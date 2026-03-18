@@ -28,7 +28,7 @@ Inicia los contenedores de MySQL y Adminer en segundo plano:
 
 ```bash
 docker compose up -d
-````
+```
 ```
 ```
 
