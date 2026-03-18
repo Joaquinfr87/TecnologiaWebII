@@ -1,0 +1,77 @@
+\begin{thebibliography}{}
+
+\bibitem[{Docker Inc.}, 2023]{docker2023}
+{Docker Inc.} (2023).
+\newblock Docker documentation.
+
+\bibitem[{ECMA International}, 2017]{ecma404}
+{ECMA International} (2017).
+\newblock The json data interchange standard.
+
+\bibitem[{ECMA International}, 2023]{ecma262}
+{ECMA International} (2023).
+\newblock Ecmascript language specification.
+
+\bibitem[Erl, 2005]{erl2005}
+Erl, T. (2005).
+\newblock {\em Service-Oriented Architecture}.
+\newblock Prentice Hall.
+
+\bibitem[Fielding, 2000]{fielding2000}
+Fielding, R.~T. (2000).
+\newblock Architectural styles and the design of network-based software
+  architectures.
+
+\bibitem[Gamma et~al., 1994]{gamma1994}
+Gamma, E., Helm, R., Johnson, R., and Vlissides, J. (1994).
+\newblock {\em Design Patterns: Elements of Reusable Object-Oriented Software}.
+\newblock Addison-Wesley.
+
+\bibitem[Garrett, 2005]{garrett2005}
+Garrett, J. (2005).
+\newblock Ajax: A new approach to web applications.
+
+\bibitem[Kurose and Ross, 2017]{kurose2017}
+Kurose, J. and Ross, K. (2017).
+\newblock {\em Computer Networking: A Top Down Approach}.
+\newblock Pearson.
+
+\bibitem[{Laravel}, 2023]{laravel2023}
+{Laravel} (2023).
+\newblock Laravel documentation.
+
+\bibitem[{Meta Platforms, Inc.}, 2023]{react2023}
+{Meta Platforms, Inc.} (2023).
+\newblock React documentation.
+
+\bibitem[{Microsoft Corporation}, 2023]{typescript2023}
+{Microsoft Corporation} (2023).
+\newblock Typescript documentation.
+
+\bibitem[{Oracle}, 2023]{mysql2023}
+{Oracle} (2023).
+\newblock Mysql documentation.
+
+\bibitem[{PHP Group}, 2023]{phpmanual2023}
+{PHP Group} (2023).
+\newblock Php manual.
+
+\bibitem[Pressman, 2014]{pressman2014}
+Pressman, R. (2014).
+\newblock {\em Ingeniería de Software}.
+\newblock McGraw-Hill.
+
+\bibitem[{Tailwind Labs Inc.}, 2023]{tailwind2023}
+{Tailwind Labs Inc.} (2023).
+\newblock Tailwind css documentation.
+
+\bibitem[Tanenbaum, 2016]{tanenbaum2016}
+Tanenbaum, A. (2016).
+\newblock {\em Computer Networks}.
+\newblock Pearson.
+
+\bibitem[{Vercel, Inc.}, 2023]{nextjs2023}
+{Vercel, Inc.} (2023).
+\newblock Next.js documentation.
+
+\end{thebibliography}

@@ -1,0 +1,471 @@
+% PLANTILLA PERSONALIZADA UPDS
+\documentclass[12pt,letterpaper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[round]{natbib} % Necesario para usar \citet y citas estilo APA
+
+% --------------------------------------------------------
+% CONFIGURACIÓN DE FORMATO REQUERIDO 
+% --------------------------------------------------------
+
+% 1. Tipografía: Arial (helvet) 12pt. Negrilla solo en títulos
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% 2. Márgenes: Izq 3.5cm, Der 2.5cm, Sup 1.5cm, Inf 1.5cm
+\usepackage[left=3.5cm,right=2.5cm,top=1.5cm,bottom=1.5cm, includehead, includefoot, headheight=15pt]{geometry}
+
+% 3. Espaciado: 1.5
+\usepackage{setspace}
+\onehalfspacing
+
+% 4. Párrafos: Espaciado 12pt antes y después, Sangría 0cm
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{12pt}
+
+% 5. Encabezados y pies de página
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} 
+\fancyhead[R]{\nouppercase{\leftmark}} % Nombre del capítulo en el encabezado
+\fancyfoot[C]{\thepage} % Numeración en el pie de página
+\renewcommand{\headrulewidth}{0.4pt} 
+
+% Forzar el encabezado en las páginas donde inicia un capítulo
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyhead[R]{\nouppercase{\leftmark}}
+	\fancyfoot[C]{\thepage}
+}
+
+% 6. Configuración de Objetos (Títulos arriba y centrados) y titulo figuras
+\usepackage{caption}
+\captionsetup[figure]{position=top, justification=centering, labelsep=colon}
+\captionsetup[table]{position=top, justification=centering, labelsep=colon}
+
+\captionsetup[figure]{
+	position=top,
+	justification=centering,
+	labelfont=bf,
+	textfont=it,
+	labelsep=space
+}
+
+% 7. Comando personalizado para la fuente de los objetos
+\newcommand{\fuente}[1]{
+	\vspace{0.2cm}
+	{\raggedright \small \textbf{Fuente:} #1 \par}
+}
+
+% Asegurar que la profundidad de numeración y del índice incluya subsecciones
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+% --------------------------------------------------------
+% CONFIGURACIÓN DE TÍTULOS (TODO EN TAMAÑO 12pt Y NEGRITA)
+% --------------------------------------------------------
+\usepackage{titlesec}
+
+% Formato para \chapter: tamaño normal (12pt), negrita, sin la palabra "Capítulo" arriba
+\titleformat{\chapter}[hang]
+{\normalsize\bfseries} % Formato: tamaño normal y negrita
+{\thechapter.} % Etiqueta (ej. "1.")
+{0.5em} % Espacio entre número y texto
+{}
+% Quitar el enorme espacio en blanco que LaTeX pone arriba de los capítulos por defecto
+\titlespacing*{\chapter}{0pt}{-0.5in}{12pt} 
+
+% Formato para \section
+\titleformat{\section}
+{\normalsize\bfseries}
+{\thesection}
+{0.5em}
+{}
+
+% Formato para \subsection
+\titleformat{\subsection}
+{\normalsize\bfseries}
+{\thesubsection}
+{0.5em}
+{}
+
+% Formato para \subsubsection
+\titleformat{\subsubsection}
+{\normalsize\bfseries}
+{\thesubsubsection}
+{0.5em}
+{}
+
+%----------------------Comandos---------------------------
+\newcommand{\figuraAPA}[5]{
+	\begin{figure}[H]
+		
+		\caption{#2}
+		\label{#5}
+		
+		\begin{center}
+			\begin{minipage}{#3}
+				
+				\centering
+				\includegraphics[width=\textwidth]{#1}
+				
+				\vspace{4pt}
+				\raggedright
+				{\small \textbf{Fuente:} #4}
+				
+			\end{minipage}
+		\end{center}
+		
+	\end{figure}
+}
+%---------------------------------------------------------
+% DOCUMENTO
+%---------------------------------------------------------
+\begin{document}
+	
+	% --- PORTADA ---
+	\begin{titlepage}
+		\centering
+		\includegraphics[width=4cm]{logo-upds.jpg}\\[1cm]
+		
+		{\Large \textbf{UNIVERSIDAD PRIVADA DOMINGO SAVIO}}\\[2cm]
+		
+		{\Large \textbf{Sistema Web y Móvil con Tecnología NFC para la Gestión del Pasaje Estudiantil en Cochabamba}}\\[3cm]
+		
+		\begin{flushleft}
+			\textbf{Integrantes:}\\
+			Joaquin Alessandro Felipez Rojas\\
+			Nicolas Sebastian Reguerin Meneses\\
+			David Willy Cruz Huanca\\[1.5cm]
+			
+			\textbf{Docente:}\\ 
+			Alejandra Gómez Mendoza\\[1.5cm]
+		\end{flushleft}
+		
+		\vfill
+		\textbf{Fecha de entrega:} 07 de abril de 2026
+	\end{titlepage}
+	
+	%---------------------------------------------------------
+	% ÍNDICES
+	%---------------------------------------------------------
+	
+	\pagenumbering{roman}
+	
+	\renewcommand\contentsname{Índice}
+	\tableofcontents
+	\newpage
+	
+	\renewcommand{\listfigurename}{Índice de figuras}
+	\listoffigures
+	\newpage
+	
+	\renewcommand{\listtablename}{Índice de tablas}
+	\listoftables
+	\newpage
+	
+	%---------------------------------------------------------
+	% CUERPO DEL DOCUMENTO
+	%---------------------------------------------------------
+	
+	\pagenumbering{arabic}
+	
+	%---------------------------------------------------------
+	\chapter{Introducción}
+	El transporte público en el municipio de Cochabamba representa un pilar fundamental para la movilidad urbana diaria, siendo el sector estudiantil uno de sus usuarios más frecuentes. Para garantizar el acceso a la educación, normativas municipales establecen una tarifa preferencial y diferenciada para los estudiantes de nivel primario y secundario. Sin embargo, el método tradicional de cobro en efectivo dentro de minibuses y trufis genera constantes fricciones, retrasos y un cumplimiento irregular de dicha tarifa.
+	
+	El presente proyecto propone la modernización y digitalización de este proceso mediante el diseño y desarrollo de un ecosistema tecnológico cliente-servidor. La solución integra un sistema web (Backend) encargado de la gestión de usuarios y saldos virtuales, junto con una aplicación móvil Android que funciona como terminal de cobro (lector) y un sistema de tarjetas físicas provistas de tecnología NFC para los estudiantes. A través de este modelo, el sistema permite que el estudiante realice el pago de su pasaje de manera rápida, segura y totalmente offline al acercar su tarjeta al dispositivo del conductor, quien valida la transacción y recibe los fondos correspondientes en su cuenta virtual. De esta manera, se busca eliminar el uso de dinero en efectivo, garantizar el respeto a la tarifa estudiantil y proveer un registro auditable de los viajes realizados.
+	
+	\section{Antecedentes}
+	
+	Históricamente, en la ciudad de Cochabamba y a nivel nacional, el pago del transporte público descentralizado (sindicatos de trufis y minibuses) se ha realizado exclusivamente mediante dinero en efectivo. Si bien existen normativas municipales que amparan el derecho de los estudiantes a pagar una tarifa reducida, la aplicación práctica de esta medida presenta graves deficiencias. Es un escenario común que los conductores del transporte público se nieguen a cobrar el pasaje diferenciado argumentando la falta de cambio (monedas de baja denominación), o que directamente eviten recoger a los estudiantes en horarios pico para no percibir ingresos menores.
+	
+	A nivel tecnológico, en Bolivia existen referentes exitosos de modernización del transporte masivo, como el sistema "Mi Teleférico" o los buses "PumaKatari" en La Paz, los cuales utilizan tarjetas físicas RFID/NFC para el cobro automatizado con un alto grado de eficiencia y aceptación ciudadana. El uso de tarjetas físicas ha demostrado ser el método más accesible y rápido para el abordaje de pasajeros. Al adaptar este modelo exitoso al transporte descentralizado de Cochabamba, y complementarlo con el uso de los teléfonos inteligentes de los conductores como terminales de validación, se democratiza el acceso a los pagos digitales sin requerir instalaciones de hardware costosas dentro de cada vehículo.
+	
+	\section{Planteamiento del problema}
+	
+	
+	\figuraAPA
+	{arbol.png}
+	{Árbol de problemas del sistema de cobro del transporte estudiantil}
+	{0.8\textwidth}
+	{Elaboración propia}
+	{fig:arbol}
+	
+	\subsection{Objetivo general}
+	
+	Desarrollar un sistema web y una aplicación móvil Android, integrando tecnología NFC, para la gestión y cobro eficiente del pasaje estudiantil en la ciudad de Cochabamba.
+	
+	\subsection{Objetivos específicos}
+	
+	\begin{itemize}
+		\item Elaborar el modelo relacional de la base de datos para gestionar de forma íntegra y segura los perfiles de los usuarios (estudiantes y choferes), los saldos virtuales y el registro histórico de las transacciones.
+		
+		\item Diseñar el \textit{backend} del sistema en PHP bajo el patrón de arquitectura MVC, implementando un módulo de administración (CRUD) de usuarios y una API para el procesamiento de peticiones de cobro.
+		
+		\item Implementar un mecanismo de seguridad basado en tokenización (como JWT) para generar credenciales temporales, permitiendo que el pago desde el dispositivo del estudiante se realice de manera \textit{offline}.
+		
+		\item Programar el módulo de la aplicación móvil Android dirigido al estudiante, utilizando la tecnología de Emulación de Tarjeta Host (HCE) para transmitir de forma segura el token identificador vía NFC.
+		
+		\item Construir la interfaz (móvil o web) dirigida al chofer, encargada de activar el modo lector NFC, capturar el token del estudiante y comunicarse con el servidor para validar y ejecutar el descuento de la tarifa preferencial.
+		
+		\item Ejecutar pruebas de funcionamiento e integración entre las aplicaciones cliente y el servidor en un entorno local, verificando la velocidad de respuesta, la integridad de los saldos y el correcto manejo de errores.
+	\end{itemize}
+	
+	%---------------------------------------------------------
+	\chapter{Marco conceptual}
+	
+	\section{Arquitecturas de aplicaciones web}
+	
+	Según \citet{pressman2014}, la arquitectura de una aplicación web define la estructura general del sistema, estableciendo la manera en que los distintos componentes interactúan entre sí para proporcionar servicios al usuario final a través de la red.
+	
+	En el presente proyecto, la arquitectura web es fundamental debido a que el sistema propuesto se basa en un modelo cliente-servidor. La aplicación web funcionará como el backend encargado de gestionar usuarios, transacciones y saldos virtuales del sistema de pago del transporte estudiantil.
+	
+	\subsection{Aplicación web}
+	
+	De acuerdo con \citet{kurose2017}, una aplicación web es un software que se ejecuta en un servidor y que los usuarios pueden acceder mediante un navegador web utilizando protocolos de comunicación como HTTP.
+	
+	En el proyecto propuesto, la aplicación web constituye el núcleo del sistema, ya que será responsable de gestionar la información relacionada con los estudiantes, conductores y las transacciones de pago realizadas mediante la tecnología NFC.
+	
+	\subsection{Modelo cliente-servidor}
+	
+	Según \citet{tanenbaum2016}, el modelo cliente-servidor es una arquitectura de red en la cual múltiples clientes solicitan servicios o recursos a un servidor central que procesa las solicitudes y responde con la información correspondiente.
+	
+	En el sistema planteado, el dispositivo móvil del conductor y el sistema del estudiante actuarán como clientes que interactúan con el servidor central donde se almacenará la base de datos y se procesarán las operaciones de validación de pago del pasaje estudiantil.
+	
+	\subsection{Protocolo HTTP}
+	
+	Según \citet{kurose2017}, el protocolo HTTP (HyperText Transfer Protocol) es el protocolo de comunicación utilizado para la transferencia de información entre clientes y servidores dentro de la World Wide Web.
+	
+	En el desarrollo del sistema propuesto, HTTP permitirá que la aplicación móvil y la interfaz web se comuniquen con el servidor mediante solicitudes y respuestas que permitirán consultar información, validar usuarios y registrar las transacciones realizadas.
+	
+	\section{Tecnologías del lado del servidor}
+	
+	De acuerdo con \citet{pressman2014}, las tecnologías del lado del servidor son aquellas que permiten procesar la lógica de negocio de una aplicación web, gestionar bases de datos y generar respuestas dinámicas que son enviadas al cliente.
+	
+	En el presente proyecto, las tecnologías del lado del servidor permitirán gestionar la información de los usuarios del sistema, controlar el saldo de las tarjetas estudiantiles y registrar cada transacción realizada durante el uso del transporte público.
+	
+	\section{Entorno de desarrollo local}
+	
+	Según \citet{pressman2014}, un entorno de desarrollo local permite a los desarrolladores probar y ejecutar aplicaciones en su propio equipo antes de desplegarlas en un servidor de producción.
+	
+	Para el desarrollo del sistema propuesto se utilizará un entorno de desarrollo local que permitirá simular el funcionamiento completo del sistema web antes de su implementación en un entorno real.
+	
+	\subsection{Servidor local}
+	
+	Un servidor local es un servidor que se ejecuta en el propio equipo del desarrollador con el objetivo de probar aplicaciones web sin necesidad de conexión a internet \citep{tanenbaum2016}.
+	
+	En el desarrollo del proyecto, el servidor local permitirá ejecutar el sistema web, realizar pruebas de funcionamiento y validar la comunicación entre la aplicación móvil y el backend del sistema.
+	
+	\subsection{PHP}
+	
+	Según \citet{phpmanual2023}, PHP es un lenguaje de programación del lado del servidor ampliamente utilizado para el desarrollo de aplicaciones web dinámicas.
+	
+	En este proyecto, PHP será utilizado para desarrollar el backend del sistema, implementar la lógica de negocio y gestionar la comunicación con la base de datos.
+	
+	\subsection{MySQL}
+	
+	De acuerdo con \citet{mysql2023}, MySQL es un sistema de gestión de bases de datos relacional que permite almacenar, organizar y consultar grandes cantidades de información de manera eficiente.
+	
+	En el sistema propuesto, MySQL será utilizado para almacenar la información de los usuarios, tarjetas estudiantiles y registros de transacciones realizadas.
+	
+	\section{Intercambio de datos en aplicaciones web}
+	
+	El intercambio de datos es un aspecto fundamental en las aplicaciones web modernas, ya que permite la comunicación entre diferentes sistemas mediante formatos estandarizados \citep{kurose2017}.
+	
+	En el proyecto desarrollado, el intercambio de datos permitirá que la aplicación móvil y el servidor web compartan información relacionada con usuarios, saldos y registros de transacciones.
+	
+	\subsection{Formato JSON}
+	
+	Según \citet{ecma404}, JSON es un formato ligero de intercambio de datos basado en texto que es fácil de leer y escribir para los humanos y sencillo de procesar por las máquinas.
+	
+	En el sistema propuesto, JSON será utilizado como formato principal para enviar y recibir datos entre la aplicación móvil y el servidor web.
+	
+	\subsection{Web Service}
+	
+	Según \citet{erl2005}, un Web Service es un conjunto de funciones accesibles a través de la red que permiten la comunicación entre diferentes aplicaciones mediante protocolos estándar.
+	
+	En el proyecto propuesto, se implementará una API que funcionará como un servicio web encargado de procesar las solicitudes de validación y cobro del pasaje estudiantil.
+	
+	\section{Tecnologías de interacción cliente-servidor}
+	
+	Las tecnologías de interacción cliente-servidor permiten mejorar la experiencia del usuario al facilitar la comunicación dinámica entre el navegador y el servidor sin necesidad de recargar completamente la página \citep{garrett2005}.
+	
+	Estas tecnologías serán utilizadas en el sistema web para permitir consultas dinámicas de información y mejorar la eficiencia de la interacción con el sistema.
+	
+	\section{Framework}
+	
+	De acuerdo con \citet{pressman2014}, un framework es una estructura de software que proporciona herramientas y componentes reutilizables que facilitan el desarrollo de aplicaciones.
+	
+	En el desarrollo del sistema propuesto, el uso de un framework permitirá organizar el código del proyecto y mejorar su mantenibilidad.
+	
+	\subsection{Laravel}
+	
+	Según \citet{laravel2023}, Laravel es un framework de desarrollo web para PHP que proporciona herramientas modernas para la construcción de aplicaciones robustas y escalables.
+	
+	En el proyecto propuesto, Laravel permitirá implementar de forma estructurada la lógica del sistema, facilitando la gestión de rutas, controladores y modelos.
+	
+  \subsection{NextJs}
+
+  De acuerdo con \citet{nextjs2023}, Next.js es un framework de desarrollo basado en React que permite la creación de aplicaciones web optimizadas mediante renderizado del lado del servidor y generación de sitios estáticos.
+
+  En el sistema propuesto, Next.js será utilizado para estructurar el frontend de la aplicación, mejorando el rendimiento y la organización del código, así como facilitando la integración con la API del backend.
+
+ \subsection{React}
+
+  Según \citet{react2023}, React es una biblioteca de JavaScript para construir interfaces de usuario basadas en componentes reutilizables y un flujo de datos unidireccional.
+
+  En el proyecto propuesto, React será utilizado para desarrollar la interfaz del sistema web, permitiendo crear componentes reutilizables que faciliten la visualización dinámica de la información de usuarios, saldos y transacciones.
+\subsection{Tailwind CSS}
+
+  Según \citet{tailwind2023}, Tailwind CSS es un framework de CSS basado en utilidades que permite construir interfaces personalizadas mediante clases predefinidas.
+
+  En el proyecto propuesto, Tailwind CSS será utilizado para diseñar la interfaz del sistema web, permitiendo un desarrollo más rápido y consistente de los estilos visuales de la aplicación.
+   
+
+	\section{Arquitectura MVC}
+	
+	De acuerdo con \citet{gamma1994}, el patrón Modelo-Vista-Controlador (MVC) separa la lógica de negocio, la interfaz de usuario y el control de la aplicación en diferentes componentes.
+	
+	En el sistema desarrollado, la arquitectura MVC permitirá organizar el código de manera clara, separando la gestión de datos, la lógica del sistema y la interfaz de usuario.
+
+  \section{API}
+
+  Según \citet{fielding2000}, una API (Interfaz de Programación de Aplicaciones) es un conjunto de definiciones y protocolos que permiten la comunicación entre diferentes sistemas de software.
+
+  En el proyecto desarrollado, la API permitirá la interacción entre la aplicación móvil, el sistema web y el backend, gestionando las solicitudes relacionadas con autenticación, validación de pagos y consulta de datos.
+
+  \section{Docker}
+
+  De acuerdo con \citet{docker2023}, Docker es una plataforma que permite desarrollar, enviar y ejecutar aplicaciones dentro de contenedores, asegurando consistencia en diferentes entornos de desarrollo y producción.
+
+  En el sistema propuesto, Docker será utilizado para gestionar el entorno de desarrollo, facilitando la configuración del servidor, la base de datos y otros servicios necesarios para el funcionamiento del sistema.
+
+  \section{JavaScript}
+
+  Según \citet{ecma262}, JavaScript es un lenguaje de programación interpretado, ampliamente utilizado para el desarrollo de aplicaciones web interactivas tanto en el cliente como en el servidor.
+
+  En el proyecto propuesto, JavaScript será utilizado para implementar la lógica del lado del cliente, permitiendo la interacción dinámica con el usuario y la comunicación con el backend mediante solicitudes HTTP.
+
+  \section{TypeScript}
+
+  De acuerdo con \citet{typescript2023}, TypeScript es un superconjunto de JavaScript que añade tipado estático opcional, mejorando la detección de errores y la mantenibilidad del código.
+
+  En el sistema desarrollado, TypeScript será utilizado para mejorar la calidad del código en el frontend, facilitando el desarrollo de componentes más robustos y escalables.
+
+   %---------------------------------------------------------
+	\chapter{Marco práctico}
+	
+	\section{Instalación y configuración del entorno}
+	
+	\subsection{Instalación del entorno local}
+	Contenido...
+	
+	\subsection{Instalación del framework}
+	Contenido...
+	
+	\subsection{Configuración de la base de datos}
+	Contenido...
+	
+	\section{Arquitectura del sistema}
+	
+	\subsection{Arquitectura cliente-servidor}
+	Contenido...
+	
+	\subsection{Patrón MVC}
+	Contenido...
+	
+	\section{Estructura del proyecto}
+	
+	\subsection{Organización de carpetas}
+	Contenido...
+	
+	\subsection{Directorios principales}
+	Contenido...
+	
+	\section{Diseño de la base de datos}
+	
+	\subsection{Diagrama conceptual}
+	Contenido...
+	
+	\subsection{Diagrama lógico}
+	Contenido...
+	
+	\subsection{Diagrama físico}
+	Contenido...
+	
+	\section{Desarrollo de la aplicación}
+	
+	\subsection{Definición de rutas}
+	Contenido...
+	
+	\subsection{Creación de controladores}
+	Contenido...
+	
+	\subsection{Creación de modelos}
+	Contenido...
+	
+	\subsection{Desarrollo de vistas}
+	Contenido...
+	
+	\subsection{Implementación de funcionalidades}
+	Contenido...
+	
+	\section{Interacción con la base de datos}
+	
+	\subsection{Configuración de conexión}
+	Contenido...
+	
+	\subsection{Consultas realizadas}
+	Contenido...
+	
+	\subsection{Manipulación de datos}
+	Contenido...
+	
+	\section{Validación y manejo de errores}
+	
+	\subsection{Validación de formularios}
+	Contenido...
+	
+	\subsection{Manejo de excepciones}
+	Contenido...
+	
+	\subsection{Control de errores}
+	Contenido...
+	
+	\section{Pruebas del sistema}
+	
+	\subsection{Pruebas de funcionamiento}
+	Contenido...
+	
+	\section{Resultados}
+	
+	\subsection{Funcionamiento final}
+	Contenido...
+	
+	\subsection{Capturas del sistema}
+	Contenido...
+	
+	%---------------------------------------------------------
+	\chapter{Conclusiones y recomendaciones}
+	
+	Redacción de conclusiones...
+	
+	%---------------------------------------------------------
+	\chapter{Anexos}
+	
+	Contenido de anexos...
+	
+	%---------------------------------------------------------
+	% REFERENCIAS
+	%---------------------------------------------------------
+	
+	% En la clase report se usa \bibname en lugar de \refname
+	\renewcommand\bibname{Referencias}
+	\bibliographystyle{apalike} % Define el estilo visual de la bibliografía
+	\bibliography{mibibliografia}
+	
+\end{document}
