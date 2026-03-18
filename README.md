@@ -42,6 +42,8 @@ composer install
 cp .env.example .env
 php artisan key:generate
 ```
+```
+```
 
 Asegúrate de configurar las credenciales de la base de datos en tu archivo `backend/.env` para que coincidan con el `docker-compose.yml`:
 ```env
@@ -71,18 +73,3 @@ npm run dev
 ```
 * El frontend estará disponible en `http://localhost:3000`.
 
-## 💻 Notas para el Desarrollo (Editores)
-
-La separación en carpetas distintas garantiza que los servidores de lenguaje (LSP) funcionen de forma aislada. Si utilizas editores como Neovim, los clientes de `intelephense`/`phpactor` se activarán de forma independiente en `/backend`, mientras que `vtsls`/`tsserver` lo harán en `/frontend`, evitando conflictos de tipos y optimizando el rendimiento.
-```
-
----
-
-¿Te gustaría que pasemos a configurar el CORS en tu proyecto de Laravel para que el frontend en el puerto 3000 pueda hacer peticiones a la API en el puerto 8000 sin errores de seguridad?
-
----
-
-### English Correction
-* **Original:** "Creame un readme.md para este proyecto"
-* **Corrected:** "Create a README.md for this project."
-* **Note:** Added the missing accent mark in Spanish implicitly ("Créame"), and in English, "README" is typically fully capitalized as it is an acronym/convention.
