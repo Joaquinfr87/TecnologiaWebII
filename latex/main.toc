@@ -31,36 +31,41 @@
 \contentsline {chapter}{\numberline {3}Marco práctico}{11}{}%
 \contentsline {section}{\numberline {3.1}Instalación y configuración del entorno}{11}{}%
 \contentsline {subsection}{\numberline {3.1.1}Instalación del entorno local}{11}{}%
-\contentsline {subsection}{\numberline {3.1.2}Instalación del framework}{11}{}%
-\contentsline {subsection}{\numberline {3.1.3}Configuración de la base de datos}{11}{}%
-\contentsline {section}{\numberline {3.2}Arquitectura del sistema}{11}{}%
-\contentsline {subsection}{\numberline {3.2.1}Arquitectura cliente-servidor}{11}{}%
-\contentsline {subsection}{\numberline {3.2.2}Patrón MVC}{11}{}%
-\contentsline {section}{\numberline {3.3}Estructura del proyecto}{11}{}%
-\contentsline {subsection}{\numberline {3.3.1}Organización de carpetas}{11}{}%
-\contentsline {subsection}{\numberline {3.3.2}Directorios principales}{12}{}%
-\contentsline {section}{\numberline {3.4}Diseño de la base de datos}{12}{}%
-\contentsline {subsection}{\numberline {3.4.1}Diagrama conceptual}{12}{}%
-\contentsline {subsection}{\numberline {3.4.2}Diagrama lógico}{12}{}%
-\contentsline {subsection}{\numberline {3.4.3}Diagrama físico}{12}{}%
-\contentsline {section}{\numberline {3.5}Desarrollo de la aplicación}{12}{}%
-\contentsline {subsection}{\numberline {3.5.1}Definición de rutas}{12}{}%
-\contentsline {subsection}{\numberline {3.5.2}Creación de controladores}{12}{}%
-\contentsline {subsection}{\numberline {3.5.3}Creación de modelos}{12}{}%
-\contentsline {subsection}{\numberline {3.5.4}Desarrollo de vistas}{13}{}%
-\contentsline {subsection}{\numberline {3.5.5}Implementación de funcionalidades}{13}{}%
-\contentsline {section}{\numberline {3.6}Interacción con la base de datos}{13}{}%
-\contentsline {subsection}{\numberline {3.6.1}Configuración de conexión}{13}{}%
-\contentsline {subsection}{\numberline {3.6.2}Consultas realizadas}{13}{}%
-\contentsline {subsection}{\numberline {3.6.3}Manipulación de datos}{13}{}%
-\contentsline {section}{\numberline {3.7}Validación y manejo de errores}{13}{}%
-\contentsline {subsection}{\numberline {3.7.1}Validación de formularios}{13}{}%
-\contentsline {subsection}{\numberline {3.7.2}Manejo de excepciones}{13}{}%
-\contentsline {subsection}{\numberline {3.7.3}Control de errores}{14}{}%
-\contentsline {section}{\numberline {3.8}Pruebas del sistema}{14}{}%
-\contentsline {subsection}{\numberline {3.8.1}Pruebas de funcionamiento}{14}{}%
-\contentsline {section}{\numberline {3.9}Resultados}{14}{}%
-\contentsline {subsection}{\numberline {3.9.1}Funcionamiento final}{14}{}%
-\contentsline {subsection}{\numberline {3.9.2}Capturas del sistema}{14}{}%
-\contentsline {chapter}{\numberline {4}Conclusiones y recomendaciones}{15}{}%
-\contentsline {chapter}{\numberline {5}Anexos}{16}{}%
+\contentsline {subsection}{\numberline {3.1.2}Instalación de PHP}{11}{}%
+\contentsline {subsection}{\numberline {3.1.3}Instalación de Node.js}{11}{}%
+\contentsline {subsection}{\numberline {3.1.4}Instalación de Docker Engine}{12}{}%
+\contentsline {subsection}{\numberline {3.1.5}Instalación de los frameworks}{13}{}%
+\contentsline {subsubsection}{\numberline {3.1.5.1}Instalación del framework backend (Laravel)}{13}{}%
+\contentsline {subsubsection}{\numberline {3.1.5.2}Instalación del framework frontend (Next.js)}{14}{}%
+\contentsline {subsection}{\numberline {3.1.6}Configuración de la base de datos}{15}{}%
+\contentsline {section}{\numberline {3.2}Arquitectura del sistema}{17}{}%
+\contentsline {subsection}{\numberline {3.2.1}Arquitectura cliente-servidor}{17}{}%
+\contentsline {subsection}{\numberline {3.2.2}Patrón MVC en el backend}{17}{}%
+\contentsline {section}{\numberline {3.3}Estructura del proyecto (a revisar)}{17}{}%
+\contentsline {subsection}{\numberline {3.3.1}Organización de carpetas}{17}{}%
+\contentsline {subsection}{\numberline {3.3.2}Directorios principales}{18}{}%
+\contentsline {section}{\numberline {3.4}Diseño de la base de datos}{18}{}%
+\contentsline {subsection}{\numberline {3.4.1}Diagrama conceptual}{18}{}%
+\contentsline {subsection}{\numberline {3.4.2}Diagrama lógico}{18}{}%
+\contentsline {subsection}{\numberline {3.4.3}Diagrama físico}{18}{}%
+\contentsline {section}{\numberline {3.5}Desarrollo de la aplicación}{18}{}%
+\contentsline {subsection}{\numberline {3.5.1}Definición de rutas}{18}{}%
+\contentsline {subsection}{\numberline {3.5.2}Creación de controladores}{19}{}%
+\contentsline {subsection}{\numberline {3.5.3}Creación de modelos}{19}{}%
+\contentsline {subsection}{\numberline {3.5.4}Desarrollo de vistas}{19}{}%
+\contentsline {subsection}{\numberline {3.5.5}Implementación de funcionalidades}{19}{}%
+\contentsline {section}{\numberline {3.6}Interacción con la base de datos}{19}{}%
+\contentsline {subsection}{\numberline {3.6.1}Configuración de conexión}{19}{}%
+\contentsline {subsection}{\numberline {3.6.2}Consultas realizadas}{19}{}%
+\contentsline {subsection}{\numberline {3.6.3}Manipulación de datos}{19}{}%
+\contentsline {section}{\numberline {3.7}Validación y manejo de errores}{20}{}%
+\contentsline {subsection}{\numberline {3.7.1}Validación de formularios}{20}{}%
+\contentsline {subsection}{\numberline {3.7.2}Manejo de excepciones}{20}{}%
+\contentsline {subsection}{\numberline {3.7.3}Control de errores}{20}{}%
+\contentsline {section}{\numberline {3.8}Pruebas del sistema}{20}{}%
+\contentsline {subsection}{\numberline {3.8.1}Pruebas de funcionamiento}{20}{}%
+\contentsline {section}{\numberline {3.9}Resultados}{20}{}%
+\contentsline {subsection}{\numberline {3.9.1}Funcionamiento final}{20}{}%
+\contentsline {subsection}{\numberline {3.9.2}Capturas del sistema}{20}{}%
+\contentsline {chapter}{\numberline {4}Conclusiones y recomendaciones}{21}{}%
+\contentsline {chapter}{Anexos}{22}{}%

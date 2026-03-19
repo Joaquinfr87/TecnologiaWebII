@@ -3,5 +3,10 @@
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Árbol de problemas del sistema de cobro del transporte estudiantil}}{2}{}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Instalación de PHP y dependencias en Debian.}}{11}{}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Instalación de Node.js en el entorno local.}}{12}{}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Instalación de Docker Engine en el entorno local (Debian).}}{13}{}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Inicialización del proyecto backend en Laravel 11.}}{14}{}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Inicialización del proyecto web con Next.js.}}{15}{}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Ejecución de migraciones de MySQL en Laravel.}}{16}{}%
 \addvspace {10\p@ }

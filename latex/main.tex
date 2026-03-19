@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage[round]{natbib} % Necesario para usar \citet y citas estilo APA
+\usepackage{listings} % Anexos
 
 % --------------------------------------------------------
 % CONFIGURACIÓN DE FORMATO REQUERIDO 
@@ -189,7 +190,7 @@
 	
 	
 	\figuraAPA
-	{arbol.png}
+	{figuras/arbol.png}
 	{Árbol de problemas del sistema de cobro del transporte estudiantil}
 	{0.8\textwidth}
 	{Elaboración propia}
@@ -357,35 +358,82 @@
   En el sistema desarrollado, TypeScript será utilizado para mejorar la calidad del código en el frontend, facilitando el desarrollo de componentes más robustos y escalables.
 
    %---------------------------------------------------------
-	\chapter{Marco práctico}
-	
-	\section{Instalación y configuración del entorno}
-	
-	\subsection{Instalación del entorno local}
-	Contenido...
-	
-	\subsection{Instalación del framework}
-	Contenido...
-	
-	\subsection{Configuración de la base de datos}
-	Contenido...
-	
-	\section{Arquitectura del sistema}
-	
-	\subsection{Arquitectura cliente-servidor}
-	Contenido...
-	
-	\subsection{Patrón MVC}
-	Contenido...
-	
-	\section{Estructura del proyecto}
-	
-	\subsection{Organización de carpetas}
-	Contenido...
-	
-	\subsection{Directorios principales}
-	Contenido...
-	
+	\chapter{Marco práctico} 
+
+\section{Instalación y configuración del entorno} 
+
+\subsection{Instalación del entorno local} 
+Para el desarrollo del proyecto, se estableció un entorno de trabajo nativo sobre el sistema operativo Debian Linux. La preparación de este entorno requirió la instalación individual de las herramientas base para el funcionamiento del backend, el frontend y la base de datos.
+
+\subsection{Instalación de PHP} 
+Dado que el backend del sistema está desarrollado en Laravel, fue necesaria la instalación de PHP en el entorno local, junto con sus extensiones requeridas y el gestor de dependencias Composer. Esto permite ejecutar el servidor de desarrollo y gestionar los paquetes de la API RESTful de manera nativa sobre Debian. En la Figura \ref{fig:install_php} se muestran los comandos ejecutados para este propósito.
+
+\figuraAPA{figuras/comandos-php.png}{Instalación de PHP y dependencias en Debian.}{0.8\textwidth}{Elaboración propia.}{fig:install_php}
+
+\subsection{Instalación de Node.js} 
+Para la construcción y ejecución del frontend web desarrollado con Next.js, se procedió a la instalación del entorno de ejecución Node.js y su gestor de paquetes (npm). La instalación se realizó para garantizar la compatibilidad requerida por las herramientas modernas de React y el \textit{App Router}. La Figura \ref{fig:install_node} detalla el proceso de instalación en la terminal.
+
+\figuraAPA{figuras/comandos-node.png}{Instalación de Node.js en el entorno local.}{0.8\textwidth}{Elaboración propia.}{fig:install_node}
+
+\subsection{Instalación de Docker Engine} 
+Para la capa de persistencia de datos, se optó por aislar el motor de base de datos MySQL utilizando contenedores. Esto evita conflictos de versiones con otras aplicaciones del sistema anfitrión y mantiene el entorno limpio. Siguiendo la documentación oficial para Debian, se instaló Docker Engine. La Figura \ref{fig:install_docker} detalla los comandos utilizados mediante el gestor de paquetes \texttt{apt} para la configuración inicial del motor.
+
+\figuraAPA{figuras/comandos-docker.png}{Instalación de Docker Engine en el entorno local (Debian).}{0.8\textwidth}{Elaboración propia.}{fig:install_docker}
+
+\subsection{Instalación de los frameworks} 
+El proyecto adopta un enfoque de desarrollo desacoplado, separando la lógica de negocio de la interfaz de usuario. Para lograr esto, se implementaron dos frameworks distintos que operan de manera independiente pero se comunican a través de una API RESTful. Ambos entornos se inicializaron de manera nativa sobre el sistema operativo Debian, aprovechando las herramientas de desarrollo locales configuradas previamente (PHP y Node.js). A continuación, se detalla el proceso de inicialización de cada uno.
+
+\subsubsection{Instalación del framework backend (Laravel)} 
+Para la construcción del backend, encargado de gestionar la validación de las transacciones NFC y la lógica de negocio, se instaló la versión 11 del framework Laravel. Esta instalación se llevó a cabo utilizando Composer, el gestor de dependencias de PHP. Mediante la terminal, se ejecutó el comando de creación de proyecto, el cual descargó el núcleo del framework y generó la estructura base de directorios. En la Figura \ref{fig:install_laravel} se ilustra este proceso.
+
+\figuraAPA{figuras/comandos-laravel.png}{Inicialización del proyecto backend en Laravel 11.}{0.8\textwidth}{Elaboración propia.}{fig:install_laravel}
+
+\subsubsection{Instalación del framework frontend (Next.js)} 
+Por otro lado, la interfaz web (cliente administrativo) se inicializó utilizando Next.js. Aprovechando el entorno de Node.js, se ejecutó la utilidad \texttt{create-next-app} para generar la estructura del proyecto web. Durante la instalación, se configuró el proyecto para utilizar el \textit{App Router}, asegurando un entorno de desarrollo moderno para el consumo de la API. La Figura \ref{fig:install_nextjs} muestra el comando ejecutado para la creación de la aplicación frontend.
+
+\figuraAPA{figuras/comandos-next.png}{Inicialización del proyecto web con Next.js.}{0.8\textwidth}{Elaboración propia.}{fig:install_nextjs}
+
+\subsection{Configuración de la base de datos} 
+La persistencia de datos se resolvió utilizando MySQL. A diferencia de un entorno completamente contenedorizado, Docker se empleó de manera exclusiva para levantar la instancia de MySQL, lo que garantiza que el motor de base de datos se ejecute en un entorno limpio y reproducible sin afectar los recursos del sistema anfitrión. Para ello, se definió la configuración del servicio en el archivo \texttt{docker-compose.yml} (ver Anexo A), ubicado en la raíz del proyecto, y se inicializó el contenedor ejecutando el comando \texttt{docker compose up -d} en la terminal.
+
+Una vez que el servicio de base de datos estuvo en ejecución, se procedió a establecer la conexión con el backend nativo de Laravel. Esto se logró modificando el archivo de configuración \texttt{.env} dentro del directorio \texttt{/backend}, donde se definieron las credenciales y parámetros de red mediante las siguientes variables de entorno:
+
+\begin{itemize}
+	\item \texttt{DB\_CONNECTION=mysql}
+	\item \texttt{DB\_HOST=127.0.0.1}
+	\item \texttt{DB\_PORT=3306}
+	\item \texttt{DB\_DATABASE=laravel\_db}
+	\item \texttt{DB\_USERNAME=laravel\_user}
+	\item \texttt{DB\_PASSWORD=secret\_password}
+\end{itemize}
+
+Finalmente, con la conexión a la base de datos exitosamente establecida, se procedió a estructurar el esquema de datos. Para ello, se ejecutó el comando \texttt{php artisan migrate} en el entorno de desarrollo de Laravel. Esta acción procesó los archivos de migración del framework, creando las tablas necesarias para gestionar los usuarios, tarjetas NFC y el historial de pasajes estudiantiles. La salida de este proceso se puede observar en la Figura \ref{fig:migraciones_db}.
+
+\figuraAPA{latex/imagenes/migraciones.png}{Ejecución de migraciones de MySQL en Laravel.}{0.8\textwidth}{Salida de la terminal al ejecutar php artisan migrate.}{fig:migraciones_db}
+\section{Arquitectura del sistema} 
+
+\subsection{Arquitectura cliente-servidor} 
+El sistema implementa una arquitectura cliente-servidor estricta, operando en repositorios y puertos separados. El servidor (backend en Laravel) actúa exclusivamente como un proveedor de servicios mediante una API, gestionando la lógica de negocio, la validación de las transacciones NFC para el pasaje estudiantil y la interacción con MySQL. El cliente web (frontend en Next.js) consume estos servicios de forma asíncrona y se encarga de la renderización de la interfaz administrativa e interactiva.
+
+\subsection{Patrón MVC en el backend} 
+Dentro del ecosistema del backend, Laravel implementa el patrón arquitectónico Modelo-Vista-Controlador (MVC). Dada la naturaleza de API del proyecto, la capa de "Vista" devuelve exclusivamente respuestas estructuradas en formato JSON. 
+\begin{itemize}
+    \item \textbf{Modelos (\texttt{app/Models}):} Representan las entidades de datos (como Usuarios, Tarjetas NFC, Transacciones) y gestionan la relación con MySQL a través del ORM Eloquent.
+    \item \textbf{Controladores (\texttt{app/Http/Controllers}):} Procesan las peticiones HTTP entrantes desde la aplicación Next.js y los dispositivos móviles, interactúan con los modelos y devuelven el estado de las operaciones.
+\end{itemize}
+
+\section{Estructura del proyecto (a revisar)} 
+
+\subsection{Organización de carpetas} 
+El código fuente está organizado en una estructura de directorios que separa claramente los dominios de la aplicación. En la raíz del proyecto se encuentra el archivo \texttt{docker-compose.yml} (destinado únicamente al despliegue de MySQL), acompañado de dos directorios principales: \texttt{backend} y \texttt{frontend}.
+
+\subsection{Directorios principales} 
+A continuación, se describe la función de los directorios más relevantes:
+
+\begin{itemize}
+    \item \textbf{\texttt{/backend}:} Contiene el núcleo de Laravel. Destacan las carpetas \texttt{app/} (lógica de negocio y modelos), \texttt{config/} (configuraciones globales), \texttt{database/} (migraciones de MySQL) y \texttt{routes/} (donde \texttt{api.php} define los endpoints del sistema de pasajes).
+    \item \textbf{\texttt{/frontend}:} Alberga la aplicación Next.js. El directorio principal es \texttt{app/}, el cual utiliza el nuevo enrutador de Next.js para estructurar las vistas administrativas y reportes.
+\end{itemize}	
 	\section{Diseño de la base de datos}
 	
 	\subsection{Diagrama conceptual}
@@ -455,9 +503,40 @@
 	Redacción de conclusiones...
 	
 	%---------------------------------------------------------
-	\chapter{Anexos}
+\chapter*{Anexos}
+\addcontentsline{toc}{chapter}{Anexos}
+
+\section*{Anexo A: Archivo de configuración Docker Compose}
+\label{anexo:docker_compose}
+
+A continuación, se detalla el contenido del archivo \texttt{docker-compose.yml} utilizado para el despliegue del motor de base de datos MySQL y la herramienta de administración visual Adminer:
+
+\begin{lstlisting}[language=bash, frame=single, title=docker-compose.yml, basicstyle=\ttfamily\small]
+	services:
+	# Base de Datos: MySQL
+	db:
+	image: mysql:8.0
+	environment:
+	MYSQL_DATABASE: laravel_db
+	MYSQL_ROOT_PASSWORD: root_password
+	MYSQL_USER: laravel_user
+	MYSQL_PASSWORD: secret_password
+	ports:
+	- "3306:3306"
+	volumes:
+	- mysql_data:/var/lib/mysql
 	
-	Contenido de anexos...
+	# Administrador: Adminer
+	adminer:
+	image: adminer
+	ports:
+	- "8080:8080"
+	depends_on:
+	- db
+	
+	volumes:
+	mysql_data:
+\end{lstlisting}
 	
 	%---------------------------------------------------------
 	% REFERENCIAS
