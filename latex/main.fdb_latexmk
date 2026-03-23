@@ -1,0 +1,18 @@
+# Fdb version 4
+["pdflatex"] 1773953274.55266 "f:/tareas/tecweb2/TecnologiaWebII/latex/main.tex" "main.pdf" "main" 1773957598.316 2
+  "K:/programas/latex/tex/generic/babel/babel.sty" 1772989484 147019 a132d5463be1676209afefa6c8d009c6 ""
+  "K:/programas/latex/tex/generic/babel/errbabel.def" 1772989484 10649 defdc70e75adbd75a201cee5e1330703 ""
+  "K:/programas/latex/tex/generic/babel/locale/es/babel-spanish.tex" 1772989485 374 26aa36054295520df734dd14cd75addc ""
+  "K:/programas/latex/tex/generic/babel/txtbabel.def" 1772989484 5231 c1599e5bf7d2ee42743212a7f8d20a56 ""
+  "K:/programas/latex/tex/latex/arabi/bblopts.cfg" 1705750854 902 c30e5c373bc58bde21f8f63a3091626f ""
+  "K:/programas/latex/tex/latex/base/inputenc.sty" 1761900684 5048 0270515b828149155424600fd2d58ac5 ""
+  "K:/programas/latex/tex/latex/base/report.cls" 1761900684 23203 f495085ac76be4e20c5e1e88646a241e ""
+  "K:/programas/latex/tex/latex/base/size12.clo" 1761900684 8449 8dc66c6c313c8eb2d774af83bca435dd ""
+  "f:/tareas/tecweb2/TecnologiaWebII/latex/main.tex" 1773953488 31231 47b027e99f2d6360075e8ca454dffdd2 ""
+  "main.aux" 1773951803 12002 6cbf05851ea36fd6d23797881580cf74 "pdflatex"
+  "main.tex" 1773953488 31231 47b027e99f2d6360075e8ca454dffdd2 ""
+  (generated)
+  "main.aux"
+  "main.log"
+  "main.pdf"
+  (rewritten before read)
