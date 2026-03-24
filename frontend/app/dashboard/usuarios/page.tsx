@@ -29,7 +29,7 @@ async function getData(): Promise<Usuario[]> {
 }
 
 
-export default async function DemoPage() {
+export default async function Page() {
   const data = await getData()
 
   return (

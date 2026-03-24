@@ -82,8 +82,8 @@ export default function SheetUsario() {
       <SheetTrigger>Crear Usuario</SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Are you absolutely sure?</SheetTitle>
-          <SheetDescription>This action cannot be undone.</SheetDescription>
+          <SheetTitle>Crear Usuario</SheetTitle>
+          <SheetDescription>Form para crear Usuario</SheetDescription>
         </SheetHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} id="form-usuario">
           <Controller
@@ -182,7 +182,7 @@ export default function SheetUsario() {
               Reset
             </Button>
             <Button type="submit" form="form-usuario">
-              Submit
+              Crear
             </Button>
           </Field>
         </SheetFooter>
