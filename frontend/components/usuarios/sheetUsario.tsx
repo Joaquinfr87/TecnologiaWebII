@@ -40,14 +40,42 @@ export default function SheetUsario() {
   const form = useForm<Usuario>({
     resolver: zodResolver(UsuarioSchema),
     defaultValues: {
-      Nombres:"",
-      Apellidos:"",
-      Carnet_Identidad:"",
-      Estado: "Activo",
+      nombres: "",
+      apellidos: "",
+      carnetIdentidad: "",
+      estado: "Activo",
     }
   })
-  function onSubmit(data: Usuario) {
-    console.log(data);
+ async function onSubmit(data: Usuario) {
+    try {
+      const res = await fetch("http://localhost:8000/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...data,
+          rolId:1,
+
+          // 🔴 convertir Date → string (Laravel espera esto)
+          fechaNacimiento: data.fechaNacimiento
+            ?.toISOString()
+            .split("T")[0],
+        }),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        console.error("Error backend:", error);
+        return;
+      }
+
+      const result = await res.json();
+      console.log("Usuario creado:", result);
+
+    } catch (err) {
+      console.error("Error de red:", err);
+    }
   }
   return (
     <Sheet>
@@ -59,7 +87,7 @@ export default function SheetUsario() {
         </SheetHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} id="form-usuario">
           <Controller
-            name="Nombres"
+            name="nombres"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
@@ -70,7 +98,7 @@ export default function SheetUsario() {
             )}
           />
           <Controller
-            name="Apellidos"
+            name="apellidos"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
@@ -81,7 +109,7 @@ export default function SheetUsario() {
             )}
           />
           <Controller
-            name="Carnet_Identidad"
+            name="carnetIdentidad"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
@@ -92,7 +120,7 @@ export default function SheetUsario() {
             )}
           />
           <Controller
-            name="Fecha_Nacimiento"
+            name="fechaNacimiento"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
@@ -116,7 +144,7 @@ export default function SheetUsario() {
             )}
           />
           <Controller
-            name="Estado"
+            name="estado"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field orientation="responsive" data-invalid={fieldState.invalid}>

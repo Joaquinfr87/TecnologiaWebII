@@ -1,20 +1,33 @@
 import SheetUsario from "@/components/usuarios/sheetUsario"
 import { columns } from "./columns"
-import { Usuario } from "@/lib/schemas/usuario.schema"
 import { DataTable } from "./data-table"
 
-async function getData(): Promise<Usuario[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    // ...
-  ]
+type Usuario = {
+  nombres:string,
+  apellidos:string,
+  carnetIdentidad:string,
+  fechaNacimiento:string,
+  estado: "Activo"|"Inactivo"|"Suspendido",
 }
+async function getData(): Promise<Usuario[]> {
+ try {
+    const res = await fetch("http://localhost:8000/api/users");
+    
+    if (!res.ok) {
+      throw new Error("Error al obtener usuarios");
+    }
+
+    const json = await res.json();
+    const data = json.data ?? json;
+    
+    return data;
+
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
 
 export default async function DemoPage() {
   const data = await getData()

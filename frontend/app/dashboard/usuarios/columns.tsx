@@ -5,23 +5,23 @@ import { Usuario } from "@/lib/schemas/usuario.schema"
 
 export const columns: ColumnDef<Usuario>[] = [
   {
-    accessorKey: "Nombres",
+    accessorKey: "nombres",
     header: "Nombres",
   },
   {
-    accessorKey: "Apellidos",
+    accessorKey: "apellidos",
     header: "Apellidos",
   },
   {
-    accessorKey: "Carnet_Identidad",
+    accessorKey: "carnetIdentidad",
     header: "Carnet_Identidad",
   },
   {
-    accessorKey:"Fecha_Nacimiento",
+    accessorKey:"fechaNacimiento",
     header:"Fecha Nacimiento"
   },
   {
-    accessorKey:"Estado",
+    accessorKey:"estado",
     header:"Estado"
   }
 ]
