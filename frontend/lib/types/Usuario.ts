@@ -1,7 +1,9 @@
-export type Usuario = {
-  nombres:string,
-  apellidos:string,
-  carnetIdentidad:string,
-  fechaNacimiento:Date,
-  estado: "Activo"|"Inactivo"|"Suspendido",
+export interface Usuario {
+  id:number
+  nombres:string
+  apellidos:string
+  carnetIdentidad:string
+  fechaNacimiento:Date
+  rolId:number
+  estado: "Activo"|"Inactivo"|"Suspendido"
 }

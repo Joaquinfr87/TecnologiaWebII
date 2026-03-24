@@ -1,21 +1,21 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Usuario } from "@/lib/types/Usuario"
-import { useRouter } from "next/navigation"
+import { Rol } from "@/lib/types/Rol"
 import { Button } from "@/components/ui/button"
 import { SquarePen, Trash2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 interface ColumnProps {
-  setUsuario: (usuario: Usuario | undefined) => void
-  setOpen: (open: boolean) => void
+  setRol: (rol: Rol | undefined) => void;
+  setOpen: (open: boolean) => void;
   router: ReturnType<typeof useRouter>
 }
-async function manejarEliminado(id: number, router: ReturnType<typeof useRouter>) {
-  const confirmado = window.confirm("Estas seguro de eliminar el Usuario")
+async function manejarEliminado(id: number,router:ReturnType<typeof useRouter>) {
+  const confirmado = window.confirm("Estas seguro de eliminar el Rol")
   if (confirmado) {
     try {
-      const res = await fetch("http://localhost:8000/api/user/" + id,
+      const res = await fetch("http://localhost:8000/api/roles/" + id,
         { method: "DELETE", })
       if (!res.ok) {
         const error = await res.json()
@@ -30,26 +30,14 @@ async function manejarEliminado(id: number, router: ReturnType<typeof useRouter>
   }
 
 }
-export const columns = ({ setUsuario, setOpen, router }: ColumnProps): ColumnDef<Usuario>[] => [
+export const columns = ({ setRol, setOpen ,router}: ColumnProps): ColumnDef<Rol>[] => [
   {
-    accessorKey: "nombres",
-    header: "Nombres",
+    accessorKey: "id",
+    header: "Id",
   },
   {
-    accessorKey: "apellidos",
-    header: "Apellidos",
-  },
-  {
-    accessorKey: "carnetIdentidad",
-    header: "Carnet_Identidad",
-  },
-  {
-    accessorKey: "fechaNacimiento",
-    header: "Fecha Nacimiento"
-  },
-  {
-    accessorKey: "estado",
-    header: "Estado"
+    accessorKey: "nombre",
+    header: "Nombre",
   },
   {
     id: "acciones",
@@ -61,7 +49,7 @@ export const columns = ({ setUsuario, setOpen, router }: ColumnProps): ColumnDef
           <Button
             onClick={() => {
               setOpen(true)
-              setUsuario(rol)
+              setRol(rol)
               console.log(rol);
             }}
           >
@@ -69,7 +57,7 @@ export const columns = ({ setUsuario, setOpen, router }: ColumnProps): ColumnDef
           </Button>
           <Button
             onClick={() => {
-              manejarEliminado(rol.id, router)
+              manejarEliminado(rol.id,router)
             }
             }>
             <Trash2 />

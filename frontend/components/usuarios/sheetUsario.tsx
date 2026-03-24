@@ -1,5 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button"
+import { Rol } from "@/lib/types/Rol"
 import {
   Sheet,
   SheetClose,
@@ -32,11 +33,19 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { UsuarioSchema, Usuario } from "@/lib/schemas/usuario.schema"
+import { Usuario as UsuarioInterface } from "@/lib/types/Usuario"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, Controller } from "react-hook-form"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
-export default function SheetUsario() {
+interface SheetUsarioProps {
+  open: boolean
+  setOpen: (open: boolean) => void
+  usuario: UsuarioInterface | undefined
+  setUsuario: (rol: UsuarioInterface | undefined) => void
+}
+export default function SheetUsario({ open, setOpen, usuario, setUsuario }: SheetUsarioProps) {
   const router = useRouter()
   const form = useForm<Usuario>({
     resolver: zodResolver(UsuarioSchema),
@@ -45,22 +54,68 @@ export default function SheetUsario() {
       apellidos: "",
       carnetIdentidad: "",
       estado: "Activo",
+      rolId: undefined,
+      fechaNacimiento: undefined
     },
   })
-  async function onSubmit(data: Usuario) {
-    try {
-      const res = await fetch("http://localhost:8000/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-          rolId: 1,
-
-          fechaNacimiento: data.fechaNacimiento?.toISOString().split("T")[0],
-        }),
+  const [roles, setRoles] = useState<Rol[]>([])
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        nombres: usuario?.nombres ?? "",
+        apellidos: usuario?.apellidos ?? "",
+        carnetIdentidad: usuario?.carnetIdentidad ?? "",
+        estado: usuario?.estado ?? "Activo",
+        rolId: usuario?.rolId ?? undefined,
+        fechaNacimiento: usuario?.fechaNacimiento
+          ? new Date(usuario.fechaNacimiento)
+          : undefined,
       })
+    }
+
+  }, [form, open, usuario])
+  useEffect(() => {
+    if (open) {
+      const fetchCategorias = async () => {
+        try {
+          const res = await fetch("http://localhost:8000/api/roles")
+          const data = await res.json()
+          setRoles(data.data)
+        } catch (err) {
+          console.error(err)
+        }
+      }
+      fetchCategorias();
+    }
+  },[open])
+
+  async function onSubmit(data: Usuario) {
+    let res;
+    try {
+      if (usuario) {
+        res = await fetch("http://localhost:8000/api/users/" + usuario.id, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...data,
+
+            fechaNacimiento: data.fechaNacimiento?.toISOString().split("T")[0],
+          }),
+        })
+      } else {
+        res = await fetch("http://localhost:8000/api/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...data,
+            fechaNacimiento: data.fechaNacimiento?.toISOString().split("T")[0],
+          }),
+        })
+      }
 
       if (!res.ok) {
         const error = await res.json()
@@ -69,15 +124,20 @@ export default function SheetUsario() {
       }
 
       const result = await res.json()
-      console.log("Usuario creado:", result)
+      console.log(usuario ? "Usuario actualizado" : "Usuario creado:", result)
     } catch (err) {
       console.error("Error de red:", err)
     }
     router.refresh()
   }
+
   return (
-    <Sheet>
-      <SheetTrigger>Crear Usuario</SheetTrigger>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger
+        onClick={() => {
+          setUsuario(undefined)
+        }}
+      >Crear Usuario</SheetTrigger>
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Crear Usuario</SheetTitle>
@@ -168,14 +228,49 @@ export default function SheetUsario() {
               </Field>
             )}
           />
+          {usuario &&
+            <Controller
+              name="estado"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field orientation="responsive" data-invalid={fieldState.invalid}>
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf-select-estado">
+                      Estado
+                    </FieldLabel>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </FieldContent>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger
+                      id="form-rhf-select-estado"
+                      aria-invalid={fieldState.invalid}
+                      className="min-w-[120px]"
+                    >
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="item-aligned">
+                      <SelectItem value="Activo">Activo</SelectItem>
+                      <SelectItem value="Inactivo">Inactivo</SelectItem>
+                      <SelectItem value="Suspendido">Suspendido</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+              )}
+            />}
           <Controller
-            name="estado"
+            name="rolId"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field orientation="responsive" data-invalid={fieldState.invalid}>
                 <FieldContent>
                   <FieldLabel htmlFor="form-rhf-select-estado">
-                    Estado
+                    Rol
                   </FieldLabel>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -183,8 +278,8 @@ export default function SheetUsario() {
                 </FieldContent>
                 <Select
                   name={field.name}
-                  value={field.value}
-                  onValueChange={field.onChange}
+                  value={field.value?.toString() ?? ""}
+                  onValueChange={(value) => field.onChange(Number(value))}
                 >
                   <SelectTrigger
                     id="form-rhf-select-estado"
@@ -194,9 +289,9 @@ export default function SheetUsario() {
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent position="item-aligned">
-                    <SelectItem value="Activo">Activo</SelectItem>
-                    <SelectItem value="Inactivo">Inactivo</SelectItem>
-                    <SelectItem value="Suspendido">Suspendido</SelectItem>
+                    {roles.map((rol) => (
+                      <SelectItem key={rol.id} value={String(rol.id)}>{rol.nombre}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </Field>
@@ -208,12 +303,19 @@ export default function SheetUsario() {
             <Button
               type="button"
               variant="outline"
-              onClick={() => form.reset()}
+              onClick={() => form.reset(
+                {
+                  nombres: "",
+                  apellidos: "",
+                  carnetIdentidad: "",
+                  estado: "Activo"
+                }
+              )}
             >
               Reset
             </Button>
             <Button type="submit" form="form-usuario">
-              Crear
+              {usuario ? "Actualizar" : "Crear"}
             </Button>
           </Field>
         </SheetFooter>
