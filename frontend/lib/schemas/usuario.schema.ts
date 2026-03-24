@@ -14,8 +14,6 @@ export const UsuarioSchema = z.object({
     .min(4, "El carnet debe tener al menos 4 caracteres")
     .max(20, "Máximo 20 caracteres permitidos"),
 
-  // z.coerce.date() es ideal aquí porque los datos de formularios HTML 
-  // llegan como strings y esto los convierte automáticamente a objetos Date
   fechaNacimiento: z.date({
     error: issue => issue.input === undefined ? "La fecha de nacimiento es requerida" : "Dato invalido"
   }),

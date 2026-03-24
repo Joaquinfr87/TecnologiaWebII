@@ -34,9 +34,10 @@ import { Input } from "@/components/ui/input"
 import { UsuarioSchema, Usuario } from "@/lib/schemas/usuario.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, Controller } from "react-hook-form"
-
+import { useRouter } from "next/navigation"
 
 export default function SheetUsario() {
+  const router = useRouter()
   const form = useForm<Usuario>({
     resolver: zodResolver(UsuarioSchema),
     defaultValues: {
@@ -44,9 +45,9 @@ export default function SheetUsario() {
       apellidos: "",
       carnetIdentidad: "",
       estado: "Activo",
-    }
+    },
   })
- async function onSubmit(data: Usuario) {
+  async function onSubmit(data: Usuario) {
     try {
       const res = await fetch("http://localhost:8000/api/users", {
         method: "POST",
@@ -55,27 +56,24 @@ export default function SheetUsario() {
         },
         body: JSON.stringify({
           ...data,
-          rolId:1,
+          rolId: 1,
 
-          // 🔴 convertir Date → string (Laravel espera esto)
-          fechaNacimiento: data.fechaNacimiento
-            ?.toISOString()
-            .split("T")[0],
+          fechaNacimiento: data.fechaNacimiento?.toISOString().split("T")[0],
         }),
-      });
+      })
 
       if (!res.ok) {
-        const error = await res.json();
-        console.error("Error backend:", error);
-        return;
+        const error = await res.json()
+        console.error("Error backend:", error)
+        return
       }
 
-      const result = await res.json();
-      console.log("Usuario creado:", result);
-
+      const result = await res.json()
+      console.log("Usuario creado:", result)
     } catch (err) {
-      console.error("Error de red:", err);
+      console.error("Error de red:", err)
     }
+    router.refresh()
   }
   return (
     <Sheet>
@@ -92,8 +90,15 @@ export default function SheetUsario() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Nombres</FieldLabel>
-                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} value={field.value ?? ""} />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                <Input
+                  {...field}
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
+                  value={field.value ?? ""}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -103,8 +108,15 @@ export default function SheetUsario() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Apellidos</FieldLabel>
-                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} value={field.value ?? ""} />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                <Input
+                  {...field}
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
+                  value={field.value ?? ""}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -114,8 +126,15 @@ export default function SheetUsario() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Carnet Identidad</FieldLabel>
-                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} value={field.value ?? ""} />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                <Input
+                  {...field}
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
+                  value={field.value ?? ""}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -125,21 +144,27 @@ export default function SheetUsario() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Fecha Nacimiento</FieldLabel>
-                <Input {...field} type="date" id={field.name} aria-invalid={fieldState.invalid}
+                <Input
+                  {...field}
+                  type="date"
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
                   value={
                     field.value
                       ? new Date(field.value).toISOString().split("T")[0]
                       : ""
                   }
                   onChange={(e) => {
-                    const value = e.target.value;
-                    field.onChange(value ? new Date(value) : undefined);
+                    const value = e.target.value
+                    field.onChange(value ? new Date(value) : undefined)
                   }}
                   onBlur={field.onBlur}
                   name={field.name}
                   ref={field.ref}
                 />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -152,7 +177,9 @@ export default function SheetUsario() {
                   <FieldLabel htmlFor="form-rhf-select-estado">
                     Estado
                   </FieldLabel>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
                 </FieldContent>
                 <Select
                   name={field.name}
@@ -178,7 +205,11 @@ export default function SheetUsario() {
         </form>
         <SheetFooter>
           <Field orientation="horizontal">
-            <Button type="button" variant="outline" onClick={() => form.reset()}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => form.reset()}
+            >
               Reset
             </Button>
             <Button type="submit" form="form-usuario">
@@ -190,4 +221,3 @@ export default function SheetUsario() {
     </Sheet>
   )
 }
-

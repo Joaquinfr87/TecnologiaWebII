@@ -2,11 +2,11 @@ import SheetUsario from "@/components/usuarios/sheetUsario"
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
 
-type Usuario = {
+export type Usuario = {
   nombres:string,
   apellidos:string,
   carnetIdentidad:string,
-  fechaNacimiento:string,
+  fechaNacimiento:Date,
   estado: "Activo"|"Inactivo"|"Suspendido",
 }
 async function getData(): Promise<Usuario[]> {
@@ -31,6 +31,7 @@ async function getData(): Promise<Usuario[]> {
 
 export default async function Page() {
   const data = await getData()
+
 
   return (
     <div className="container mx-auto py-10">
