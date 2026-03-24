@@ -1,14 +1,6 @@
-import SheetUsario from "@/components/usuarios/sheetUsario"
-import { columns } from "./columns"
-import { DataTable } from "./data-table"
+import UsuariosClient from "./UsuariosClient";
+import {Usuario} from "@/lib/types/Usuario"
 
-export type Usuario = {
-  nombres:string,
-  apellidos:string,
-  carnetIdentidad:string,
-  fechaNacimiento:Date,
-  estado: "Activo"|"Inactivo"|"Suspendido",
-}
 async function getData(): Promise<Usuario[]> {
  try {
     const res = await fetch("http://localhost:8000/api/users");
@@ -34,9 +26,6 @@ export default async function Page() {
 
 
   return (
-    <div className="container mx-auto py-10">
-      <SheetUsario/>
-      <DataTable columns={columns} data={data} />
-    </div>
+  <UsuariosClient data={data}/>   
   )
 }
