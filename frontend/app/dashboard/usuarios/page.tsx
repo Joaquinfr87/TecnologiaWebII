@@ -1,8 +1,9 @@
 import SheetUsario from "@/components/usuarios/sheetUsario"
-import { columns, Payment } from "./columns"
+import { columns } from "./columns"
+import { Usuario } from "@/lib/schemas/usuario.schema"
 import { DataTable } from "./data-table"
 
-async function getData(): Promise<Payment[]> {
+async function getData(): Promise<Usuario[]> {
   // Fetch data from your API here.
   return [
     {

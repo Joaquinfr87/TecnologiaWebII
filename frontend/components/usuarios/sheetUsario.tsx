@@ -1,4 +1,5 @@
 "use client"
+import { Button } from "@/components/ui/button"
 import {
   Sheet,
   SheetClose,
@@ -39,6 +40,9 @@ export default function SheetUsario() {
   const form = useForm<Usuario>({
     resolver: zodResolver(UsuarioSchema),
     defaultValues: {
+      Nombres:"",
+      Apellidos:"",
+      Carnet_Identidad:"",
       Estado: "Activo",
     }
   })
@@ -53,14 +57,14 @@ export default function SheetUsario() {
           <SheetTitle>Are you absolutely sure?</SheetTitle>
           <SheetDescription>This action cannot be undone.</SheetDescription>
         </SheetHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} id="form-usuario">
           <Controller
             name="Nombres"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Nombres</FieldLabel>
-                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} value={field.value ?? ""} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
@@ -71,7 +75,7 @@ export default function SheetUsario() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Apellidos</FieldLabel>
-                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} value={field.value ?? ""} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
@@ -82,7 +86,7 @@ export default function SheetUsario() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Carnet Identidad</FieldLabel>
-                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} value={field.value ?? ""} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
@@ -99,6 +103,13 @@ export default function SheetUsario() {
                       ? new Date(field.value).toISOString().split("T")[0]
                       : ""
                   }
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    field.onChange(value ? new Date(value) : undefined);
+                  }}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                  ref={field.ref}
                 />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
@@ -137,9 +148,18 @@ export default function SheetUsario() {
             )}
           />
         </form>
+        <SheetFooter>
+          <Field orientation="horizontal">
+            <Button type="button" variant="outline" onClick={() => form.reset()}>
+              Reset
+            </Button>
+            <Button type="submit" form="form-usuario">
+              Submit
+            </Button>
+          </Field>
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   )
-
 }
 
