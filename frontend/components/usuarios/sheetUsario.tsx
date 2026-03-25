@@ -116,7 +116,8 @@ export default function SheetUsario({ open, setOpen, usuario, setUsuario }: Shee
           }),
         })
       }
-
+      setOpen(false)
+      setUsuario(undefined)
       if (!res.ok) {
         const error = await res.json()
         console.error("Error backend:", error)

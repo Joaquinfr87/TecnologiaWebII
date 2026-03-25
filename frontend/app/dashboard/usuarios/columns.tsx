@@ -15,11 +15,16 @@ async function manejarEliminado(id: number, router: ReturnType<typeof useRouter>
   const confirmado = window.confirm("Estas seguro de eliminar el Usuario")
   if (confirmado) {
     try {
-      const res = await fetch("http://localhost:8000/api/user/" + id,
+      const res = await fetch("http://localhost:8000/api/users/" + id,
         { method: "DELETE", })
       if (!res.ok) {
-        const error = await res.json()
-        console.error("Error al elimnar del backend", error)
+        const errorText = await res.text()
+        try {
+          const errorJson = JSON.parse(errorText)
+          console.error("Error al eliminar del backend", errorJson);
+        } catch (parseError) {
+          console.error("Error del servidor (no es Json):", errorText)
+        }
         return
       }
       console.log("Eliminado exitosamente")
