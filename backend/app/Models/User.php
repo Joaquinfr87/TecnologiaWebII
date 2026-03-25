@@ -18,6 +18,7 @@ class User extends Authenticatable
         'Nombres',
         'Apellidos',
         'Carnet_Identidad',
+        'Correo_Electronico',
         'Fecha_Nacimiento',
         'Contrasena',
         'Id_Rol',

@@ -24,7 +24,8 @@ class UserController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('Nombres', 'like', "%{$search}%")
                   ->orWhere('Apellidos', 'like', "%{$search}%")
-                  ->orWhere('Carnet_Identidad', 'like', "%{$search}%");
+                  ->orWhere('Carnet_Identidad', 'like', "%{$search}%")
+                  ->orWhere('Correo_Electronico', 'like', "%{$search}%");
             });
         }
 
@@ -76,6 +77,7 @@ class UserController extends Controller
             'nombres' => 'required|string|max:100',
             'apellidos' => 'required|string|max:100',
             'carnetIdentidad' => 'required|unique:Usuario,Carnet_Identidad', // Apunta a tabla 'Usuario'
+            'correoElectronico' => 'required|email|unique:Usuario,Correo_Electronico',
             'fechaNacimiento' => 'required|date',
             'contrasena' => 'nullable|min:6', // CAMBIO: nullable por los estudiantes
             'rolId' => 'required|exists:Rol,Id_Rol', // Apunta a tabla 'Rol'
@@ -93,6 +95,7 @@ class UserController extends Controller
             'Nombres' => $request->nombres,
             'Apellidos' => $request->apellidos,
             'Carnet_Identidad' => $request->carnetIdentidad,
+            'Correo_Electronico' => $request->correoElectronico,
             'Fecha_Nacimiento' => $request->fechaNacimiento,
             'Contrasena' => $request->contrasena ? Hash::make($request->contrasena) : null,
             'Id_Rol' => $request->rolId,
@@ -115,6 +118,7 @@ class UserController extends Controller
             'nombres' => 'sometimes|string|max:100',
             'apellidos' => 'sometimes|string|max:100',
             'carnetIdentidad' => 'sometimes|unique:Usuario,Carnet_Identidad,' . $id . ',Id_Usuario',
+            'correoElectronico' => 'sometimes|email|unique:Usuario,Correo_Electronico,' . $id . ',Id_Usuario',
             'fechaNacimiento' => 'sometimes|date',
             'rolId' => 'sometimes|exists:Rol,Id_Rol',
             'estado' => 'sometimes|in:Activo,Inactivo',
@@ -132,6 +136,7 @@ class UserController extends Controller
             'Nombres' => $request->get('nombres', $user->Nombres),
             'Apellidos' => $request->get('apellidos', $user->Apellidos),
             'Carnet_Identidad' => $request->get('carnetIdentidad', $user->Carnet_Identidad),
+            'Correo_Electronico' => $request->get('correoElectronico', $user->Correo_Electronico),
             'Fecha_Nacimiento' => $request->get('fechaNacimiento', $user->Fecha_Nacimiento),
             'Id_Rol' => $request->get('rolId', $user->Id_Rol),
             'Estado' => $request->get('estado', $user->Estado),
