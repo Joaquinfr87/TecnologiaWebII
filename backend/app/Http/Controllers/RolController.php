@@ -83,6 +83,10 @@ class RolController extends Controller
         $rol = Rol::findOrFail($id);
         $rol->delete();
 
+        // Tras eliminar, reiniciamos el AUTO_INCREMENT.
+        // prueba o test
+        \Illuminate\Support\Facades\DB::statement('ALTER TABLE ' . $rol->getTable() . ' AUTO_INCREMENT = 4');
+
         return response()->json([
             'message' => 'Rol eliminado correctamente'
         ], 200);

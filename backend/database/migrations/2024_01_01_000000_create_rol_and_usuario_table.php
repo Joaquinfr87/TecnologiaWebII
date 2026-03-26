@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('Nombres', 100);
             $table->string('Apellidos', 100);
             $table->string('Carnet_Identidad', 20)->unique();
+            $table->string('Correo_Electronico', 100)->unique();
             $table->date('Fecha_Nacimiento');
             $table->string('Contrasena', 255)->nullable();
             $table->integer('Id_Rol');
