@@ -37,6 +37,7 @@ interface SheetRolProps {
   setRol: (rol: RolInterface | undefined) => void
 }
 
+
 export default function SheetRol({ open, setOpen, rol, setRol }: SheetRolProps) {
 
   const router = useRouter();
@@ -68,7 +69,7 @@ export default function SheetRol({ open, setOpen, rol, setRol }: SheetRolProps) 
           body: JSON.stringify(data)
         })
       } else {
-         res = await fetch("http://localhost:8000/api/roles", {
+        res = await fetch("http://localhost:8000/api/roles", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -83,7 +84,7 @@ export default function SheetRol({ open, setOpen, rol, setRol }: SheetRolProps) 
       }
 
       const result = await res.json()
-      console.log(rol?"Rol actualizado:":"Rol Creado", result)
+      console.log(rol ? "Rol actualizado:" : "Rol Creado", result)
 
       setOpen(false);
       setRol(undefined);
