@@ -5,11 +5,13 @@ import { Usuario } from "@/lib/types/Usuario"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { SquarePen, Trash2 } from "lucide-react"
+import { Rol } from "@/lib/types/Rol"
 
 interface ColumnProps {
   setUsuario: (usuario: Usuario | undefined) => void
   setOpen: (open: boolean) => void
   router: ReturnType<typeof useRouter>
+  rolesMap: Record<number,string>
 }
 async function manejarEliminado(id: number, router: ReturnType<typeof useRouter>) {
   const confirmado = window.confirm("Estas seguro de eliminar el Usuario")
@@ -33,9 +35,8 @@ async function manejarEliminado(id: number, router: ReturnType<typeof useRouter>
       console.error("Error de red:", err)
     }
   }
-
 }
-export const columns = ({ setUsuario, setOpen, router }: ColumnProps): ColumnDef<Usuario>[] => [
+export const columns = ({ setUsuario, setOpen, router,rolesMap }: ColumnProps): ColumnDef<Usuario>[] => [
   {
     accessorKey: "nombres",
     header: "Nombres",
@@ -53,28 +54,36 @@ export const columns = ({ setUsuario, setOpen, router }: ColumnProps): ColumnDef
     header: "Fecha Nacimiento"
   },
   {
+    accessorKey: "rolId",
+    header: "Rol",
+    cell:({getValue})=>{
+      const rolId = getValue<number>();//=> es lo mismo que row.original["rolId"]
+      return rolesMap[rolId]??"Desconocido"
+    } 
+  },
+  {
     accessorKey: "estado",
     header: "Estado"
   },
   {
     id: "acciones",
     cell: ({ row }) => {
-      const rol = row.original
+      const usuario = row.original
 
       return (
         <div>
           <Button
             onClick={() => {
               setOpen(true)
-              setUsuario(rol)
-              console.log(rol);
+              setUsuario(usuario)
+              console.log(usuario);
             }}
           >
             <SquarePen />
           </Button>
           <Button
             onClick={() => {
-              manejarEliminado(rol.id, router)
+              manejarEliminado(usuario.id, router)
             }
             }>
             <Trash2 />

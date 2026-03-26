@@ -76,7 +76,7 @@ export default function SheetUsario({ open, setOpen, usuario, setUsuario }: Shee
   }, [form, open, usuario])
   useEffect(() => {
     if (open) {
-      const fetchCategorias = async () => {
+      const fetchRoles = async () => {
         try {
           const res = await fetch("http://localhost:8000/api/roles")
           const data = await res.json()
@@ -85,7 +85,7 @@ export default function SheetUsario({ open, setOpen, usuario, setUsuario }: Shee
           console.error(err)
         }
       }
-      fetchCategorias();
+      fetchRoles();
     }
   },[open])
 
@@ -141,8 +141,8 @@ export default function SheetUsario({ open, setOpen, usuario, setUsuario }: Shee
       >Crear Usuario</SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Crear Usuario</SheetTitle>
-          <SheetDescription>Form para crear Usuario</SheetDescription>
+          <SheetTitle>{usuario?"Actualizar":"Crear"} Usuario</SheetTitle>
+          <SheetDescription>Form para {usuario?"actualizar":"crear"} Usuario</SheetDescription>
         </SheetHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} id="form-usuario">
           <Controller

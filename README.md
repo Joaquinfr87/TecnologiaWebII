@@ -59,6 +59,7 @@ Luego, ejecuta las migraciones y levanta el servidor de desarrollo:
 ```bash
 php artisan migrate
 php artisan db:seed --class=RolSeeder
+php artisan migrate:fresh --seed
 php artisan serve
 ```
 * La API estará disponible en `http://localhost:8000`.
