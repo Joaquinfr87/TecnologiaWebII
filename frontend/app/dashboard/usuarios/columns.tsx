@@ -62,6 +62,10 @@ export const columns = ({ setUsuario, setOpen, router,rolesMap }: ColumnProps): 
     } 
   },
   {
+    accessorKey:"correoElectronico",
+    header:"Email"
+  },
+  {
     accessorKey: "estado",
     header: "Estado"
   },

@@ -6,4 +6,5 @@ export interface Usuario {
   fechaNacimiento:Date
   rolId:number
   estado: "Activo"|"Inactivo"|"Suspendido"
+  correoElectronico:string
 }

@@ -17,6 +17,7 @@ export const UsuarioSchema = z.object({
   fechaNacimiento: z.date({
     error: issue => issue.input === undefined ? "La fecha de nacimiento es requerida" : "Dato invalido"
   }),
+  correoElectronico: z.email("Email invalido"),
   rolId: z.number(),
   estado: Estado,
 })

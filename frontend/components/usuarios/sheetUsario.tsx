@@ -61,6 +61,7 @@ export default function SheetUsario({
       estado: "Activo",
       rolId: undefined,
       fechaNacimiento: undefined,
+      correoElectronico: "",
     },
   })
   const [roles, setRoles] = useState<Rol[]>([])
@@ -75,6 +76,7 @@ export default function SheetUsario({
         fechaNacimiento: usuario?.fechaNacimiento
           ? new Date(usuario.fechaNacimiento)
           : undefined,
+        correoElectronico: usuario?.correoElectronico ?? ""
       })
     }
   }, [form, open, usuario])
@@ -118,7 +120,7 @@ export default function SheetUsario({
           body: JSON.stringify({
             ...data,
             fechaNacimiento: data.fechaNacimiento?.toISOString().split("T")[0],
-            correoElectronico: "test@upds.com"
+            contrasena: 123456,
           }),
         })
       }
@@ -232,6 +234,24 @@ export default function SheetUsario({
                   onBlur={field.onBlur}
                   name={field.name}
                   ref={field.ref}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            name="correoElectronico"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                <Input
+                  {...field}
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
+                  value={field.value ?? ""}
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
