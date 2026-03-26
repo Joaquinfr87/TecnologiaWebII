@@ -24,7 +24,7 @@ export default function UsuariosClient({ data }: { data: Usuario[] }) {
       }
     }
     fetchRoles()
-  })
+  },[])
 
   const rolesMap = useMemo(()=>{
     return Object.fromEntries(

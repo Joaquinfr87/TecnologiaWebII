@@ -92,6 +92,7 @@ export function CardLogin() {
                     aria-invalid={fieldState.invalid}
                     value={field.value ?? ""}
                     placeholder="*************"
+                    type="password"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />

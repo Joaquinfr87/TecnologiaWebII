@@ -11,7 +11,7 @@ export async function loginAction(data: { email: string; contrasena: string }) {
     },
     body: JSON.stringify({
       email: data.email,
-      password: data.contrasena
+      contrasena: data.contrasena
     }
     )
   }
