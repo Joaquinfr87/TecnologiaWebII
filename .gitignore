@@ -2,4 +2,28 @@
 .vscode/
 *.swp
 *.swo
+# Archivos auxiliares de LaTeX
+*.aux
+*.log
+*.toc
+*.out
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+
+# Archivos temporales adicionales
+*.nav
+*.snm
+*.vrb
+
+# PDFs (opcional, depende si quieres versionarlos)
+# *.pdf
+
+# Carpetas comunes
+latex/build/
+latex/out/
 

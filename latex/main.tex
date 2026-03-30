@@ -1,6 +1,7 @@
 % PLANTILLA PERSONALIZADA UPDS
 \documentclass[12pt,letterpaper]{report}
 
+\usepackage{xparse}% para notas opcionales en la figura
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage{graphicx}
@@ -101,11 +102,11 @@
 {}
 
 %----------------------Comandos---------------------------
-\newcommand{\figuraAPA}[5]{
+\NewDocumentCommand{\figuraAPA}{m m m m o m}{
 	\begin{figure}[H]
 		
 		\caption{#2}
-		\label{#5}
+		\label{#6}
 		
 		\begin{center}
 			\begin{minipage}{#3}
@@ -115,12 +116,36 @@
 				
 				\vspace{4pt}
 				\raggedright
+				
+				% Nota opcional
+				\IfValueT{#5}{
+					{\small \textit{Nota: #5}\\}
+				}
+				
 				{\small \textbf{Fuente:} #4}
 				
 			\end{minipage}
 		\end{center}
 		
 	\end{figure}
+}
+
+\newcommand{\tablaAPA}[5]{
+	\begin{table}[H]
+		
+		\caption{#2}
+		\label{#5}
+		
+		\begin{center}
+			\begin{minipage}{#3}
+				
+				\centering
+				#1
+				
+			\end{minipage}
+		\end{center}
+		\fuente{#4}
+	\end{table}
 }
 %---------------------------------------------------------
 % DOCUMENTO
@@ -409,7 +434,14 @@
 	
 	Finalmente, con la conexión a la base de datos exitosamente establecida, se procedió a estructurar el esquema de datos. Para ello, se ejecutó el comando \texttt{php artisan migrate} en el entorno de desarrollo de Laravel. Esta acción procesó los archivos de migración del framework, creando las tablas necesarias para gestionar los usuarios, tarjetas NFC y el historial de pasajes estudiantiles. La salida de este proceso se puede observar en la Figura \ref{fig:migraciones_db}.
 	
-	\figuraAPA{latex/imagenes/migraciones.png}{Ejecución de migraciones de MySQL en Laravel.}{0.8\textwidth}{Salida de la terminal al ejecutar php artisan migrate.}{fig:migraciones_db}
+	\figuraAPA
+	{figuras/migraciones.jpeg}
+	{Ejecución de migraciones de MySQL en Laravel.}
+	{0.8\textwidth}
+	{Elaboración propia.}
+	[Salida de la terminal al ejecutar \texttt{php artisan migrate}.]
+	{fig:migraciones_db}
+	
 	\section{Arquitectura del sistema} 
 	
 	\subsection{Arquitectura cliente-servidor} 
@@ -438,12 +470,35 @@
 	
 	\subsection{Diagrama conceptual}
 	
+	\figuraAPA
+	{figuras/diagrama-conceptual.jpeg}
+	{Diagrama conceptual del sistema.}
+	{0.9\textwidth}
+	{Elaboración propia.}
+	[Representa las entidades principales y sus relaciones a nivel abstracto, sin detalles de implementación.]
+	{fig:diagrama_conceptual}
+	
 	
 	\subsection{Diagrama lógico}
-	Contenido...
+	
+	\figuraAPA
+	{figuras/diagrama-logico.jpeg}
+	{Diagrama lógico del sistema.}
+	{0.9\textwidth}
+	{Elaboración propia.}
+	[Describe la estructura de datos, atributos y relaciones, considerando reglas de negocio y normalización.]
+	{fig:diagrama_logico}
+	
 	
 	\subsection{Diagrama físico}
-	Contenido...
+	
+	\figuraAPA
+	{figuras/diagrama-fisico.jpeg}
+	{Diagrama físico de la base de datos.}
+	{0.9\textwidth}
+	{Elaboración propia.}
+	[Implementación en el gestor de base de datos, incluyendo tipos de datos, claves primarias, foráneas y restricciones.]
+	{fig:diagrama_fisico}
 	
 	\section{Desarrollo de la aplicación}
 	
@@ -466,8 +521,7 @@
 		
 		\item[AuthController:] Para que el chofer introduzca su correo/carnet y contraseña para abrir su turno en el celular. (Los estudiantes usarán esto si tienen una app para ver su saldo).
 		
-		\item[CobroController:] El corazón de tu aplicación Android. \\
-		\textbf{¿Qué hará?} El Android del chofer lee una tarjeta y manda el \texttt{UID\_NFC} por POST a este controlador. \\
+		\item[CobroController:] En la App Android del chofer lee una tarjeta y manda el \texttt{UID\_NFC} por POST a este controlador. \\
 		\textbf{Lógica paso a paso:}
 		\begin{itemize}
 			\item Busca la Tarjeta\_NFC $\rightarrow$ verifica que esté 'Activa' $\rightarrow$ saca al Usuario dueño.
@@ -477,204 +531,191 @@
 			\texttt{\{"status": "ok", "msj": "Cobro exitoso", "saldo\_restante": 12.50\}}
 		\end{itemize}
 		
-		\item[CuentaController:] Para tener un endpoint (ej. \texttt{GET /api/cuenta/mi-saldo}) donde un
+		\item[CuentaController:] Para tener un endpoint (ej. \texttt{GET /api/cuenta/mi-saldo}) donde un usuario pueda ver ya accedeetalles de su cuenta
+	\end{description}
+	
+	\subsection{Creación de modelos}
+	\begin{description}
+		\item[Rol:] Relaciones: \texttt{hasMany(Usuario::class)}, \texttt{hasMany(Tarifa::class)}
 		
-		\subsection{Creación de modelos}
-		\begin{description}
-			\item[Rol:] Relaciones: \texttt{hasMany(Usuario::class)}, \texttt{hasMany(Tarifa::class)}
-			
-			\item[Tarifa:] Relaciones: \texttt{belongsTo(Rol::class)} (Ej: Te dirá que el pasaje de 0.50 Bs le pertenece al rol 'Estudiante').
-			
-			\item[Usuario:] Relaciones: \texttt{belongsTo(Rol::class)}, \texttt{hasOne(Cuenta::class)} (Billetera única por persona), \texttt{hasMany(TarjetaNFC::class)} (Por si pierde una tarjeta y le dan otra).
-			
-			\item[Cuenta:] Relaciones: \texttt{belongsTo(Usuario::class)}, \texttt{hasMany(Transaccion::class)} (Como cuenta origen o destino).
-			
-			\item[TarjetaNFC:] Relaciones: \texttt{belongsTo(Usuario::class)}, \texttt{hasMany(Transaccion::class)}.
-			
-			\item[Transaccion:] Relaciones: \texttt{belongsTo(Cuenta::class, 'Id\_Cuenta\_Origen')} (Quien paga), \texttt{belongsTo(Cuenta::class, 'Id\_Cuenta\_Destino')} (El chofer/sindicato que recibe), \texttt{belongsTo(TarjetaNFC::class, 'UID\_NFC')}.
-		\end{description}
+		\item[Tarifa:] Relaciones: \texttt{belongsTo(Rol::class)} (Ej: Te dirá que el pasaje de 0.50 Bs le pertenece al rol 'Estudiante').
 		
-		\subsection{Desarrollo de vistas}
-		Contenido...
+		\item[Usuario:] Relaciones: \texttt{belongsTo(Rol::class)}, \texttt{hasOne(Cuenta::class)} (Billetera única por persona), \texttt{hasMany(TarjetaNFC::class)} (Por si pierde una tarjeta y le dan otra).
 		
-		\subsection{Implementación de funcionalidades}
-		Contenido...
+		\item[Cuenta:] Relaciones: \texttt{belongsTo(Usuario::class)}, \texttt{hasMany(Transaccion::class)} (Como cuenta origen o destino).
 		
-		\section{Interacción con la base de datos}
+		\item[TarjetaNFC:] Relaciones: \texttt{belongsTo(Usuario::class)}, \texttt{hasMany(Transaccion::class)}.
 		
-		\subsection{Configuración de conexión}
-		La conexión con la base de datos MySQL en el entorno de desarrollo se gestiona a través del archivo de configuración de entorno \texttt{.env}, ubicado en el directorio raíz del \textit{backend}. Laravel utiliza este archivo para centralizar las credenciales y parámetros de red, permitiendo una fácil conmutación entre entornos. En el Cuadro \ref{tab:config_db} se detallan las variables de entorno principales configuradas para el proyecto.
-		
-		\begin{table}[H]
-			\caption{Variables de configuración de la base de datos}
-			\centering
-			\begin{tabular}{|l|l|}
-				\hline
-				\textbf{Variable} & \textbf{Valor configurado} \\ \hline
-				\texttt{DB\_CONNECTION} & mysql \\ \hline
-				\texttt{DB\_HOST} & 127.0.0.1 \\ \hline
-				\texttt{DB\_PORT} & 3306 \\ \hline
-				\texttt{DB\_DATABASE} & laravel\_db \\ \hline
-				\texttt{DB\_USERNAME} & laravel\_user \\ \hline
-				\texttt{DB\_PASSWORD} & secret\_password \\ \hline
-			\end{tabular}
-			\label{tab:config_db}
-			
-			\fuente{Elaboración propia.}
-		\end{table}
-		
-		\subsection{Consultas realizadas}
-		Para la interacción con los datos, se utiliza el ORM Eloquent de Laravel, el cual permite realizar consultas a la base de datos mediante una sintaxis orientada a objetos en lugar de consultas SQL manuales. En el sistema de pasajes, las consultas más representativas incluyen filtros de búsqueda y paginación. Un ejemplo destacado es la recuperación de usuarios en el \texttt{UserController}, donde se implementa lógica para filtrar por nombres, apellidos o carnet de identidad, junto con un sistema de ordenamiento dinámico:
-		
-		\begin{figure}[H]
-			\caption{Filtrado y consulta mediante Eloquent}
-			\label{fig:consulta_eloquent}
-			\begin{center}
-				\begin{minipage}{0.9\textwidth}
-					\begin{lstlisting}[language=php, frame=single, basicstyle=\ttfamily\scriptsize]
-						$query = User::query();
-						
-						if ($request->has('search')) {
-							$search = $request->search;
-							$query->where(function($q) use ($search) {
-								$q->where('Nombres', 'like', "%{$search}%")
-								->orWhere('Apellidos', 'like', "%{$search}%")
-								->orWhere('Carnet_Identidad', 'like', "%{$search}%");
-							});
-						}
-						
-						$users = $query->paginate($request->get('perPage', 10));
-					\end{lstlisting}
-					\vspace{4pt}
-					\raggedright
-					{\small \textbf{Fuente:} Elaboración propia.}
-				\end{minipage}
-			\end{center}
-		\end{figure}
-		
-		\subsection{Manipulación de datos}
-		La manipulación de datos comprende las operaciones de creación, actualización y eliminación. En el proyecto, se prioriza la integridad de los datos mediante el uso de asignación masiva (\textit{mass assignment}) y validación de reglas de negocio antes de persistir la información.
-		
-		\subsubsection{Creación de registros}
-		Para registrar un nuevo usuario, se utiliza el método \texttt{create()}, el cual recibe un arreglo asociativo con los datos validados del estudiante o chofer. El sistema se encarga de aplicar el \textit{hashing} a la contraseña para su almacenamiento seguro:
-		
-		\begin{figure}[H]
-			\caption{Inserción de datos en la tabla Usuario}
-			\label{fig:insercion_usuario}
-			\begin{center}
-				\begin{minipage}{0.9\textwidth}
-					\begin{lstlisting}[language=php, frame=single, basicstyle=\ttfamily\scriptsize]
-						$user = User::create([
-						'Nombres' => $request->nombres,
-						'Apellidos' => $request->apellidos,
-						'Carnet_Identidad' => $request->carnetIdentidad,
-						'Contrasena' => Hash::make($request->contrasena),
-						'Id_Rol' => $request->rolId,
-						'Estado' => 'Activo',
-						]);
-					\end{lstlisting}
-					\vspace{4pt}
-					\raggedright
-					{\small \textbf{Fuente:} Elaboración propia.}
-				\end{minipage}
-			\end{center}
-		\end{figure}
-		
-		\subsubsection{Eliminación simulada (Soft Delete)}
-		Para mantener la trazabilidad histórica de las transacciones, el sistema no realiza un borrado físico de los registros de usuario. En su lugar, se implementa una "eliminación lógica" o \textit{Soft Delete} manual, modificando la columna \texttt{Estado} a \texttt{'Inactivo'}. Esto deshabilita al usuario del sistema sin perder sus registros relacionados:
-		
-		\begin{figure}[H]
-			\caption{Lógica de eliminación lógica}
-			\label{fig:soft_delete}
-			\begin{center}
-				\begin{minipage}{0.9\textwidth}
-					\begin{lstlisting}[language=php, frame=single, basicstyle=\ttfamily\scriptsize]
-						public function destroy($id)
-						{
-							$user = User::findOrFail($id);
-							$user->update(['Estado' => 'Inactivo']);
-							return response()->json(['message' => 'Usuario desactivado'], 200);
-						}
-					\end{lstlisting}
-					\vspace{4pt}
-					\raggedright
-					{\small \textbf{Fuente:} Elaboración propia.}
-				\end{minipage}
-			\end{center}
-		\end{figure}
-		
-		\section{Validación y manejo de errores}
-		
-		\subsection{Validación de formularios}
-		Contenido...
-		
-		\subsection{Manejo de excepciones}
-		Contenido...
-		
-		\subsection{Control de errores}
-		Contenido...
-		
-		\section{Pruebas del sistema}
-		
-		\subsection{Pruebas de funcionamiento}
-		Contenido...
-		
-		\section{Resultados}
-		
-		\subsection{Funcionamiento final}
-		Contenido...
-		
-		\subsection{Capturas del sistema}
-		Contenido...
-		
-		%---------------------------------------------------------
-		\chapter{Conclusiones y recomendaciones}
-		
-		Redacción de conclusiones...
-		
-		%---------------------------------------------------------
-		\chapter{Anexos}
-		\addcontentsline{toc}{chapter}{Anexos}
-		
-		\section{Anexo A: Archivo de configuración Docker Compose}
-		\label{anexo:docker_compose}
-		
-		A continuación, se detalla el contenido del archivo \texttt{docker-compose.yml} utilizado para el despliegue del motor de base de datos MySQL y la herramienta de administración visual Adminer:
-		
-		\begin{lstlisting}[language=bash, frame=single, title=docker-compose.yml, basicstyle=\ttfamily\small]
-			services:
-			# Base de Datos: MySQL
-			db:
-			image: mysql:8.0
-			environment:
-			MYSQL_DATABASE: laravel_db
-			MYSQL_ROOT_PASSWORD: root_password
-			MYSQL_USER: laravel_user
-			MYSQL_PASSWORD: secret_password
-			ports:
-			- "3306:3306"
-			volumes:
-			- mysql_data:/var/lib/mysql
-			
-			# Administrador: Adminer
-			adminer:
-			image: adminer
-			ports:
-			- "8080:8080"
-			depends_on:
-			- db
-			
-			volumes:
-			mysql_data:
-		\end{lstlisting}
-		
-		%---------------------------------------------------------
-		% REFERENCIAS
-		%---------------------------------------------------------
-		
-		% En la clase report se usa \bibname en lugar de \refname
-		\renewcommand\bibname{Referencias}
-		\bibliographystyle{apalike} % Define el estilo visual de la bibliografía
-		\bibliography{mibibliografia}
-		
-	\end{document}
+		\item[Transaccion:] Relaciones: \texttt{belongsTo(Cuenta::class, 'Id\_Cuenta\_Origen')} (Quien paga), \texttt{belongsTo(Cuenta::class, 'Id\_Cuenta\_Destino')} (El chofer/sindicato que recibe), \texttt{belongsTo(TarjetaNFC::class, 'UID\_NFC')}.
+	\end{description}
+	
+	\subsection{Desarrollo de vistas}
+	Contenido...
+	
+	\subsection{Implementación de funcionalidades}
+	Contenido...
+	
+	\section{Interacción con la base de datos}
+	\subsection{Configuración de conexión}
+	La conexión con la base de datos MySQL en el entorno de desarrollo se gestiona a través del archivo de configuración de entorno \texttt{.env}. Laravel utiliza este archivo para centralizar las credenciales y parámetros de red. Además, para asegurar la portabilidad y limpieza del entorno, se utiliza Docker Engine para orquestar el contenedor de MySQL. 
+	
+	A continuación, en el Cuadro \ref{tab:config_db} se detallan las variables de entorno configuradas para el proyecto, seguidas por el fragmento del archivo \texttt{docker-compose.yml} (Figura \ref{fig:docker_config}) que define el servicio de persistencia y la herramienta de administración visual Adminer.
+	
+	\tablaAPA{
+		\begin{tabular}{|l|l|}
+			\hline
+			\textbf{Variable} & \textbf{Valor configurado} \\ \hline
+			\texttt{DB\_CONNECTION} & mysql \\ \hline
+			\texttt{DB\_HOST} & 127.0.0.1 \\ \hline
+			\texttt{DB\_PORT} & 3306 \\ \hline
+			\texttt{DB\_DATABASE} & laravel\_db \\ \hline
+			\texttt{DB\_USERNAME} & laravel\_user \\ \hline
+			\texttt{DB\_PASSWORD} & secret\_password \\ \hline
+		\end{tabular}
+	}{Variables de configuración de la base de datos}{0.8\textwidth}{Elaboración propia.}{tab:config_db}
+	
+	\begin{figure}[H]
+		\caption{Configuración del servicio MySQL en Docker Compose}
+		\label{fig:docker_config}
+		\begin{center}
+			\begin{minipage}{0.9\textwidth}
+				\begin{lstlisting}[language=bash, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
+					services:
+					db:
+					image: mysql:8.0
+					environment:
+					MYSQL_DATABASE: laravel_db
+					MYSQL_ROOT_PASSWORD: root_password
+					MYSQL_USER: laravel_user
+					MYSQL_PASSWORD: secret_password
+					ports:
+					- "3306:3306"
+				\end{lstlisting}
+				\vspace{4pt}
+				\raggedright
+				{\small \textbf{Fuente:} Elaboración propia.}
+			\end{minipage}
+		\end{center}
+	\end{figure}
+	
+	\subsection{Consultas realizadas}
+	Para la interacción con los datos, se utiliza el ORM Eloquent de Laravel, el cual permite realizar consultas a la base de datos mediante una sintaxis orientada a objetos en lugar de consultas SQL manuales. En el sistema de pasajes, las consultas más representativas incluyen filtros de búsqueda y paginación. Un ejemplo destacado es la recuperación de usuarios en el \texttt{UserController}, donde se implementa lógica para filtrar por nombres, apellidos o carnet de identidad, junto con un sistema de ordenamiento dinámico:
+	
+	\begin{figure}[H]
+		\caption{Filtrado y consulta mediante Eloquent}
+		\label{fig:consulta_eloquent}
+		\begin{center}
+			\begin{minipage}{0.9\textwidth}
+				\begin{lstlisting}[language=php, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
+					$query = User::query();
+					
+					if ($request->has('search')) {
+						$search = $request->search;
+						$query->where(function($q) use ($search) {
+							$q->where('Nombres', 'like', "%{$search}%")
+							->orWhere('Apellidos', 'like', "%{$search}%")
+							->orWhere('Carnet_Identidad', 'like', "%{$search}%");
+						});
+					}
+					
+					$users = $query->paginate($request->get('perPage', 10));
+				\end{lstlisting}
+				\vspace{4pt}
+				\raggedright
+				{\small \textbf{Fuente:} Elaboración propia.}
+			\end{minipage}
+		\end{center}
+	\end{figure}
+	
+	\subsection{Manipulación de datos}
+	La manipulación de datos comprende las operaciones de creación, actualización y eliminación. En el proyecto, se prioriza la integridad de los datos mediante el uso de asignación masiva (\textit{mass assignment}) y validación de reglas de negocio antes de persistir la información.
+	
+	\subsection{Creación de registros}
+	Para registrar un nuevo usuario, se utiliza el método \texttt{create()}, el cual recibe un arreglo asociativo con los datos validados del estudiante o chofer. El sistema se encarga de aplicar el \textit{hashing} a la contraseña para su almacenamiento seguro:
+	
+	\begin{figure}[H]
+		\caption{Inserción de datos en la tabla Usuario}
+		\label{fig:insercion_usuario}
+		\begin{center}
+			\begin{minipage}{0.9\textwidth}
+				\begin{lstlisting}[language=php, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
+					$user = User::create([
+					'Nombres' => $request->nombres,
+					'Apellidos' => $request->apellidos,
+					'Carnet_Identidad' => $request->carnetIdentidad,
+					'Contrasena' => Hash::make($request->contrasena),
+					'Id_Rol' => $request->rolId,
+					'Estado' => 'Activo',
+					]);
+				\end{lstlisting}
+				\vspace{4pt}
+				\raggedright
+				{\small \textbf{Fuente:} Elaboración propia.}
+			\end{minipage}
+		\end{center}
+	\end{figure}
+	
+	\subsubsection{Eliminación simulada (Soft Delete)}
+	Para mantener la trazabilidad histórica de las transacciones, el sistema no realiza un borrado físico de los registros de usuario. En su lugar, se implementa una "eliminación lógica" o \textit{Soft Delete} manual, modificando la columna \texttt{Estado} a \texttt{'Inactivo'}. Esto deshabilita al usuario del sistema sin perder sus registros relacionados:
+	
+	\begin{figure}[H]
+		\caption{Lógica de eliminación lógica}
+		\label{fig:soft_delete}
+		\begin{center}
+			\begin{minipage}{0.9\textwidth}
+				\begin{lstlisting}[language=php, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
+					public function destroy($id)
+					{
+						$user = User::findOrFail($id);
+						$user->update(['Estado' => 'Inactivo']);
+						return response()->json(['message' => 'Usuario desactivado'], 200);
+					}
+				\end{lstlisting}
+				\vspace{4pt}
+				\raggedright
+				{\small \textbf{Fuente:} Elaboración propia.}
+			\end{minipage}
+		\end{center}
+	\end{figure}
+	
+	\section{Validación y manejo de errores}
+	
+	\subsection{Validación de formularios}
+	Contenido...
+	
+	\subsection{Manejo de excepciones}
+	Contenido...
+	
+	\subsection{Control de errores}
+	Contenido...
+	
+	\section{Pruebas del sistema}
+	
+	\subsection{Pruebas de funcionamiento}
+	Contenido...
+	
+	\section{Resultados}
+	
+	\subsection{Funcionamiento final}
+	Contenido...
+	
+	\subsection{Capturas del sistema}
+	Contenido...
+	
+	%---------------------------------------------------------
+	\chapter{Conclusiones y recomendaciones}
+	
+	Redacción de conclusiones...
+	
+	%---------------------------------------------------------
+	
+	%---------------------------------------------------------
+	% REFERENCIAS
+	%---------------------------------------------------------
+	
+	% En la clase report se usa \bibname en lugar de \refname
+	\renewcommand\bibname{Referencias}
+	\bibliographystyle{apalike} % Define el estilo visual de la bibliografía
+	\bibliography{mibibliografia}
+	
+\end{document}
