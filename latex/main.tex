@@ -309,131 +309,131 @@
 	
 	En el proyecto propuesto, Laravel permitirá implementar de forma estructurada la lógica del sistema, facilitando la gestión de rutas, controladores y modelos.
 	
-  \subsection{NextJs}
-
-  De acuerdo con \citet{nextjs2023}, Next.js es un framework de desarrollo basado en React que permite la creación de aplicaciones web optimizadas mediante renderizado del lado del servidor y generación de sitios estáticos.
-
-  En el sistema propuesto, Next.js será utilizado para estructurar el frontend de la aplicación, mejorando el rendimiento y la organización del código, así como facilitando la integración con la API del backend.
-
- \subsection{React}
-
-  Según \citet{react2023}, React es una biblioteca de JavaScript para construir interfaces de usuario basadas en componentes reutilizables y un flujo de datos unidireccional.
-
-  En el proyecto propuesto, React será utilizado para desarrollar la interfaz del sistema web, permitiendo crear componentes reutilizables que faciliten la visualización dinámica de la información de usuarios, saldos y transacciones.
-\subsection{Tailwind CSS}
-
-  Según \citet{tailwind2023}, Tailwind CSS es un framework de CSS basado en utilidades que permite construir interfaces personalizadas mediante clases predefinidas.
-
-  En el proyecto propuesto, Tailwind CSS será utilizado para diseñar la interfaz del sistema web, permitiendo un desarrollo más rápido y consistente de los estilos visuales de la aplicación.
-   
-
+	\subsection{NextJs}
+	
+	De acuerdo con \citet{nextjs2023}, Next.js es un framework de desarrollo basado en React que permite la creación de aplicaciones web optimizadas mediante renderizado del lado del servidor y generación de sitios estáticos.
+	
+	En el sistema propuesto, Next.js será utilizado para estructurar el frontend de la aplicación, mejorando el rendimiento y la organización del código, así como facilitando la integración con la API del backend.
+	
+	\subsection{React}
+	
+	Según \citet{react2023}, React es una biblioteca de JavaScript para construir interfaces de usuario basadas en componentes reutilizables y un flujo de datos unidireccional.
+	
+	En el proyecto propuesto, React será utilizado para desarrollar la interfaz del sistema web, permitiendo crear componentes reutilizables que faciliten la visualización dinámica de la información de usuarios, saldos y transacciones.
+	\subsection{Tailwind CSS}
+	
+	Según \citet{tailwind2023}, Tailwind CSS es un framework de CSS basado en utilidades que permite construir interfaces personalizadas mediante clases predefinidas.
+	
+	En el proyecto propuesto, Tailwind CSS será utilizado para diseñar la interfaz del sistema web, permitiendo un desarrollo más rápido y consistente de los estilos visuales de la aplicación.
+	
+	
 	\section{Arquitectura MVC}
 	
 	De acuerdo con \citet{gamma1994}, el patrón Modelo-Vista-Controlador (MVC) separa la lógica de negocio, la interfaz de usuario y el control de la aplicación en diferentes componentes.
 	
 	En el sistema desarrollado, la arquitectura MVC permitirá organizar el código de manera clara, separando la gestión de datos, la lógica del sistema y la interfaz de usuario.
-
-  \section{API}
-
-  Según \citet{fielding2000}, una API (Interfaz de Programación de Aplicaciones) es un conjunto de definiciones y protocolos que permiten la comunicación entre diferentes sistemas de software.
-
-  En el proyecto desarrollado, la API permitirá la interacción entre la aplicación móvil, el sistema web y el backend, gestionando las solicitudes relacionadas con autenticación, validación de pagos y consulta de datos.
-
-  \section{Docker}
-
-  De acuerdo con \citet{docker2023}, Docker es una plataforma que permite desarrollar, enviar y ejecutar aplicaciones dentro de contenedores, asegurando consistencia en diferentes entornos de desarrollo y producción.
-
-  En el sistema propuesto, Docker será utilizado para gestionar el entorno de desarrollo, facilitando la configuración del servidor, la base de datos y otros servicios necesarios para el funcionamiento del sistema.
-
-  \section{JavaScript}
-
-  Según \citet{ecma262}, JavaScript es un lenguaje de programación interpretado, ampliamente utilizado para el desarrollo de aplicaciones web interactivas tanto en el cliente como en el servidor.
-
-  En el proyecto propuesto, JavaScript será utilizado para implementar la lógica del lado del cliente, permitiendo la interacción dinámica con el usuario y la comunicación con el backend mediante solicitudes HTTP.
-
-  \section{TypeScript}
-
-  De acuerdo con \citet{typescript2023}, TypeScript es un superconjunto de JavaScript que añade tipado estático opcional, mejorando la detección de errores y la mantenibilidad del código.
-
-  En el sistema desarrollado, TypeScript será utilizado para mejorar la calidad del código en el frontend, facilitando el desarrollo de componentes más robustos y escalables.
-
-   %---------------------------------------------------------
+	
+	\section{API}
+	
+	Según \citet{fielding2000}, una API (Interfaz de Programación de Aplicaciones) es un conjunto de definiciones y protocolos que permiten la comunicación entre diferentes sistemas de software.
+	
+	En el proyecto desarrollado, la API permitirá la interacción entre la aplicación móvil, el sistema web y el backend, gestionando las solicitudes relacionadas con autenticación, validación de pagos y consulta de datos.
+	
+	\section{Docker}
+	
+	De acuerdo con \citet{docker2023}, Docker es una plataforma que permite desarrollar, enviar y ejecutar aplicaciones dentro de contenedores, asegurando consistencia en diferentes entornos de desarrollo y producción.
+	
+	En el sistema propuesto, Docker será utilizado para gestionar el entorno de desarrollo, facilitando la configuración del servidor, la base de datos y otros servicios necesarios para el funcionamiento del sistema.
+	
+	\section{JavaScript}
+	
+	Según \citet{ecma262}, JavaScript es un lenguaje de programación interpretado, ampliamente utilizado para el desarrollo de aplicaciones web interactivas tanto en el cliente como en el servidor.
+	
+	En el proyecto propuesto, JavaScript será utilizado para implementar la lógica del lado del cliente, permitiendo la interacción dinámica con el usuario y la comunicación con el backend mediante solicitudes HTTP.
+	
+	\section{TypeScript}
+	
+	De acuerdo con \citet{typescript2023}, TypeScript es un superconjunto de JavaScript que añade tipado estático opcional, mejorando la detección de errores y la mantenibilidad del código.
+	
+	En el sistema desarrollado, TypeScript será utilizado para mejorar la calidad del código en el frontend, facilitando el desarrollo de componentes más robustos y escalables.
+	
+	%---------------------------------------------------------
 	\chapter{Marco práctico} 
-
-\section{Instalación y configuración del entorno} 
-
-\subsection{Instalación del entorno local} 
-Para el desarrollo del proyecto, se estableció un entorno de trabajo nativo sobre el sistema operativo Debian Linux. La preparación de este entorno requirió la instalación individual de las herramientas base para el funcionamiento del backend, el frontend y la base de datos.
-
-\subsection{Instalación de PHP} 
-Dado que el backend del sistema está desarrollado en Laravel, fue necesaria la instalación de PHP en el entorno local, junto con sus extensiones requeridas y el gestor de dependencias Composer. Esto permite ejecutar el servidor de desarrollo y gestionar los paquetes de la API RESTful de manera nativa sobre Debian. En la Figura \ref{fig:install_php} se muestran los comandos ejecutados para este propósito.
-
-\figuraAPA{figuras/comandos-php.png}{Instalación de PHP y dependencias en Debian.}{0.8\textwidth}{Elaboración propia.}{fig:install_php}
-
-\subsection{Instalación de Node.js} 
-Para la construcción y ejecución del frontend web desarrollado con Next.js, se procedió a la instalación del entorno de ejecución Node.js y su gestor de paquetes (npm). La instalación se realizó para garantizar la compatibilidad requerida por las herramientas modernas de React y el \textit{App Router}. La Figura \ref{fig:install_node} detalla el proceso de instalación en la terminal.
-
-\figuraAPA{figuras/comandos-node.png}{Instalación de Node.js en el entorno local.}{0.8\textwidth}{Elaboración propia.}{fig:install_node}
-
-\subsection{Instalación de Docker Engine} 
-Para la capa de persistencia de datos, se optó por aislar el motor de base de datos MySQL utilizando contenedores. Esto evita conflictos de versiones con otras aplicaciones del sistema anfitrión y mantiene el entorno limpio. Siguiendo la documentación oficial para Debian, se instaló Docker Engine. La Figura \ref{fig:install_docker} detalla los comandos utilizados mediante el gestor de paquetes \texttt{apt} para la configuración inicial del motor.
-
-\figuraAPA{figuras/comandos-docker.png}{Instalación de Docker Engine en el entorno local (Debian).}{0.8\textwidth}{Elaboración propia.}{fig:install_docker}
-
-\subsection{Instalación de los frameworks} 
-El proyecto adopta un enfoque de desarrollo desacoplado, separando la lógica de negocio de la interfaz de usuario. Para lograr esto, se implementaron dos frameworks distintos que operan de manera independiente pero se comunican a través de una API RESTful. Ambos entornos se inicializaron de manera nativa sobre el sistema operativo Debian, aprovechando las herramientas de desarrollo locales configuradas previamente (PHP y Node.js). A continuación, se detalla el proceso de inicialización de cada uno.
-
-\subsubsection{Instalación del framework backend (Laravel)} 
-Para la construcción del backend, encargado de gestionar la validación de las transacciones NFC y la lógica de negocio, se instaló la versión 11 del framework Laravel. Esta instalación se llevó a cabo utilizando Composer, el gestor de dependencias de PHP. Mediante la terminal, se ejecutó el comando de creación de proyecto, el cual descargó el núcleo del framework y generó la estructura base de directorios. En la Figura \ref{fig:install_laravel} se ilustra este proceso.
-
-\figuraAPA{figuras/comandos-laravel.png}{Inicialización del proyecto backend en Laravel 11.}{0.8\textwidth}{Elaboración propia.}{fig:install_laravel}
-
-\subsubsection{Instalación del framework frontend (Next.js)} 
-Por otro lado, la interfaz web (cliente administrativo) se inicializó utilizando Next.js. Aprovechando el entorno de Node.js, se ejecutó la utilidad \texttt{create-next-app} para generar la estructura del proyecto web. Durante la instalación, se configuró el proyecto para utilizar el \textit{App Router}, asegurando un entorno de desarrollo moderno para el consumo de la API. La Figura \ref{fig:install_nextjs} muestra el comando ejecutado para la creación de la aplicación frontend.
-
-\figuraAPA{figuras/comandos-next.png}{Inicialización del proyecto web con Next.js.}{0.8\textwidth}{Elaboración propia.}{fig:install_nextjs}
-
-\subsection{Configuración de la base de datos} 
-La persistencia de datos se resolvió utilizando MySQL. A diferencia de un entorno completamente contenedorizado, Docker se empleó de manera exclusiva para levantar la instancia de MySQL, lo que garantiza que el motor de base de datos se ejecute en un entorno limpio y reproducible sin afectar los recursos del sistema anfitrión. Para ello, se definió la configuración del servicio en el archivo \texttt{docker-compose.yml} (ver Anexo A), ubicado en la raíz del proyecto, y se inicializó el contenedor ejecutando el comando \texttt{docker compose up -d} en la terminal.
-
-Una vez que el servicio de base de datos estuvo en ejecución, se procedió a establecer la conexión con el backend nativo de Laravel. Esto se logró modificando el archivo de configuración \texttt{.env} dentro del directorio \texttt{/backend}, donde se definieron las credenciales y parámetros de red mediante las siguientes variables de entorno:
-
-\begin{itemize}
-	\item \texttt{DB\_CONNECTION=mysql}
-	\item \texttt{DB\_HOST=127.0.0.1}
-	\item \texttt{DB\_PORT=3306}
-	\item \texttt{DB\_DATABASE=laravel\_db}
-	\item \texttt{DB\_USERNAME=laravel\_user}
-	\item \texttt{DB\_PASSWORD=secret\_password}
-\end{itemize}
-
-Finalmente, con la conexión a la base de datos exitosamente establecida, se procedió a estructurar el esquema de datos. Para ello, se ejecutó el comando \texttt{php artisan migrate} en el entorno de desarrollo de Laravel. Esta acción procesó los archivos de migración del framework, creando las tablas necesarias para gestionar los usuarios, tarjetas NFC y el historial de pasajes estudiantiles. La salida de este proceso se puede observar en la Figura \ref{fig:migraciones_db}.
-
-\figuraAPA{latex/imagenes/migraciones.png}{Ejecución de migraciones de MySQL en Laravel.}{0.8\textwidth}{Salida de la terminal al ejecutar php artisan migrate.}{fig:migraciones_db}
-\section{Arquitectura del sistema} 
-
-\subsection{Arquitectura cliente-servidor} 
-El sistema implementa una arquitectura cliente-servidor estricta, operando en repositorios y puertos separados. El servidor (backend en Laravel) actúa exclusivamente como un proveedor de servicios mediante una API, gestionando la lógica de negocio, la validación de las transacciones NFC para el pasaje estudiantil y la interacción con MySQL. El cliente web (frontend en Next.js) consume estos servicios de forma asíncrona y se encarga de la renderización de la interfaz administrativa e interactiva.
-
-\subsection{Patrón MVC en el backend} 
-Dentro del ecosistema del backend, Laravel implementa el patrón arquitectónico Modelo-Vista-Controlador (MVC). Dada la naturaleza de API del proyecto, la capa de "Vista" devuelve exclusivamente respuestas estructuradas en formato JSON. 
-\begin{itemize}
-    \item \textbf{Modelos (\texttt{app/Models}):} Representan las entidades de datos (como Usuarios, Tarjetas NFC, Transacciones) y gestionan la relación con MySQL a través del ORM Eloquent.
-    \item \textbf{Controladores (\texttt{app/Http/Controllers}):} Procesan las peticiones HTTP entrantes desde la aplicación Next.js y los dispositivos móviles, interactúan con los modelos y devuelven el estado de las operaciones.
-\end{itemize}
-
-\section{Estructura del proyecto (a revisar)} 
-
-\subsection{Organización de carpetas} 
-El código fuente está organizado en una estructura de directorios que separa claramente los dominios de la aplicación. En la raíz del proyecto se encuentra el archivo \texttt{docker-compose.yml} (destinado únicamente al despliegue de MySQL), acompañado de dos directorios principales: \texttt{backend} y \texttt{frontend}.
-
-\subsection{Directorios principales} 
-A continuación, se describe la función de los directorios más relevantes:
-
-\begin{itemize}
-    \item \textbf{\texttt{/backend}:} Contiene el núcleo de Laravel. Destacan las carpetas \texttt{app/} (lógica de negocio y modelos), \texttt{config/} (configuraciones globales), \texttt{database/} (migraciones de MySQL) y \texttt{routes/} (donde \texttt{api.php} define los endpoints del sistema de pasajes).
-    \item \textbf{\texttt{/frontend}:} Alberga la aplicación Next.js. El directorio principal es \texttt{app/}, el cual utiliza el nuevo enrutador de Next.js para estructurar las vistas administrativas y reportes.
-\end{itemize}	
+	
+	\section{Instalación y configuración del entorno} 
+	
+	\subsection{Instalación del entorno local} 
+	Para el desarrollo del proyecto, se estableció un entorno de trabajo nativo sobre el sistema operativo Debian Linux. La preparación de este entorno requirió la instalación individual de las herramientas base para el funcionamiento del backend, el frontend y la base de datos.
+	
+	\subsection{Instalación de PHP} 
+	Dado que el backend del sistema está desarrollado en Laravel, fue necesaria la instalación de PHP en el entorno local, junto con sus extensiones requeridas y el gestor de dependencias Composer. Esto permite ejecutar el servidor de desarrollo y gestionar los paquetes de la API RESTful de manera nativa sobre Debian. En la Figura \ref{fig:install_php} se muestran los comandos ejecutados para este propósito.
+	
+	\figuraAPA{figuras/comandos-php.png}{Instalación de PHP y dependencias en Debian.}{0.8\textwidth}{Elaboración propia.}{fig:install_php}
+	
+	\subsection{Instalación de Node.js} 
+	Para la construcción y ejecución del frontend web desarrollado con Next.js, se procedió a la instalación del entorno de ejecución Node.js y su gestor de paquetes (npm). La instalación se realizó para garantizar la compatibilidad requerida por las herramientas modernas de React y el \textit{App Router}. La Figura \ref{fig:install_node} detalla el proceso de instalación en la terminal.
+	
+	\figuraAPA{figuras/comandos-node.png}{Instalación de Node.js en el entorno local.}{0.8\textwidth}{Elaboración propia.}{fig:install_node}
+	
+	\subsection{Instalación de Docker Engine} 
+	Para la capa de persistencia de datos, se optó por aislar el motor de base de datos MySQL utilizando contenedores. Esto evita conflictos de versiones con otras aplicaciones del sistema anfitrión y mantiene el entorno limpio. Siguiendo la documentación oficial para Debian, se instaló Docker Engine. La Figura \ref{fig:install_docker} detalla los comandos utilizados mediante el gestor de paquetes \texttt{apt} para la configuración inicial del motor.
+	
+	\figuraAPA{figuras/comandos-docker.png}{Instalación de Docker Engine en el entorno local (Debian).}{0.8\textwidth}{Elaboración propia.}{fig:install_docker}
+	
+	\subsection{Instalación de los frameworks} 
+	El proyecto adopta un enfoque de desarrollo desacoplado, separando la lógica de negocio de la interfaz de usuario. Para lograr esto, se implementaron dos frameworks distintos que operan de manera independiente pero se comunican a través de una API RESTful. Ambos entornos se inicializaron de manera nativa sobre el sistema operativo Debian, aprovechando las herramientas de desarrollo locales configuradas previamente (PHP y Node.js). A continuación, se detalla el proceso de inicialización de cada uno.
+	
+	\subsubsection{Instalación del framework backend (Laravel)} 
+	Para la construcción del backend, encargado de gestionar la validación de las transacciones NFC y la lógica de negocio, se instaló la versión 11 del framework Laravel. Esta instalación se llevó a cabo utilizando Composer, el gestor de dependencias de PHP. Mediante la terminal, se ejecutó el comando de creación de proyecto, el cual descargó el núcleo del framework y generó la estructura base de directorios. En la Figura \ref{fig:install_laravel} se ilustra este proceso.
+	
+	\figuraAPA{figuras/comandos-laravel.png}{Inicialización del proyecto backend en Laravel 11.}{0.8\textwidth}{Elaboración propia.}{fig:install_laravel}
+	
+	\subsubsection{Instalación del framework frontend (Next.js)} 
+	Por otro lado, la interfaz web (cliente administrativo) se inicializó utilizando Next.js. Aprovechando el entorno de Node.js, se ejecutó la utilidad \texttt{create-next-app} para generar la estructura del proyecto web. Durante la instalación, se configuró el proyecto para utilizar el \textit{App Router}, asegurando un entorno de desarrollo moderno para el consumo de la API. La Figura \ref{fig:install_nextjs} muestra el comando ejecutado para la creación de la aplicación frontend.
+	
+	\figuraAPA{figuras/comandos-next.png}{Inicialización del proyecto web con Next.js.}{0.8\textwidth}{Elaboración propia.}{fig:install_nextjs}
+	
+	\subsection{Configuración de la base de datos} 
+	La persistencia de datos se resolvió utilizando MySQL. A diferencia de un entorno completamente contenedorizado, Docker se empleó de manera exclusiva para levantar la instancia de MySQL, lo que garantiza que el motor de base de datos se ejecute en un entorno limpio y reproducible sin afectar los recursos del sistema anfitrión. Para ello, se definió la configuración del servicio en el archivo \texttt{docker-compose.yml} (ver Anexo A), ubicado en la raíz del proyecto, y se inicializó el contenedor ejecutando el comando \texttt{docker compose up -d} en la terminal.
+	
+	Una vez que el servicio de base de datos estuvo en ejecución, se procedió a establecer la conexión con el backend nativo de Laravel. Esto se logró modificando el archivo de configuración \texttt{.env} dentro del directorio \texttt{/backend}, donde se definieron las credenciales y parámetros de red mediante las siguientes variables de entorno:
+	
+	\begin{itemize}
+		\item \texttt{DB\_CONNECTION=mysql}
+		\item \texttt{DB\_HOST=127.0.0.1}
+		\item \texttt{DB\_PORT=3306}
+		\item \texttt{DB\_DATABASE=laravel\_db}
+		\item \texttt{DB\_USERNAME=laravel\_user}
+		\item \texttt{DB\_PASSWORD=secret\_password}
+	\end{itemize}
+	
+	Finalmente, con la conexión a la base de datos exitosamente establecida, se procedió a estructurar el esquema de datos. Para ello, se ejecutó el comando \texttt{php artisan migrate} en el entorno de desarrollo de Laravel. Esta acción procesó los archivos de migración del framework, creando las tablas necesarias para gestionar los usuarios, tarjetas NFC y el historial de pasajes estudiantiles. La salida de este proceso se puede observar en la Figura \ref{fig:migraciones_db}.
+	
+	\figuraAPA{latex/imagenes/migraciones.png}{Ejecución de migraciones de MySQL en Laravel.}{0.8\textwidth}{Salida de la terminal al ejecutar php artisan migrate.}{fig:migraciones_db}
+	\section{Arquitectura del sistema} 
+	
+	\subsection{Arquitectura cliente-servidor} 
+	El sistema implementa una arquitectura cliente-servidor estricta, operando en repositorios y puertos separados. El servidor (backend en Laravel) actúa exclusivamente como un proveedor de servicios mediante una API, gestionando la lógica de negocio, la validación de las transacciones NFC para el pasaje estudiantil y la interacción con MySQL. El cliente web (frontend en Next.js) consume estos servicios de forma asíncrona y se encarga de la renderización de la interfaz administrativa e interactiva.
+	
+	\subsection{Patrón MVC en el backend} 
+	Dentro del ecosistema del backend, Laravel implementa el patrón arquitectónico Modelo-Vista-Controlador (MVC). Dada la naturaleza de API del proyecto, la capa de "Vista" devuelve exclusivamente respuestas estructuradas en formato JSON. 
+	\begin{itemize}
+		\item \textbf{Modelos (\texttt{app/Models}):} Representan las entidades de datos (como Usuarios, Tarjetas NFC, Transacciones) y gestionan la relación con MySQL a través del ORM Eloquent.
+		\item \textbf{Controladores (\texttt{app/Http/Controllers}):} Procesan las peticiones HTTP entrantes desde la aplicación Next.js y los dispositivos móviles, interactúan con los modelos y devuelven el estado de las operaciones.
+	\end{itemize}
+	
+	\section{Estructura del proyecto (a revisar)} 
+	
+	\subsection{Organización de carpetas} 
+	El código fuente está organizado en una estructura de directorios que separa claramente los dominios de la aplicación. En la raíz del proyecto se encuentra el archivo \texttt{docker-compose.yml} (destinado únicamente al despliegue de MySQL), acompañado de dos directorios principales: \texttt{backend} y \texttt{frontend}.
+	
+	\subsection{Directorios principales} 
+	A continuación, se describe la función de los directorios más relevantes:
+	
+	\begin{itemize}
+		\item \textbf{\texttt{/backend}:} Contiene el núcleo de Laravel. Destacan las carpetas \texttt{app/} (lógica de negocio y modelos), \texttt{config/} (configuraciones globales), \texttt{database/} (migraciones de MySQL) y \texttt{routes/} (donde \texttt{api.php} define los endpoints del sistema de pasajes).
+		\item \textbf{\texttt{/frontend}:} Alberga la aplicación Next.js. El directorio principal es \texttt{app/}, el cual utiliza el nuevo enrutador de Next.js para estructurar las vistas administrativas y reportes.
+	\end{itemize}	
 	\section{Diseño de la base de datos}
 	
 	\subsection{Diagrama conceptual}
@@ -451,100 +451,230 @@ A continuación, se describe la función de los directorios más relevantes:
 	Contenido...
 	
 	\subsection{Creación de controladores}
-	Contenido...
-	
-	\subsection{Creación de modelos}
-	Contenido...
-	
-	\subsection{Desarrollo de vistas}
-	Contenido...
-	
-	\subsection{Implementación de funcionalidades}
-	Contenido...
-	
-	\section{Interacción con la base de datos}
-	
-	\subsection{Configuración de conexión}
-	Contenido...
-	
-	\subsection{Consultas realizadas}
-	Contenido...
-	
-	\subsection{Manipulación de datos}
-	Contenido...
-	
-	\section{Validación y manejo de errores}
-	
-	\subsection{Validación de formularios}
-	Contenido...
-	
-	\subsection{Manejo de excepciones}
-	Contenido...
-	
-	\subsection{Control de errores}
-	Contenido...
-	
-	\section{Pruebas del sistema}
-	
-	\subsection{Pruebas de funcionamiento}
-	Contenido...
-	
-	\section{Resultados}
-	
-	\subsection{Funcionamiento final}
-	Contenido...
-	
-	\subsection{Capturas del sistema}
-	Contenido...
-	
-	%---------------------------------------------------------
-	\chapter{Conclusiones y recomendaciones}
-	
-	Redacción de conclusiones...
-	
-	%---------------------------------------------------------
-\chapter*{Anexos}
-\addcontentsline{toc}{chapter}{Anexos}
-
-\section*{Anexo A: Archivo de configuración Docker Compose}
-\label{anexo:docker_compose}
-
-A continuación, se detalla el contenido del archivo \texttt{docker-compose.yml} utilizado para el despliegue del motor de base de datos MySQL y la herramienta de administración visual Adminer:
-
-\begin{lstlisting}[language=bash, frame=single, title=docker-compose.yml, basicstyle=\ttfamily\small]
-	services:
-	# Base de Datos: MySQL
-	db:
-	image: mysql:8.0
-	environment:
-	MYSQL_DATABASE: laravel_db
-	MYSQL_ROOT_PASSWORD: root_password
-	MYSQL_USER: laravel_user
-	MYSQL_PASSWORD: secret_password
-	ports:
-	- "3306:3306"
-	volumes:
-	- mysql_data:/var/lib/mysql
-	
-	# Administrador: Adminer
-	adminer:
-	image: adminer
-	ports:
-	- "8080:8080"
-	depends_on:
-	- db
-	
-	volumes:
-	mysql_data:
-\end{lstlisting}
-	
-	%---------------------------------------------------------
-	% REFERENCIAS
-	%---------------------------------------------------------
-	
-	% En la clase report se usa \bibname en lugar de \refname
-	\renewcommand\bibname{Referencias}
-	\bibliographystyle{apalike} % Define el estilo visual de la bibliografía
-	\bibliography{mibibliografia}
-	
-\end{document}
+	\begin{description}
+		\item[UserController:] Para registrar, editar, suspender (Inactivo) a estudiantes, choferes y cajeros. Al crear un usuario, el controlador también debería crear automáticamente su Cuenta con Saldo 0.
+		
+		\item[TarifaController:] Para modificar los precios. (Si mañana la alcaldía sube el pasaje de 0.50 a 0.60, lo cambias aquí y todo el sistema se actualiza).
+		
+		\item[TarjetaNfcController:] Para asignar una tarjeta física (leer el \texttt{UID\_NFC}) y enlazarla al \texttt{Id\_Usuario} de un estudiante. También para cambiar su estado a 'Perdida' si el estudiante la reporta.
+		
+		\item[RecargaController (o CajaController):] La interfaz web donde el cajero recibe dinero en efectivo de un estudiante, busca su cuenta y le aumenta el Saldo (Generando una transaccion de tipo 'Recarga Saldo' con un \texttt{Id\_Cuenta\_Destino} nulo).
+		
+		\item[ReporteController:] Para ver métricas globales. ¿Cuánto se recaudó hoy? ¿Cuántos pasajes se pagaron?
+		
+		\item[RolController:] Para crear, borrar, actualizar y leer los diferentes roles.
+		
+		\item[AuthController:] Para que el chofer introduzca su correo/carnet y contraseña para abrir su turno en el celular. (Los estudiantes usarán esto si tienen una app para ver su saldo).
+		
+		\item[CobroController:] El corazón de tu aplicación Android. \\
+		\textbf{¿Qué hará?} El Android del chofer lee una tarjeta y manda el \texttt{UID\_NFC} por POST a este controlador. \\
+		\textbf{Lógica paso a paso:}
+		\begin{itemize}
+			\item Busca la Tarjeta\_NFC $\rightarrow$ verifica que esté 'Activa' $\rightarrow$ saca al Usuario dueño.
+			\item Saca su Cuenta $\rightarrow$ saca el Rol $\rightarrow$ busca la Tarifa para ese rol.
+			\item Descuenta el Monto del Saldo origen $\rightarrow$ lo suma al Saldo destino.
+			\item Registra la Transaccion $\rightarrow$ devuelve un JSON: \\
+			\texttt{\{"status": "ok", "msj": "Cobro exitoso", "saldo\_restante": 12.50\}}
+		\end{itemize}
+		
+		\item[CuentaController:] Para tener un endpoint (ej. \texttt{GET /api/cuenta/mi-saldo}) donde un
+		
+		\subsection{Creación de modelos}
+		\begin{description}
+			\item[Rol:] Relaciones: \texttt{hasMany(Usuario::class)}, \texttt{hasMany(Tarifa::class)}
+			
+			\item[Tarifa:] Relaciones: \texttt{belongsTo(Rol::class)} (Ej: Te dirá que el pasaje de 0.50 Bs le pertenece al rol 'Estudiante').
+			
+			\item[Usuario:] Relaciones: \texttt{belongsTo(Rol::class)}, \texttt{hasOne(Cuenta::class)} (Billetera única por persona), \texttt{hasMany(TarjetaNFC::class)} (Por si pierde una tarjeta y le dan otra).
+			
+			\item[Cuenta:] Relaciones: \texttt{belongsTo(Usuario::class)}, \texttt{hasMany(Transaccion::class)} (Como cuenta origen o destino).
+			
+			\item[TarjetaNFC:] Relaciones: \texttt{belongsTo(Usuario::class)}, \texttt{hasMany(Transaccion::class)}.
+			
+			\item[Transaccion:] Relaciones: \texttt{belongsTo(Cuenta::class, 'Id\_Cuenta\_Origen')} (Quien paga), \texttt{belongsTo(Cuenta::class, 'Id\_Cuenta\_Destino')} (El chofer/sindicato que recibe), \texttt{belongsTo(TarjetaNFC::class, 'UID\_NFC')}.
+		\end{description}
+		
+		\subsection{Desarrollo de vistas}
+		Contenido...
+		
+		\subsection{Implementación de funcionalidades}
+		Contenido...
+		
+		\section{Interacción con la base de datos}
+		
+		\subsection{Configuración de conexión}
+		La conexión con la base de datos MySQL en el entorno de desarrollo se gestiona a través del archivo de configuración de entorno \texttt{.env}, ubicado en el directorio raíz del \textit{backend}. Laravel utiliza este archivo para centralizar las credenciales y parámetros de red, permitiendo una fácil conmutación entre entornos. En el Cuadro \ref{tab:config_db} se detallan las variables de entorno principales configuradas para el proyecto.
+		
+		\begin{table}[H]
+			\caption{Variables de configuración de la base de datos}
+			\centering
+			\begin{tabular}{|l|l|}
+				\hline
+				\textbf{Variable} & \textbf{Valor configurado} \\ \hline
+				\texttt{DB\_CONNECTION} & mysql \\ \hline
+				\texttt{DB\_HOST} & 127.0.0.1 \\ \hline
+				\texttt{DB\_PORT} & 3306 \\ \hline
+				\texttt{DB\_DATABASE} & laravel\_db \\ \hline
+				\texttt{DB\_USERNAME} & laravel\_user \\ \hline
+				\texttt{DB\_PASSWORD} & secret\_password \\ \hline
+			\end{tabular}
+			\label{tab:config_db}
+			
+			\fuente{Elaboración propia.}
+		\end{table}
+		
+		\subsection{Consultas realizadas}
+		Para la interacción con los datos, se utiliza el ORM Eloquent de Laravel, el cual permite realizar consultas a la base de datos mediante una sintaxis orientada a objetos en lugar de consultas SQL manuales. En el sistema de pasajes, las consultas más representativas incluyen filtros de búsqueda y paginación. Un ejemplo destacado es la recuperación de usuarios en el \texttt{UserController}, donde se implementa lógica para filtrar por nombres, apellidos o carnet de identidad, junto con un sistema de ordenamiento dinámico:
+		
+		\begin{figure}[H]
+			\caption{Filtrado y consulta mediante Eloquent}
+			\label{fig:consulta_eloquent}
+			\begin{center}
+				\begin{minipage}{0.9\textwidth}
+					\begin{lstlisting}[language=php, frame=single, basicstyle=\ttfamily\scriptsize]
+						$query = User::query();
+						
+						if ($request->has('search')) {
+							$search = $request->search;
+							$query->where(function($q) use ($search) {
+								$q->where('Nombres', 'like', "%{$search}%")
+								->orWhere('Apellidos', 'like', "%{$search}%")
+								->orWhere('Carnet_Identidad', 'like', "%{$search}%");
+							});
+						}
+						
+						$users = $query->paginate($request->get('perPage', 10));
+					\end{lstlisting}
+					\vspace{4pt}
+					\raggedright
+					{\small \textbf{Fuente:} Elaboración propia.}
+				\end{minipage}
+			\end{center}
+		\end{figure}
+		
+		\subsection{Manipulación de datos}
+		La manipulación de datos comprende las operaciones de creación, actualización y eliminación. En el proyecto, se prioriza la integridad de los datos mediante el uso de asignación masiva (\textit{mass assignment}) y validación de reglas de negocio antes de persistir la información.
+		
+		\subsubsection{Creación de registros}
+		Para registrar un nuevo usuario, se utiliza el método \texttt{create()}, el cual recibe un arreglo asociativo con los datos validados del estudiante o chofer. El sistema se encarga de aplicar el \textit{hashing} a la contraseña para su almacenamiento seguro:
+		
+		\begin{figure}[H]
+			\caption{Inserción de datos en la tabla Usuario}
+			\label{fig:insercion_usuario}
+			\begin{center}
+				\begin{minipage}{0.9\textwidth}
+					\begin{lstlisting}[language=php, frame=single, basicstyle=\ttfamily\scriptsize]
+						$user = User::create([
+						'Nombres' => $request->nombres,
+						'Apellidos' => $request->apellidos,
+						'Carnet_Identidad' => $request->carnetIdentidad,
+						'Contrasena' => Hash::make($request->contrasena),
+						'Id_Rol' => $request->rolId,
+						'Estado' => 'Activo',
+						]);
+					\end{lstlisting}
+					\vspace{4pt}
+					\raggedright
+					{\small \textbf{Fuente:} Elaboración propia.}
+				\end{minipage}
+			\end{center}
+		\end{figure}
+		
+		\subsubsection{Eliminación simulada (Soft Delete)}
+		Para mantener la trazabilidad histórica de las transacciones, el sistema no realiza un borrado físico de los registros de usuario. En su lugar, se implementa una "eliminación lógica" o \textit{Soft Delete} manual, modificando la columna \texttt{Estado} a \texttt{'Inactivo'}. Esto deshabilita al usuario del sistema sin perder sus registros relacionados:
+		
+		\begin{figure}[H]
+			\caption{Lógica de eliminación lógica}
+			\label{fig:soft_delete}
+			\begin{center}
+				\begin{minipage}{0.9\textwidth}
+					\begin{lstlisting}[language=php, frame=single, basicstyle=\ttfamily\scriptsize]
+						public function destroy($id)
+						{
+							$user = User::findOrFail($id);
+							$user->update(['Estado' => 'Inactivo']);
+							return response()->json(['message' => 'Usuario desactivado'], 200);
+						}
+					\end{lstlisting}
+					\vspace{4pt}
+					\raggedright
+					{\small \textbf{Fuente:} Elaboración propia.}
+				\end{minipage}
+			\end{center}
+		\end{figure}
+		
+		\section{Validación y manejo de errores}
+		
+		\subsection{Validación de formularios}
+		Contenido...
+		
+		\subsection{Manejo de excepciones}
+		Contenido...
+		
+		\subsection{Control de errores}
+		Contenido...
+		
+		\section{Pruebas del sistema}
+		
+		\subsection{Pruebas de funcionamiento}
+		Contenido...
+		
+		\section{Resultados}
+		
+		\subsection{Funcionamiento final}
+		Contenido...
+		
+		\subsection{Capturas del sistema}
+		Contenido...
+		
+		%---------------------------------------------------------
+		\chapter{Conclusiones y recomendaciones}
+		
+		Redacción de conclusiones...
+		
+		%---------------------------------------------------------
+		\chapter{Anexos}
+		\addcontentsline{toc}{chapter}{Anexos}
+		
+		\section{Anexo A: Archivo de configuración Docker Compose}
+		\label{anexo:docker_compose}
+		
+		A continuación, se detalla el contenido del archivo \texttt{docker-compose.yml} utilizado para el despliegue del motor de base de datos MySQL y la herramienta de administración visual Adminer:
+		
+		\begin{lstlisting}[language=bash, frame=single, title=docker-compose.yml, basicstyle=\ttfamily\small]
+			services:
+			# Base de Datos: MySQL
+			db:
+			image: mysql:8.0
+			environment:
+			MYSQL_DATABASE: laravel_db
+			MYSQL_ROOT_PASSWORD: root_password
+			MYSQL_USER: laravel_user
+			MYSQL_PASSWORD: secret_password
+			ports:
+			- "3306:3306"
+			volumes:
+			- mysql_data:/var/lib/mysql
+			
+			# Administrador: Adminer
+			adminer:
+			image: adminer
+			ports:
+			- "8080:8080"
+			depends_on:
+			- db
+			
+			volumes:
+			mysql_data:
+		\end{lstlisting}
+		
+		%---------------------------------------------------------
+		% REFERENCIAS
+		%---------------------------------------------------------
+		
+		% En la clase report se usa \bibname en lugar de \refname
+		\renewcommand\bibname{Referencias}
+		\bibliographystyle{apalike} % Define el estilo visual de la bibliografía
+		\bibliography{mibibliografia}
+		
+	\end{document}
