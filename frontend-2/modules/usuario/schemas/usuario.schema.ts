@@ -44,4 +44,28 @@ export const usuarioSchema = formularioUsuarioSchema.extend({
 
 export type Usuario = z.infer<typeof usuarioSchema>; 
 
-//Tambien se puede anadir a futuro usuarioResponseSchema con los params para filtrado de la tabla 
+
+export const filtrosUsuariosSchema = z.object({
+  search: z.string().optional(),
+  estado: Estado.optional(),
+  rolId: z.coerce.number().optional(),
+  sortBy:z.string().optional(),
+  sortDir:z.enum(['asc','desc']).optional(),
+  perPage: z.coerce.number().optional(),
+  page: z.coerce.number().optional(),
+})
+
+export type FiltrosUsuario = z.infer<typeof filtrosUsuariosSchema>
+
+export const usuarioResponseSchema=z.object({
+  data: z.array(usuarioSchema),
+
+  meta: z.object({
+    current_page: z.number(),
+    last_page: z.number(),
+    per_page: z.number(),
+    total:z.number()
+  }).optional(),
+})
+
+export type UsuarioResponse = z.infer<typeof usuarioResponseSchema>

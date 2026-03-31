@@ -1,12 +1,23 @@
-import { Usuario, FormularioUsuario } from "../schemas/usuario.schema";
+import { Usuario,FormularioUsuario,FiltrosUsuario, UsuarioResponse, usuarioResponseSchema } from "../schemas/usuario.schema";
 
 //Tambien se puede anadir a futuro el uso de los search params para filtrado de la tabla y usar el Type UsuarioResponse
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "/api";
 
-export async function fetchUsuarios(): Promise<Usuario[]> {
-  const res = await fetch(`${API_BASE}/users`);
+export async function fetchUsuarios(filtros:FiltrosUsuario): Promise<UsuarioResponse> {
+  const searchParams = new URLSearchParams();
+
+  if(filtros.search) searchParams.set("search", filtros.search)
+  if(filtros.estado) searchParams.set("estado", filtros.estado)
+  if(filtros.rolId) searchParams.set("rolId",String(filtros.rolId))
+  if(filtros.sortBy) searchParams.set("sortBy", filtros.sortBy)
+  if(filtros.sortDir) searchParams.set("sortDir", filtros.sortDir)
+  if(filtros.perPage) searchParams.set("perPage",String(filtros.perPage))
+  if(filtros.page) searchParams.set("page",String(filtros.page))
+
+  const res = await fetch(`${API_BASE}/users?${searchParams}`);
   if (!res.ok) throw new Error("Fallo al traer Usuarios")
-  return res.json()
+  const data = await res.json()
+  return usuarioResponseSchema.parse(data)
 }
 export async function fetchUsuario(id: string): Promise<Usuario> {
   const res = await fetch(`${API_BASE}/users/${id}`);
