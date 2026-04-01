@@ -46,14 +46,15 @@ export const usuarioSchema = formularioUsuarioSchema.extend({
 export type Usuario = z.infer<typeof usuarioSchema>; 
 
 
+
 export const filtrosUsuariosSchema = z.object({
-  search: z.string().optional(),
+  search: z.string().trim().min(1).optional(),
   estado: Estado.optional(),
-  rolId: z.coerce.number().optional(),
-  sortBy:z.string().optional(),
-  sortDir:z.enum(['asc','desc']).optional(),
-  perPage: z.coerce.number().optional(),
-  page: z.coerce.number().optional(),
+  rolId: z.coerce.number().int().positive().optional(),
+  sortBy: z.enum(["nombre", "email", "estado", "rol"]).optional(),
+  sortDir: z.enum(["asc", "desc"]).default("asc"),
+  perPage: z.coerce.number().int().min(1).max(100).default(10),
+  page: z.coerce.number().int().min(1).default(1),
 })
 
 export type FiltrosUsuario = z.infer<typeof filtrosUsuariosSchema>

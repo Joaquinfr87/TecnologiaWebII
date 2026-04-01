@@ -1,5 +1,5 @@
 import { getQueryClient } from "@/lib/query-client";
-import UsuarioClient from "@/modules/usuario/components/usuario-client";
+import UsuarioClient from "@/modules/usuario/components/usuario-client-ejemplo";
 import { FiltrosUsuario, filtrosUsuariosSchema } from "@/modules/usuario/schemas/usuario.schema";
 import { usuariosListQueryOptions } from "@/modules/usuario/services/usuario.queries";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
