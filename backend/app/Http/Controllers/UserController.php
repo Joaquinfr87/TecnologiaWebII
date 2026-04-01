@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Cuenta;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -100,6 +101,12 @@ class UserController extends Controller
             'Contrasena' => $request->contrasena ? Hash::make($request->contrasena) : null,
             'Id_Rol' => $request->rolId,
             'Estado' => 'Activo',
+        ]);
+
+        // Crear su cuenta predeterminada con saldo 0
+        Cuenta::create([
+            'Id_Usuario' => $user->Id_Usuario,
+            'Saldo' => 0.00
         ]);
 
         return (new UserResource($user))
