@@ -28,4 +28,19 @@ class User extends Authenticatable
     protected $hidden = [
         'Contrasena',
     ];
+
+    public function cuenta()
+    {
+        return $this->hasOne(Cuenta::class, 'Id_Usuario', 'Id_Usuario');
+    }
+
+    public function tarjetasNFC()
+    {
+        return $this->hasMany(TarjetaNFC::class, 'Id_Usuario', 'Id_Usuario');
+    }
+
+    public function dispositivosMoviles()
+    {
+        return $this->hasMany(DispositivoMovil::class, 'Id_Usuario', 'Id_Usuario');
+    }
 }
