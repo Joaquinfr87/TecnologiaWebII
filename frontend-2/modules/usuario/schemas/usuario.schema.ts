@@ -39,7 +39,8 @@ export const formularioUsuarioSchema = z.object({
 export type FormularioUsuario = z.infer<typeof formularioUsuarioSchema>;
 
 export const usuarioSchema = formularioUsuarioSchema.extend({
-  id: z.string().uuid("El formato del id es invalido")
+  //id: z.string().uuid("El formato del id es invalido")
+  id:z.number()
 })
 
 export type Usuario = z.infer<typeof usuarioSchema>; 
