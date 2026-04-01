@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('TarjetaNFC', function (Blueprint $table) {
             $table->string('UID_NFC', 50)->primary();
-            $table->integer('Id_Usuario');
+            $table->uuid('Id_Usuario');
             $table->enum('Estado', ['Activa', 'Inactiva', 'Perdida'])->default('Activa');
             
             $table->foreign('Id_Usuario')->references('Id_Usuario')->on('Usuario')->onDelete('cascade');

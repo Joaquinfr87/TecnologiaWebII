@@ -17,7 +17,7 @@ return new class extends Migration
         });
 
         Schema::create('Usuario', function (Blueprint $table) {
-            $table->integer('Id_Usuario', true);
+            $table->uuid('Id_Usuario')->primary();
             $table->string('Nombres', 100);
             $table->string('Apellidos', 100);
             $table->string('Carnet_Identidad', 20)->unique();
