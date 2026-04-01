@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
     {
         // Primero creamos los 3 roles (Administrador, Estudiante, Chofer)
         $this->call(RolSeeder::class);
+        $this->call(TarifaSeeder::class);
 
         // Luego creamos el usuario admin de prueba con el Rol 1 (Administrador)
         User::create([
