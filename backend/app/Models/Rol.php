@@ -10,4 +10,9 @@ class Rol extends Model
     protected $primaryKey = 'Id_Rol';
     public $timestamps = false;
     protected $fillable = ['Nombre'];
+
+    public function tarifas()
+    {
+        return $this->hasMany(Tarifa::class, 'Id_Rol', 'Id_Rol');
+    }
 }

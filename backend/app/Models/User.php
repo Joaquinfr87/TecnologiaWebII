@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, HasUuids;
 
     protected $table = 'Usuario';
     protected $primaryKey = 'Id_Usuario';
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
 
     protected $fillable = [
@@ -28,4 +31,19 @@ class User extends Authenticatable
     protected $hidden = [
         'Contrasena',
     ];
+
+    public function cuenta()
+    {
+        return $this->hasOne(Cuenta::class, 'Id_Usuario', 'Id_Usuario');
+    }
+
+    public function tarjetasNFC()
+    {
+        return $this->hasMany(TarjetaNFC::class, 'Id_Usuario', 'Id_Usuario');
+    }
+
+    public function dispositivosMoviles()
+    {
+        return $this->hasMany(DispositivoMovil::class, 'Id_Usuario', 'Id_Usuario');
+    }
 }

@@ -5,6 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TarifaController;
+use App\Http\Controllers\TarjetaNFCController;
+use App\Http\Controllers\DispositivoMovilController;
+use App\Http\Controllers\CuentaController;
+use App\Http\Controllers\RecargaController;
+use App\Http\Controllers\CobroController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -21,8 +27,26 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    // Rutas protegidas
+    Route::post('/cobro', [CobroController::class, 'store']);
 });
 
 Route::apiResource('users', UserController::class);
 
 Route::apiResource('roles', RolController::class);
+
+// Rutas públicas base
+Route::apiResource('tarifas', TarifaController::class);
+Route::apiResource('tarjetas-nfc', TarjetaNFCController::class)->parameters([
+    'tarjetas-nfc' => 'uid'
+]);
+
+// Cuentas y Recargas
+Route::get('/usuarios/{id}/cuenta', [CuentaController::class, 'showByUsuario']);
+Route::post('/recargas', [RecargaController::class, 'store']);
+
+// Dispositivos
+Route::post('/dispositivos', [DispositivoMovilController::class, 'store']);
+Route::put('/dispositivos/{id}', [DispositivoMovilController::class, 'update']);
+Route::get('/usuarios/{id}/dispositivo', [DispositivoMovilController::class, 'showByUsuario']);
