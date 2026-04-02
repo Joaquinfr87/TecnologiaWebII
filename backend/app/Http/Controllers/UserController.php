@@ -14,50 +14,57 @@ class UserController extends Controller
     /**
      * 1.1 Listar (index) - Soporta búsqueda, filtros y paginación
      */
-    public function index(Request $request)
-    {
-        $query = User::query();
+public function index(Request $request)
+{
+    $query = User::query();
 
-        // Búsqueda general (nombres, apellidos, carnet)
-        // CAMBIO: Usamos los nombres de columnas de tu BD (Mayúsculas)
-        if ($request->has('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('Nombres', 'like', "%{$search}%")
-                  ->orWhere('Apellidos', 'like', "%{$search}%")
-                  ->orWhere('Carnet_Identidad', 'like', "%{$search}%")
-                  ->orWhere('Correo_Electronico', 'like', "%{$search}%");
-            });
-        }
-
-        // Filtros específicos
-        if ($request->has('estado')) {
-            $query->where('Estado', $request->estado);
-        }
-
-        if ($request->has('rolId')) {
-            $query->where('Id_Rol', $request->rolId);
-        }
-
-        // Ordenamiento
-        // CAMBIO: Si el frontend manda 'id', lo traducimos a 'Id_Usuario' para la BD.
-        // Si no, usamos el campo que mande, asegurando la primera letra en mayúscula
-        $sortByInput = $request->get('sortBy', 'id');
-        $sortBy = $sortByInput === 'id' ? 'Id_Usuario' : ucfirst($sortByInput);
-        
-        // Manejo especial si el frontend pide ordenar por rolId o carnetIdentidad
-        if ($sortByInput === 'rolId') $sortBy = 'Id_Rol';
-        if ($sortByInput === 'carnetIdentidad') $sortBy = 'Carnet_Identidad';
-
-        $sortDir = $request->get('sortDir', 'asc');
-        $query->orderBy($sortBy, $sortDir);
-
-        // Paginación
-        $perPage = $request->get('perPage', 10);
-        $users = $query->paginate($perPage);
-
-        return UserResource::collection($users);
+    // Búsqueda general (nombres, apellidos, carnet, correo)
+    if ($request->has('search')) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('Nombres', 'like', "%{$search}%")
+              ->orWhere('Apellidos', 'like', "%{$search}%")
+              ->orWhere('Carnet_Identidad', 'like', "%{$search}%")
+              ->orWhere('Correo_Electronico', 'like', "%{$search}%");
+        });
     }
+
+    // Filtros específicos
+    if ($request->has('estado')) {
+        $query->where('Estado', $request->estado);
+    }
+
+    if ($request->has('rolId')) {
+        $query->where('Id_Rol', $request->rolId);
+    }
+
+    // Mapeo de los campos de ordenamiento que envía el frontend
+    // a las columnas reales de la base de datos
+    $sortMap = [
+        'id'     => 'Id_Usuario',
+        'nombre' => 'Nombres',
+        'email'  => 'Correo_Electronico',
+        'estado' => 'Estado',
+        'rol'    => 'Id_Rol',
+    ];
+
+    $sortByInput = $request->get('sortBy', 'id');
+    $sortBy = $sortMap[$sortByInput] ?? 'Id_Usuario'; // fallback seguro
+    $sortDir = $request->get('sortDir', 'asc');
+
+    // Validar dirección de ordenamiento (solo 'asc' o 'desc')
+    if (!in_array($sortDir, ['asc', 'desc'])) {
+        $sortDir = 'asc';
+    }
+
+    $query->orderBy($sortBy, $sortDir);
+
+    // Paginación
+    $perPage = $request->get('perPage', 10);
+    $users = $query->paginate($perPage);
+
+    return UserResource::collection($users);
+}
 
     /**
      * 1.2 Obtener uno (show)

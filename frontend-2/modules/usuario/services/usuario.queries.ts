@@ -16,7 +16,7 @@ export function usuarioQueryOptions(id:string){
     staleTime: 5*60*1000, //5 minutos
   });
 }
-export function usuariosListQueryOptions(filtros: FiltrosUsuario = {} ){// => el = {} sirve para decirle si no hay filtros entonces dame vacio y no dara error
+export function usuariosListQueryOptions(filtros: FiltrosUsuario ){// => el = {} sirve para decirle si no hay filtros entonces dame vacio y no dara error
   return queryOptions({
     queryKey: usuarioKeys.list(filtros),
     queryFn:()=>fetchUsuarios(filtros),
