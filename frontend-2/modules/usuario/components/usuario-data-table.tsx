@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import {
   ColumnDef,
   flexRender,
@@ -36,6 +37,12 @@ interface DataTableProps<TData, TValue> {
   globalFilter: string
   setGlobalFilter: (value: string) => void
 
+  estadoFilter: string
+  setEstadoFilter: (value: string) => void
+
+  rolFilter: string
+  setRolFilter: (value: string) => void
+
   loading?: boolean
 }
 
@@ -54,8 +61,29 @@ export function DataTable<TData, TValue>({
   globalFilter,
   setGlobalFilter,
 
+  estadoFilter,
+  setEstadoFilter,
+
+  rolFilter,
+  setRolFilter,
+
   loading,
 }: DataTableProps<TData, TValue>) {
+  const [searchTerm, setSearchTerm] = useState(globalFilter)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (globalFilter !== searchTerm) {
+        setGlobalFilter(searchTerm)
+      }
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [searchTerm, globalFilter, setGlobalFilter])
+
+  useEffect(() => {
+    setSearchTerm(globalFilter)
+  }, [globalFilter])
 
   const table = useReactTable({
     data,
@@ -82,13 +110,36 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
 
-      {/* 🔎 búsqueda */}
-      <input
-        value={globalFilter}
-        onChange={(e) => setGlobalFilter(e.target.value)}
-        placeholder="Buscar..."
-        className="border px-2 py-1 rounded"
-      />
+      <div className="flex gap-4">
+        <input
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Buscar..."
+          className="border px-2 py-1 rounded w-64"
+        />
+
+        <select
+          value={estadoFilter}
+          onChange={(e) => setEstadoFilter(e.target.value)}
+          className="border px-2 py-1 rounded"
+        >
+          <option value="">Todos los Estados</option>
+          <option value="Activo">Activo</option>
+          <option value="Inactivo">Inactivo</option>
+          <option value="Suspendido">Suspendido</option>
+        </select>
+
+        <select
+          value={rolFilter}
+          onChange={(e) => setRolFilter(e.target.value)}
+          className="border px-2 py-1 rounded"
+        >
+          <option value="">Todos los Roles</option>
+          <option value="1">Administrador</option>
+          <option value="2">Estudiante</option>
+          <option value="3">Chofer</option>
+        </select>
+      </div>
 
       <div className="overflow-hidden rounded-md border">
         <Table>
@@ -104,9 +155,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
 
                     {/* indicador simple */}
                     {{

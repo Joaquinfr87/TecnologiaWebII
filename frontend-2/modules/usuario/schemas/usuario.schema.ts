@@ -38,8 +38,13 @@ export const formularioUsuarioSchema = z.object({
 
 export type FormularioUsuario = z.infer<typeof formularioUsuarioSchema>;
 
-export const usuarioSchema = formularioUsuarioSchema.extend({
-  id: z.string().uuid("El formato del id es invalido")
+export const rolSchema = z.object({
+  id:z.number(),
+  nombre:z.string(),
+})
+export const usuarioSchema = formularioUsuarioSchema.omit({rolId:true}).extend({
+  id: z.string().uuid("El formato del id es invalido"),
+  rol: rolSchema,
   //id:z.number()
 })
 

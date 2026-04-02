@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(DispositivoMovil::class, 'Id_Usuario', 'Id_Usuario');
     }
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'Id_Rol', 'Id_Rol');
+    }
+
 }

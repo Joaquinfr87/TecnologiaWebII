@@ -19,14 +19,16 @@ export const columns: ColumnDef<Usuario>[] = [
   },
   {
     accessorKey:"fechaNacimiento",
-    header: "Fecha de Nacimiento"
+    header: "Fecha de Nacimiento",
+    cell: ({row})=> new Date(row.original.fechaNacimiento).toLocaleDateString()
   },
   {
     accessorKey:"correoElectronico",
     header:"Email"
   },
   {
-    accessorKey:"rolId",
+    accessorKey:"rol.nombre",
+    id:"rol",
     header:"Rol"
   },
   {

@@ -60,7 +60,12 @@ export default function UsuarioClient({ initialFiltros }: Props) {
   const [globalFilter, setGlobalFilter] = useState(
     initialFiltros.search ?? ""
   )
-
+  const [estadoFilter, setEstadoFilter] = useState<string>(
+    initialFiltros.estado ?? ""
+  )
+  const [rolFilter, setRolFilter] = useState<string>(
+    initialFiltros.rolId ? String(initialFiltros.rolId) : ""
+  )
   const filtros = useMemo(() => {
     const sortId = sorting[0]?.id as TableColumnId | undefined
 
@@ -70,6 +75,8 @@ export default function UsuarioClient({ initialFiltros }: Props) {
       page: pagination.pageIndex + 1,
       perPage: pagination.pageSize,
       search: globalFilter || undefined,
+      estado: estadoFilter || undefined,
+      rolId: rolFilter ? Number(rolFilter) : undefined,
       sortBy: mappedSortBy,
       sortDir: sorting[0]
         ? sorting[0].desc
@@ -77,7 +84,7 @@ export default function UsuarioClient({ initialFiltros }: Props) {
           : "asc"
         : undefined,
     })
-  }, [pagination, globalFilter, sorting])
+  }, [pagination, globalFilter, sorting,rolFilter,estadoFilter])
 
   const { data, isLoading } = useQuery(
     usuariosListQueryOptions(filtros)
@@ -136,6 +143,22 @@ export default function UsuarioClient({ initialFiltros }: Props) {
     }))
   }
 
+  const handleEstadoChange = (value:string)=>{
+    setEstadoFilter(value)
+
+    setPagination((p)=>({
+      ...p,pageIndex:0,
+    }))
+  }
+  
+  const handleRolChange = (value:string) =>{
+    setRolFilter(value)
+
+    setPagination((p)=>({
+      ...p,pageIndex:0,
+    }))
+  }
+
   return (
     <div className="container mx-auto py-10">
       <DataTable
@@ -151,6 +174,12 @@ export default function UsuarioClient({ initialFiltros }: Props) {
 
         globalFilter={globalFilter}
         setGlobalFilter={handleFilterChange}
+
+        estadoFilter={estadoFilter}
+        setEstadoFilter = {setEstadoFilter}
+
+        rolFilter = {rolFilter}
+        setRolFilter = {setRolFilter}
 
         loading={isLoading}
       />

@@ -21,8 +21,8 @@ class UserResource extends JsonResource
             'carnetIdentidad' => $this->Carnet_Identidad,
             'correoElectronico' => $this->Correo_Electronico,
             'fechaNacimiento' => $this->Fecha_Nacimiento,
-            'rolId' => $this->Id_Rol,
             'estado' => $this->Estado,
+            'rol' => new RolResource($this->whenLoaded('rol')),
         ];
     }
 }

@@ -16,7 +16,7 @@ class UserController extends Controller
      */
 public function index(Request $request)
 {
-    $query = User::query();
+    $query = User::with('rol');
 
     // Búsqueda general (nombres, apellidos, carnet, correo)
     if ($request->has('search')) {
