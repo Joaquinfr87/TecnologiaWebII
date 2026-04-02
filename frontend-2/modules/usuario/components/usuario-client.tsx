@@ -1,67 +1,159 @@
-import { useMemo, useState } from "react";
+"use client"
+
+import { useEffect, useMemo, useState } from "react"
 import { columns } from "./usuario-columns"
 import { DataTable } from "./usuario-data-table"
-import { FiltrosUsuario, filtrosUsuariosSchema } from "@/modules/usuario/schemas/usuario.schema";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { usuariosListQueryOptions } from "../services/usuario.queries";
-import { Parastoo } from "next/font/google";
+import {
+  FiltrosUsuario,
+  filtrosUsuariosSchema,
+} from "@/modules/usuario/schemas/usuario.schema"
+import { useRouter } from "next/navigation"
+import { useQuery } from "@tanstack/react-query"
+import { usuariosListQueryOptions } from "../services/usuario.queries"
+import { PaginationState, SortingState } from "@tanstack/react-table"
 
-interface Props{
-  initialFiltros:FiltrosUsuario
+interface Props {
+  initialFiltros: FiltrosUsuario
 }
 
-export default function UsuarioClient({initialFiltros}:Props) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
+type ColumnId = "nombre" | "email" | "estado" | "rol"
+type TableColumnId = "nombres" | "correoElectronico" | "estado" | "rolId"
 
-  const [pagination,setPagination] = useState({
-    pageIndex: initialFiltros.page-1,
+const sortMap: Record<TableColumnId, ColumnId> = {
+  nombres: "nombre",
+  correoElectronico: "email",
+  estado: "estado",
+  rolId: "rol",
+}
+
+const reverseSortMap: Record<ColumnId, TableColumnId> = {
+  nombre: "nombres",
+  email: "correoElectronico",
+  estado: "estado",
+  rol: "rolId",
+}
+
+export default function UsuarioClient({ initialFiltros }: Props) {
+  const router = useRouter()
+
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: initialFiltros.page - 1,
     pageSize: initialFiltros.perPage,
   })
 
-  const [sorting, setSorting] = useState(()=>{
-    initialFiltros.sortBy?[
-      {
-        id:initialFiltros.sortBy,
-        desc:initialFiltros.sortDir==="desc"
-      },
-    ]:[]
+  const [sorting, setSorting] = useState<SortingState>(() => {
+    if (initialFiltros.sortBy) {
+      const tableId = reverseSortMap[initialFiltros.sortBy]
+
+      if (tableId) {
+        return [
+          {
+            id: tableId,
+            desc: initialFiltros.sortDir === "desc",
+          },
+        ]
+      }
+    }
+    return []
   })
 
-  const [globalFilter,setGlobalFilter] = useState(
-    initialFiltros.search??""
+  const [globalFilter, setGlobalFilter] = useState(
+    initialFiltros.search ?? ""
   )
 
-  const filtros = useMemo(()=>{
+  const filtros = useMemo(() => {
+    const sortId = sorting[0]?.id as TableColumnId | undefined
+
+    const mappedSortBy = sortId ? sortMap[sortId] : undefined
+
     return filtrosUsuariosSchema.parse({
-      page: pagination.pageIndex +1,
+      page: pagination.pageIndex + 1,
       perPage: pagination.pageSize,
       search: globalFilter || undefined,
-      sortBy: sorting[0]?.id,
-      sortDir: sorting[0]?.desc ? "desc":"asc",
+      sortBy: mappedSortBy,
+      sortDir: sorting[0]
+        ? sorting[0].desc
+          ? "desc"
+          : "asc"
+        : undefined,
     })
-    },[pagination,globalFilter,sorting])
+  }, [pagination, globalFilter, sorting])
 
-  const {data, isLoading} = useQuery(usuariosListQueryOptions(filtros))
+  const { data, isLoading } = useQuery(
+    usuariosListQueryOptions(filtros)
+  )
 
-  const rows = data?.data??[]
+  const rows = data?.data ?? []
   const meta = data?.meta
 
-  const updateUrl=(next:FiltrosUsuario)=>{
-    const params = new URLSearchParams();
+  useEffect(() => {
+    const params = new URLSearchParams()
 
-    Object.entries(next).forEach(([key,value])=>{
-      if(value !== undefined){
-        params.set(key,String(value))
+    Object.entries(filtros).forEach(([key, value]) => {
+      if (value !== undefined) {
+        params.set(key, String(value))
       }
     })
-    router.replace(`?${params.toString()}`)
+
+    const newUrl = `?${params.toString()}`
+    const currentUrl = window.location.search
+
+    if (newUrl !== currentUrl) {
+      router.replace(newUrl)
+    }
+  }, [filtros, router])
+
+  const handlePaginationChange = (
+    updater: PaginationState | ((prev: PaginationState) => PaginationState)
+  ) => {
+    setPagination((prev) =>
+      typeof updater === "function" ? updater(prev) : updater
+    )
+  }
+
+  const handleSortingChange = (
+    updater: SortingState | ((prev: SortingState) => SortingState)
+  ) => {
+    setSorting((prev) => {
+      const next =
+        typeof updater === "function" ? updater(prev) : updater
+
+      setPagination((p) => ({
+        ...p,
+        pageIndex: 0,
+      }))
+
+      return next
+    })
+  }
+
+  const handleFilterChange = (value: string) => {
+    setGlobalFilter(value)
+
+    setPagination((p) => ({
+      ...p,
+      pageIndex: 0,
+    }))
   }
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable
+        columns={columns}
+        data={rows}
+        pageCount={meta?.last_page ?? 0}
+
+        pagination={pagination}
+        setPagination={handlePaginationChange}
+
+        sorting={sorting}
+        setSorting={handleSortingChange}
+
+        globalFilter={globalFilter}
+        setGlobalFilter={handleFilterChange}
+
+        loading={isLoading}
+      />
     </div>
   )
 }
