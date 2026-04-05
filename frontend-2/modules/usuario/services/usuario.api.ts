@@ -1,4 +1,6 @@
+import { apiClient } from "@/lib/api/api-client";
 import { Usuario, FormularioUsuario, FiltrosUsuario, UsuarioResponse, usuarioResponseSchema } from "../schemas/usuario.schema";
+import AppPageRouteModule from "next/dist/server/route-modules/app-page/module";
 
 //Tambien se puede anadir a futuro el uso de los search params para filtrado de la tabla y usar el Type UsuarioResponse
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "/api";
@@ -14,7 +16,7 @@ export async function fetchUsuarios(filtros: FiltrosUsuario): Promise<UsuarioRes
   if (filtros.perPage) searchParams.set("perPage", String(filtros.perPage))
   if (filtros.page) searchParams.set("page", String(filtros.page))
 
-  const res = await fetch(`${API_BASE}/users?${searchParams}`);
+  const res = await apiClient(`/users?${searchParams}`)
   if (!res.ok) throw new Error("Fallo al traer Usuarios")
   const data = await res.json()
   try {
@@ -26,32 +28,30 @@ export async function fetchUsuarios(filtros: FiltrosUsuario): Promise<UsuarioRes
 
 }
 export async function fetchUsuario(id: string): Promise<Usuario> {
-  const res = await fetch(`${API_BASE}/users/${id}`);
+  const res = await apiClient(`/users/${id}`);
   if (!res.ok) throw new Error("Usuario no encontrado")
   return res.json()
 }
 export async function createUsuario(data: FormularioUsuario): Promise<Usuario> {
-  const res = await fetch(`${API_BASE}/users`, {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(data),
-  });
+  const res = await apiClient("/users",{
+    method:"POST",
+    body: JSON.stringify(data)
+  })
   if (!res.ok) throw new Error("Fallo al crear Usuario")
   return res.json()
 }
 export async function updateUsuario(id: string, data: FormularioUsuario): Promise<Usuario> {
-  const res = await fetch(`${API_BASE}/users/${id}`, {
-    method: "PATCH",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(data),
-  });
+  const res = await apiClient(`/users/${id}`,{
+    method:"PATCH",
+    body: JSON.stringify(data)
+  })
   if (!res.ok) throw new Error("Fallo al actualizar Usuario")
   return res.json()
 }
 export async function deleteUsuario(id: string): Promise<void> {
-  const res = await fetch(`${API_BASE}/users/${id}`, {
-    method: "DELETE",
-  });
+  const res = await apiClient(`/users/${id}`,{
+    method:"DELETE"
+  })
   if (!res.ok) throw new Error("Fallo al eliminar Usuario")
 }
 

@@ -18,7 +18,7 @@ export const formularioUsuarioSchema = z.object({
     .min(4, "El carnet debe tener al menos 4 caracteres")
     .max(20, "Máximo 20 caracteres permitidos"),
 
-  fechaNacimiento: z.coerce.date({
+  fechaNacimiento: z.string().date({
     message: "La fecha de nacimiento es requerida o tiene un formato inválido",
   }),
 
@@ -29,7 +29,7 @@ export const formularioUsuarioSchema = z.object({
     .toLowerCase()
     .email({ message: "Email inválido" }),
 
-  rolId: z.coerce.number({
+  rolId: z.number({
     message: "El rol es requerido y debe ser un número válido",
   }),
 
