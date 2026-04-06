@@ -9,6 +9,15 @@ use Illuminate\Http\Request;
 
 class TransaccionController extends Controller
 {
+    public function index()
+    {
+        return response()->json([
+            'data' => TransaccionResource::collection(
+                Transaccion::orderBy('Fecha', 'desc')->get()
+            )
+        ], 200);
+    }
+
     public function showByUsuario($idUsuario)
     {
         // Encontrar la cuenta del usuario

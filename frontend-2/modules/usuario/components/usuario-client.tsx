@@ -75,8 +75,8 @@ export default function UsuarioClient({ initialFiltros }: Props) {
       page: pagination.pageIndex + 1,
       perPage: pagination.pageSize,
       search: globalFilter || undefined,
-      estado: estadoFilter || undefined,
-      rolId: rolFilter ? Number(rolFilter) : undefined,
+      estado: estadoFilter && estadoFilter !== "all" ? estadoFilter : undefined,
+      rolId: rolFilter && rolFilter !== "all" ? Number(rolFilter) : undefined,
       sortBy: mappedSortBy,
       sortDir: sorting[0]
         ? sorting[0].desc
@@ -160,29 +160,42 @@ export default function UsuarioClient({ initialFiltros }: Props) {
   }
 
   return (
-    <div className="container mx-auto py-10">
-      <DataTable
-        columns={columns}
-        data={rows}
-        pageCount={meta?.last_page ?? 0}
+    <div className="p-4 md:p-6 space-y-6 bg-background min-h-screen w-full">
+      <div className="flex items-center gap-3">
+        <div className="p-2 rounded-lg bg-blue-500/10">
+          <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Usuarios</h1>
+          <p className="text-sm text-muted-foreground">Gestión de usuarios del sistema</p>
+        </div>
+      </div>
+      <div className="w-full">
+        <DataTable
+          columns={columns}
+          data={rows}
+          pageCount={meta?.last_page ?? 0}
 
-        pagination={pagination}
-        setPagination={handlePaginationChange}
+          pagination={pagination}
+          setPagination={handlePaginationChange}
 
-        sorting={sorting}
-        setSorting={handleSortingChange}
+          sorting={sorting}
+          setSorting={handleSortingChange}
 
-        globalFilter={globalFilter}
-        setGlobalFilter={handleFilterChange}
+          globalFilter={globalFilter}
+          setGlobalFilter={handleFilterChange}
 
-        estadoFilter={estadoFilter}
-        setEstadoFilter = {setEstadoFilter}
+          estadoFilter={estadoFilter}
+          setEstadoFilter={setEstadoFilter}
 
-        rolFilter = {rolFilter}
-        setRolFilter = {setRolFilter}
+          rolFilter={rolFilter}
+          setRolFilter={setRolFilter}
 
-        loading={isLoading}
-      />
+          loading={isLoading}
+        />
+      </div>
     </div>
   )
 }

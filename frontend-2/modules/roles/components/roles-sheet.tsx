@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button"
 
 import { rolQueryOptions } from "../services/roles.query"
 import { useCreateRolMutation, useUpdateRolMutation } from "../hooks/use-roles"
-import { formRolschema, FormRolType } from "../schemas/roles.schema"
+import { formRolSchema, FormRolType } from "../schemas/roles.schema"
 
 export default function SheetRol() {
   const router = useRouter()
@@ -42,7 +42,7 @@ export default function SheetRol() {
   })
 
   const form = useForm<FormRolType>({
-    resolver: zodResolver(formRolschema),
+    resolver: zodResolver(formRolSchema),
     defaultValues: {
       nombre: "", tarifa: {
         monto: undefined,

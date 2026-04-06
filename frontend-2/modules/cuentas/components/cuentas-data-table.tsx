@@ -15,18 +15,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { CuentaType } from "../schemas/cuentas.schema"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+interface DataTableProps {
+  columns: ColumnDef<CuentaType>[]
+  data: CuentaType[]
   loading?: boolean
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-  loading,
-}: DataTableProps<TData, TValue>) {
+export function CuentasDataTable({ columns, data, loading }: DataTableProps) {
   const table = useReactTable({
     data,
     columns,
@@ -87,3 +84,28 @@ export function DataTable<TData, TValue>({
     </div>
   )
 }
+
+export const cuentasColumns: ColumnDef<CuentaType>[] = [
+  {
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ row }) => <span className="text-muted-foreground font-mono text-sm">#{row.getValue("id")}</span>,
+  },
+  {
+    accessorKey: "saldo",
+    header: "Saldo",
+    cell: ({ row }) => {
+      const saldo = row.getValue("saldo") as number
+      return <span className="font-semibold text-emerald-600">Bs. {saldo.toFixed(2)}</span>
+    },
+  },
+  {
+    accessorKey: "usuarioId",
+    header: "Usuario",
+    cell: ({ row }) => (
+      <span className="text-muted-foreground font-mono text-xs">
+        {String(row.getValue("usuarioId")).slice(0, 8)}...
+      </span>
+    ),
+  },
+]

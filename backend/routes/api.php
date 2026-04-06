@@ -43,6 +43,15 @@ Route::apiResource('tarjetas-nfc', TarjetaNFCController::class)->parameters([
     'tarjetas-nfc' => 'uid'
 ]);
 
+// Cuentas - listados generales
+Route::apiResource('cuentas', CuentaController::class);
+
+// Transacciones - listados generales  
+Route::apiResource('transacciones', TransaccionController::class);
+
+// Dispositivos - listados generales
+Route::apiResource('dispositivos', DispositivoMovilController::class)->only(['index', 'show']);
+
 // Cuentas y Recargas
 Route::get('/usuarios/{id}/cuenta', [CuentaController::class, 'showByUsuario']);
 Route::post('/recargas', [RecargaController::class, 'store']);

@@ -7,6 +7,7 @@ import { DataTable } from "@/modules/roles/components/roles-data-table"
 import SheetRol from "@/modules/roles/components/roles-sheet"
 import { rolesListQueryOptions } from "@/modules/roles/services/roles.query"
 import { Button } from "@/components/ui/button"
+import { Shield } from "lucide-react"
 
 export default function Page() {
   const router = useRouter()
@@ -15,18 +16,26 @@ export default function Page() {
   const { data, isLoading } = useQuery(rolesListQueryOptions())
   const rows = data?.data ?? [] 
 
-  if (isLoading) return <div className="p-10 text-center">Cargando tabla de roles...</div>
-
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Gestión de Roles</h1>
+    <div className="p-4 md:p-6 space-y-6 bg-background min-h-screen w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-violet-500/10">
+            <Shield className="h-6 w-6 text-violet-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Roles y Tarifas</h1>
+            <p className="text-sm text-muted-foreground">Gestión de roles del sistema</p>
+          </div>
+        </div>
         <Button onClick={() => router.replace(`${pathname}?rolId=new`)}>
           Crear Nuevo Rol
         </Button>
       </div>
       
-      <DataTable columns={columns} data={rows} />
+      <div className="w-full">
+        <DataTable columns={columns} data={rows} loading={isLoading} />
+      </div>
 
       <SheetRol />
     </div>

@@ -8,6 +8,7 @@ import { useEffect } from "react"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { Menu } from "lucide-react"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -18,34 +19,35 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (isError) {
       console.error(error)
     }
-    // Si ya terminó de cargar y devolvió error (no autenticado), lo expulsamos
     if (!isLoading && isError) {
-      // Usamos replace en vez de push para que el usuario no pueda 
-      // usar el botón "Atrás" del navegador para volver al dashboard
       router.replace("/login")
     }
   }, [isLoading, isError, router, error])
 
-  // 1. Mientras valida el token con Laravel, mostramos una pantalla de carga
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen">Cargando sistema...</div>
   }
 
-  // 2. Si dio error, retornamos null para que la pantalla quede en blanco 
-  // la fracción de segundo que tarda el router.replace en actuar
   if (isError) {
     return null
   }
 
-  // 3. Si todo está bien, dibujamos tu Layout normal con su Sidebar, Header, etc.
   return (
     <TooltipProvider>
       <SidebarProvider>
-        <AppSidebar />
-        <main>
-          <SidebarTrigger />
-          {children}
-        </main>
+        <div className="flex min-h-screen w-full">
+          <AppSidebar />
+          <div className="flex flex-col flex-1 min-w-0">
+            <header className="flex h-14 items-center gap-2 border-b px-4 lg:px-6">
+              <SidebarTrigger className="h-9 w-9">
+                <Menu className="h-5 w-5" />
+              </SidebarTrigger>
+            </header>
+            <main className="flex flex-1 flex-col">
+              {children}
+            </main>
+          </div>
+        </div>
       </SidebarProvider>
     </TooltipProvider>
   )

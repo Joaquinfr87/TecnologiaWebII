@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Validator;
 
 class DispositivoMovilController extends Controller
 {
+    public function index()
+    {
+        return response()->json([
+            'data' => DispositivoMovilResource::collection(DispositivoMovil::all())
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -7,6 +7,13 @@ use App\Http\Resources\CuentaResource;
 
 class CuentaController extends Controller
 {
+    public function index()
+    {
+        return response()->json([
+            'data' => CuentaResource::collection(Cuenta::all())
+        ], 200);
+    }
+
     public function show($id)
     {
         $cuenta = Cuenta::findOrFail($id);

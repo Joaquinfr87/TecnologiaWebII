@@ -75,64 +75,64 @@ const data = {
 
     {
       title: "Cuentas",
-      url: "/cuentas",
+      url: "/dashboard/cuentas",
       icon: Wallet,
       items: [
         {
           title: "Cuentas",
-          url: "/cuentas",
+          url: "/dashboard/cuentas",
         },
         {
           title: "Saldo",
-          url: "/cuentas/saldo",
+          url: "/dashboard/cuentas/saldo",
         },
       ],
     },
 
     {
       title: "Tarjetas NFC",
-      url: "/tarjetas",
+      url: "/dashboard/tarjetas",
       icon: CreditCard,
       items: [
         {
           title: "Listado",
-          url: "/tarjetas",
+          url: "/dashboard/tarjetas",
         },
         {
           title: "Asignaciones",
-          url: "/tarjetas/asignaciones",
+          url: "/dashboard/tarjetas/asignaciones",
         },
       ],
     },
 
     {
       title: "Dispositivos",
-      url: "/dispositivos",
+      url: "/dashboard/dispositivos",
       icon: Smartphone,
       items: [
         {
           title: "Registrados",
-          url: "/dispositivos",
+          url: "/dashboard/dispositivos",
         },
       ],
     },
 
     {
       title: "Transacciones",
-      url: "/transacciones",
+      url: "/dashboard/transacciones",
       icon: ArrowLeftRight,
       items: [
         {
           title: "Historial",
-          url: "/transacciones",
+          url: "/dashboard/transacciones",
         },
         {
           title: "Cobros",
-          url: "/transacciones/cobros",
+          url: "/dashboard/transacciones/cobros",
         },
         {
           title: "Recargas",
-          url: "/transacciones/recargas",
+          url: "/dashboard/transacciones/recargas",
         },
       ],
     },
@@ -141,12 +141,12 @@ const data = {
   projects: [
     {
       name: "Control de Pasajes",
-      url: "/transacciones",
+      url: "/dashboard/transacciones",
       icon: Ticket,
     },
     {
       name: "Gestión de Usuarios",
-      url: "/usuarios",
+      url: "/dashboard/usuario",
       icon: UserCog,
     },
     {

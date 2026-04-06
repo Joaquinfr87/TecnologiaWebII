@@ -18,6 +18,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ChevronLeft, ChevronRight, Search } from "lucide-react"
 
 type Updater<T> = T | ((prev: T) => T)
 
@@ -25,7 +28,6 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 
-  // 🔹 control externo
   pageCount: number
 
   pagination: PaginationState
@@ -49,24 +51,17 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-
   pageCount,
-
   pagination,
   setPagination,
-
   sorting,
   setSorting,
-
   globalFilter,
   setGlobalFilter,
-
   estadoFilter,
   setEstadoFilter,
-
   rolFilter,
   setRolFilter,
-
   loading,
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState(globalFilter)
@@ -89,81 +84,83 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     pageCount,
-
     state: {
       pagination,
       sorting,
       globalFilter,
     },
-
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
-
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,
-
     getCoreRowModel: getCoreRowModel(),
   })
 
   return (
     <div className="space-y-4">
+      {/* Filtros */}
+      <div className="flex flex-col sm:flex-row gap-3 p-4 bg-card rounded-lg border">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Buscar usuarios..."
+            className="pl-9"
+          />
+        </div>
 
-      <div className="flex gap-4">
-        <input
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Buscar..."
-          className="border px-2 py-1 rounded w-64"
-        />
+        <Select value={estadoFilter} onValueChange={setEstadoFilter}>
+          <SelectTrigger className="w-[150px]">
+            <SelectValue placeholder="Estado" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos</SelectItem>
+            <SelectItem value="Activo">Activo</SelectItem>
+            <SelectItem value="Inactivo">Inactivo</SelectItem>
+            <SelectItem value="Suspendido">Suspendido</SelectItem>
+          </SelectContent>
+        </Select>
 
-        <select
-          value={estadoFilter}
-          onChange={(e) => setEstadoFilter(e.target.value)}
-          className="border px-2 py-1 rounded"
-        >
-          <option value="">Todos los Estados</option>
-          <option value="Activo">Activo</option>
-          <option value="Inactivo">Inactivo</option>
-          <option value="Suspendido">Suspendido</option>
-        </select>
-
-        <select
-          value={rolFilter}
-          onChange={(e) => setRolFilter(e.target.value)}
-          className="border px-2 py-1 rounded"
-        >
-          <option value="">Todos los Roles</option>
-          <option value="1">Administrador</option>
-          <option value="2">Estudiante</option>
-          <option value="3">Chofer</option>
-        </select>
+        <Select value={rolFilter} onValueChange={setRolFilter}>
+          <SelectTrigger className="w-[150px]">
+            <SelectValue placeholder="Rol" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos</SelectItem>
+            <SelectItem value="1">Administrador</SelectItem>
+            <SelectItem value="2">Estudiante</SelectItem>
+            <SelectItem value="3">Chofer</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      <div className="overflow-hidden rounded-md border">
+      {/* Tabla */}
+      <div className="rounded-lg border bg-card w-full">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-muted/50">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="border-b hover:bg-transparent">
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
-                    className="cursor-pointer"
+                    className="cursor-pointer font-semibold text-foreground"
                   >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-
-                    {/* indicador simple */}
-                    {{
-                      asc: " ↑",
-                      desc: " ↓",
-                    }[header.column.getIsSorted() as string] ?? null}
+                    <div className="flex items-center gap-1">
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                      {{
+                        asc: <span className="text-xs">↑</span>,
+                        desc: <span className="text-xs">↓</span>,
+                      }[header.column.getIsSorted() as string] ?? null}
+                    </div>
                   </TableHead>
                 ))}
               </TableRow>
@@ -173,27 +170,30 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={columns.length}>
-                  Cargando...
+                <TableCell colSpan={columns.length} className="h-32 text-center">
+                  <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                    Cargando...
+                  </div>
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow 
+                  key={row.id} 
+                  className="hover:bg-muted/50 transition-colors border-b border-border/50"
+                >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                    <TableCell key={cell.id} className="py-3">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length}>
-                  No results.
+                <TableCell colSpan={columns.length} className="h-32 text-center text-muted-foreground">
+                  No se encontraron usuarios
                 </TableCell>
               </TableRow>
             )}
@@ -201,25 +201,27 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      {/* 📄 paginación */}
-      <div className="flex items-center gap-4">
-        <button
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Anterior
-        </button>
-
-        <span>
-          Página {pagination.pageIndex + 1} de {pageCount}
-        </span>
-
-        <button
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Siguiente
-        </button>
+      {/* Paginación */}
+      <div className="flex items-center justify-between px-2">
+        <div className="text-sm text-muted-foreground">
+          Página {pagination.pageIndex + 1} de {pageCount || 1}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="p-2 rounded-lg border hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="p-2 rounded-lg border hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
       </div>
     </div>
   )
