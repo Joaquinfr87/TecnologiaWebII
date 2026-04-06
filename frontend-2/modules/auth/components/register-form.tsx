@@ -23,13 +23,20 @@ import { useForm, Controller } from "react-hook-form"
 import { RegisterFormType, registerSchema } from "../schemas/auth.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRegisterMutation } from "../hooks/use-auth"
-
+import { useQuery } from "@tanstack/react-query"
+import { rolesListQueryOptions } from "@/modules/roles/services/roles.query"
 
 export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const { mutate: registerUser, isPending, isError, error } = useRegisterMutation();
+  const { data: roles, isLoading } = useQuery(rolesListQueryOptions())
+  const {
+    mutate: registerUser,
+    isPending,
+    isError,
+    error,
+  } = useRegisterMutation()
   const form = useForm<RegisterFormType>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -40,14 +47,18 @@ export function RegisterForm({
       correoElectronico: "",
       rolId: undefined,
       contrasena: "",
-      contrasena_confirmacion: ""
-    }
+      contrasena_confirmacion: "",
+    },
   })
   async function onSubmit(data: RegisterFormType) {
     registerUser(data)
   }
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className={cn("flex flex-col gap-6", className)} {...props} >
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className={cn("flex flex-col gap-6", className)}
+      {...props}
+    >
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Crea tu cuenta</h1>
@@ -56,8 +67,10 @@ export function RegisterForm({
           </p>
         </div>
         {isError && (
-          <div className="p-3 text-sm text-red-600 bg-red-100 border border-red-300 rounded-md">
-            {error instanceof Error ? error.message : "Error al iniciar sesión. Verifica tus credenciales."}
+          <div className="rounded-md border border-red-300 bg-red-100 p-3 text-sm text-red-600">
+            {error instanceof Error
+              ? error.message
+              : "Error al iniciar sesión. Verifica tus credenciales."}
           </div>
         )}
         <Controller
@@ -72,9 +85,7 @@ export function RegisterForm({
                 aria-invalid={fieldState.invalid}
                 value={field.value ?? ""}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -90,9 +101,7 @@ export function RegisterForm({
                 aria-invalid={fieldState.invalid}
                 value={field.value ?? ""}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -108,9 +117,7 @@ export function RegisterForm({
                 aria-invalid={fieldState.invalid}
                 value={field.value ?? ""}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -125,9 +132,11 @@ export function RegisterForm({
                 type="date"
                 id={field.name}
                 aria-invalid={fieldState.invalid}
-                value={field.value
-                  ? new Date(field.value).toISOString().split("T")[0]
-                  : ""}
+                value={
+                  field.value
+                    ? new Date(field.value).toISOString().split("T")[0]
+                    : ""
+                }
                 onChange={(e) => {
                   const value = e.target.value
                   field.onChange(value ? value : undefined)
@@ -136,9 +145,7 @@ export function RegisterForm({
                 name={field.name}
                 ref={field.ref}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -154,9 +161,7 @@ export function RegisterForm({
                 aria-invalid={fieldState.invalid}
                 value={field.value ?? ""}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -184,9 +189,17 @@ export function RegisterForm({
                   <SelectValue placeholder="Selecciona" />
                 </SelectTrigger>
                 <SelectContent position="item-aligned">
-                  <SelectItem value="1">Administrador</SelectItem>
-                  <SelectItem value="2">Estudiante</SelectItem>
-                  <SelectItem value="3">Chofer</SelectItem>
+                  {isLoading && (
+                    <SelectItem value="loading" disabled>
+                      Cargando...
+                    </SelectItem>
+                  )}
+
+                  {roles?.data?.map((e) => (
+                    <SelectItem key={e.id} value={e.id.toString()}>
+                      {e.nombre}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </Field>
@@ -206,9 +219,7 @@ export function RegisterForm({
                 placeholder="*************"
                 type="password"
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -226,9 +237,7 @@ export function RegisterForm({
                 placeholder="*************"
                 type="password"
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
