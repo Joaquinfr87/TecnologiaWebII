@@ -11,6 +11,7 @@ use App\Http\Controllers\DispositivoMovilController;
 use App\Http\Controllers\CuentaController;
 use App\Http\Controllers\RecargaController;
 use App\Http\Controllers\CobroController;
+use App\Http\Controllers\TransaccionController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -50,3 +51,4 @@ Route::post('/recargas', [RecargaController::class, 'store']);
 Route::post('/dispositivos', [DispositivoMovilController::class, 'store']);
 Route::put('/dispositivos/{id}', [DispositivoMovilController::class, 'update']);
 Route::get('/usuarios/{id}/dispositivo', [DispositivoMovilController::class, 'showByUsuario']);
+Route::get('/usuarios/{id}/transacciones', [TransaccionController::class, 'showByUsuario']);

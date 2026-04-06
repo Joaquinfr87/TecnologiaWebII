@@ -12,16 +12,25 @@ class TarifaSeeder extends Seeder
      */
     public function run(): void
     {
+        // 2: Estudiante Primaria
         Tarifa::create([
             'Monto' => 0.50,
             'Estado' => 'Activa',
-            'Id_Rol' => 2 // Estudiante
+            'Id_Rol' => 2
         ]);
 
+        // 3: Estudiante Secundaria
         Tarifa::create([
             'Monto' => 1.00,
             'Estado' => 'Activa',
-            'Id_Rol' => 3 // Chofer
+            'Id_Rol' => 3
+        ]);
+
+        // 4: Estudiante Universidad
+        Tarifa::create([
+            'Monto' => 1.50,
+            'Estado' => 'Activa',
+            'Id_Rol' => 4 
         ]);
     }
 }
