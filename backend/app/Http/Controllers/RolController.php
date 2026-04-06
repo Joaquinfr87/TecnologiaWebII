@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rol;
+use App\Models\Tarifa;
 use App\Http\Resources\RolResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,8 +12,10 @@ class RolController extends Controller
 {
     public function index()
     {
+        // Excluir el rol Administrador de la lista general
+        $roles = Rol::where('Nombre', '!=', 'Administrador')->get();
         return response()->json([
-            'data' => RolResource::collection(Rol::all())
+            'data' => RolResource::collection($roles)
         ]);
     }
 
@@ -26,11 +29,13 @@ class RolController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:50|unique:Rol,Nombre',
+            'tarifa' => 'nullable|array',
+            'tarifa.monto' => 'required_with:tarifa|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'The given data was invalid.',
+                'message' => 'Los datos proporcionados no son válidos.',
                 'errors' => $validator->errors()
             ], 422);
         }
@@ -39,8 +44,17 @@ class RolController extends Controller
             'Nombre' => $request->nombre
         ]);
 
+        // Si se envió información de tarifa, la creamos asociada al nuevo rol
+        if ($request->has('tarifa')) {
+            Tarifa::create([
+                'Monto' => $request->input('tarifa.monto'),
+                'Estado' => 'Activa',
+                'Id_Rol' => $rol->Id_Rol
+            ]);
+        }
+
         return response()->json([
-            'message' => 'Rol creado exitosamente',
+            'message' => 'Rol y tarifa creado exitosamente',
             'data' => new RolResource($rol)
         ], 201);
     }

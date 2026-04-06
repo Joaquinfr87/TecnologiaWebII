@@ -9,9 +9,14 @@ class RolResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $tarifa = $this->tarifas->where('Estado', 'Activa')->first();
+
         return [
             'id' => $this->Id_Rol,
             'nombre' => $this->Nombre,
+            'tarifa' => $tarifa ? [
+                'monto' => $tarifa->Monto,
+            ] : null,
         ];
     }
 }
