@@ -8,6 +8,7 @@
 \usepackage{float}
 \usepackage[round]{natbib} % Necesario para usar \citet y citas estilo APA
 \usepackage{listings} % Anexos
+\usepackage{microtype}
 
 % --------------------------------------------------------
 % CONFIGURACIÓN DE FORMATO REQUERIDO 
@@ -454,18 +455,25 @@
 		\item \textbf{Controladores (\texttt{app/Http/Controllers}):} Procesan las peticiones HTTP entrantes desde la aplicación Next.js y los dispositivos móviles, interactúan con los modelos y devuelven el estado de las operaciones.
 	\end{itemize}
 	
-	\section{Estructura del proyecto (a revisar)} 
+	\section{Estructura del proyecto} 
 	
 	\subsection{Organización de carpetas} 
-	El código fuente está organizado en una estructura de directorios que separa claramente los dominios de la aplicación. En la raíz del proyecto se encuentra el archivo \texttt{docker-compose.yml} (destinado únicamente al despliegue de MySQL), acompañado de dos directorios principales: \texttt{backend} y \texttt{frontend}.
+	El proyecto está organizado dividiendo claramente el sistema en dos entornos separados: el \textit{backend} (API) y el \textit{frontend} (interfaz de usuario). En la raíz del proyecto se encuentra el archivo \texttt{docker-compose.yml} (destinado al despliegue de los servicios y la base de datos), acompañado de dos directorios principales.
 	
 	\subsection{Directorios principales} 
-	A continuación, se describe la función de los directorios más relevantes:
+	A continuación, se describe la función de los directorios más relevantes de la aplicación:
 	
 	\begin{itemize}
-		\item \textbf{\texttt{/backend}:} Contiene el núcleo de Laravel. Destacan las carpetas \texttt{app/} (lógica de negocio y modelos), \texttt{config/} (configuraciones globales), \texttt{database/} (migraciones de MySQL) y \texttt{routes/} (donde \texttt{api.php} define los endpoints del sistema de pasajes).
-		\item \textbf{\texttt{/frontend}:} Alberga la aplicación Next.js. El directorio principal es \texttt{app/}, el cual utiliza el nuevo enrutador de Next.js para estructurar las vistas administrativas y reportes.
-	\end{itemize}	
+		\item \textbf{\texttt{/backend}:} Contiene el núcleo de la API desarrollada en Laravel. Destacan las carpetas \texttt{app/} (lógica de negocio y modelos), \texttt{config/} (configuraciones globales), \texttt{database/} (migraciones de la base de datos) y \texttt{routes/} (donde \texttt{api.php} define los \textit{endpoints} del sistema).
+		
+		\item \textbf{\texttt{/frontend}:} Alberga la aplicación web desarrollada con Next.js, la cual está estructurada bajo una arquitectura modular orientada a dominios:
+		\begin{itemize}
+			\item \textbf{\texttt{app/}:} Define el sistema de enrutamiento mediante el \textit{App Router}. Separa las rutas públicas de autenticación dentro del grupo \texttt{(auth)} y las vistas administrativas protegidas dentro de \texttt{dashboard/} (cuentas, dispositivos, roles, transacciones y usuario).
+			\item \textbf{\texttt{components/}:} Aloja los componentes visuales compartidos de la interfaz, incluyendo la navegación y el subdirectorio \texttt{ui/} para componentes base reutilizables.
+			\item \textbf{\texttt{modules/}:} Constituye el núcleo de la lógica del frontend. Agrupa el código por dominios específicos (\texttt{auth}, \texttt{cuentas}, \texttt{roles}, etc.), encapsulando internamente sus propios componentes visuales, \textit{hooks}, esquemas de validación y servicios de conexión (\textit{queries} a la API).
+			\item \textbf{\texttt{lib/} e \textbf{\texttt{hooks/}}:} Contienen utilidades transversales. \texttt{lib/} almacena configuraciones esenciales como los clientes de conexión (\texttt{api-client.ts}), y \texttt{hooks/} guarda ganchos globales de la interfaz.
+		\end{itemize}
+	\end{itemize}
 	\section{Diseño de la base de datos}
 	
 	\subsection{Diagrama conceptual}
@@ -502,8 +510,29 @@
 	
 	\section{Desarrollo de la aplicación}
 	
-	\subsection{Definición de rutas}
-	Contenido...
+\subsection{Definición de rutas e integración de la API}
+
+El sistema implementa una arquitectura basada en servicios (API RESTful) que comunica el \textit{back\-end} (Laravel) con el \textit{front\-end} (Next.js). La definición de rutas abarca desde la exposición de \textit{end\-points} en el servidor hasta su respectivo consumo y validación en el cliente.
+
+\subsubsection{Enrutamiento en el Backend (Laravel)}
+La configuración de rutas se centraliza en el archivo \texttt{routes/api.php}. El diseño de la API sigue las siguientes convenciones principales:
+
+\begin{itemize}
+	\item \textbf{Autenticación y Seguridad:} Se exponen rutas públicas para el registro (\texttt{/register}) y acceso (\texttt{/login}). Por otro lado, las rutas que devuelven la sesión del usuario (\texttt{/user}) o ejecutan cierres de sesión están protegidas bajo el \textit{middle\-ware} \texttt{auth:sanctum}, garantizando que solo clientes con un \textit{token} válido accedan.
+	\item \textbf{Controladores de Recursos (API Resources):} Se utiliza el método \texttt{Route::api\-Resource} para generar automáticamente las rutas CRUD (Crear, Leer, Actualizar, Eliminar) de entidades clave, tales como \texttt{users}, \texttt{roles}, \texttt{tarifas}, \texttt{cuentas} y \texttt{transacciones}.
+	\item \textbf{Rutas Específicas de Lógica de Negocio:} Para procesos que no encajan en el modelo CRUD estándar, se definen \textit{end\-points} personalizados. Esto incluye la gestión transaccional (ej. \texttt{/cobro}, \texttt{/recargas}) y la obtención de relaciones complejas (ej. \texttt{/usuarios/\{id\}/cuenta}).
+\end{itemize}
+
+\subsubsection{Consumo en el Frontend (Next.js)}
+En el lado del cliente, las peticiones HTTP se abstraen dentro de los módulos correspondientes. Tomando como ejemplo el servicio de usuarios (\texttt{usuario.api.ts}), el flujo de datos se maneja de la siguiente forma:
+
+\begin{itemize}
+	\item \textbf{Cliente HTTP Centralizado:} Se emplea una instancia personalizada llamada \texttt{apiClient} que se encarga de estandarizar las peticiones (inyectando \textit{headers} y manejando sesiones) hacia los \textit{end\-points} de Laravel.
+	\item \textbf{Manejo Dinámico de Parámetros:} Para peticiones GET complejas como listados (\texttt{fetchUsuarios}), se utiliza la interfaz \texttt{URL\-Search\-Params}. Esto permite inyectar dinámicamente parámetros de paginación, filtros (\textit{estado}, \textit{rolId}), búsquedas (\textit{search}) y ordenamiento directo en la URL de la API.
+	\item \textbf{Validación de Tipos Estrictos:} Para garantizar la integridad de la información que ingresa al estado de la aplicación, las respuestas en formato JSON se validan en tiempo de ejecución utilizando la librería Zod (ej. \texttt{usuario\-Response\-Schema.parse(data)}). Si la respuesta del servidor no coincide con el esquema esperado, se intercepta el error para evitar fallos silenciosos en la interfaz.
+\end{itemize}
+
+\figuraAPA{figuras/flujo-rutas-api.png}{Arquitectura de comunicación y flujo de datos entre el Frontend y el Backend.}{0.8\textwidth}{Elaboración propia.}{fig:flujo_rutas_api}
 	
 	\subsection{Creación de controladores}
 	\begin{description}
@@ -549,8 +578,33 @@
 		\item[Transaccion:] Relaciones: \texttt{belongsTo(Cuenta::class, 'Id\_Cuenta\_Origen')} (Quien paga), \texttt{belongsTo(Cuenta::class, 'Id\_Cuenta\_Destino')} (El chofer/sindicato que recibe), \texttt{belongsTo(TarjetaNFC::class, 'UID\_NFC')}.
 	\end{description}
 	
-	\subsection{Desarrollo de vistas}
-	Contenido...
+\subsection{Desarrollo de vistas y componentes de interfaz}
+
+El desarrollo de la capa visual del \textit{front\-end} se abordó mediante una arquitectura basada en componentes reutilizables, apoyándose en las convenciones del \textit{App Router} de Next.js y un sistema de diseño estandarizado.
+
+\subsubsection{Estrategia de renderizado (Server y Client Components)}
+Para optimizar el rendimiento y la experiencia del usuario, se implementó una separación clara entre componentes de servidor y de cliente:
+\begin{itemize}
+	\item \textbf{\textit{Server Com\-po\-nents} (por defecto):} Se utilizaron para las páginas estáticas y los \textit{lay\-outs} principales (como \texttt{app/dashboard/layout.tsx}). Esto permite que la estructura base de la aplicación se genere en el servidor, reduciendo el tamaño del paquete JavaScript enviado al navegador.
+	\item \textbf{\textit{Client Com\-po\-nents}:} Aquellos elementos que requieren interactividad, manejo de estado local o el uso de \textit{hooks} (como los formularios de registro, tablas de datos interactivos y modales) se marcaron explícitamente con la directiva \texttt{"use client"}. Un ejemplo de esto son los componentes dentro de \texttt{modules/usuario/components/}.
+\end{itemize}
+
+\subsubsection{Sistema de diseño y librería UI}
+Para mantener la coherencia visual y acelerar el desarrollo, se integró \textbf{Tailwind CSS} junto con una arquitectura de componentes base accesibles. 
+La carpeta \texttt{components/ui/} actúa como una biblioteca interna donde residen elementos atómicos (\textit{botones, inputs, selectores, avatares, tablas y menús desplegables}). Estos componentes encapsulan sus propios estilos y comportamientos base, garantizando que vistas complejas, como los \textit{dash\-boards} administrativos, compartan el mismo lenguaje visual.
+
+\subsubsection{Estructuración de Vistas Complejas}
+Las interfaces principales, como el panel de administración (\textit{dash\-board}), se componen de varias capas jerárquicas:
+\begin{enumerate}
+	\item \textbf{Capa de Envoltorio (\textit{Layouts}):} Proveen el esqueleto de navegación persistente, integrando componentes globales como \texttt{app-sidebar.tsx} y \texttt{nav-main.tsx}.
+	\item \textbf{Capa de Página (\textit{Pages}):} Actúan como contenedores principales de cada ruta (ej. \texttt{cuentas/page.tsx}).
+	\item \textbf{Capa de Dominio (\textit{Módulos}):} Las páginas delegan la presentación de la información a componentes especializados del dominio, como \texttt{cuentas-data-table.tsx}, los cuales gestionan la paginación, filtros y acciones directas sobre los registros.
+\end{enumerate}
+
+\figuraAPA{figuras/jerarquia-vistas.png}{Jerarquía de componentes y composición de una vista administrativa.}{0.8\textwidth}{Elaboración propia.}{fig:jerarquia_vistas}
+
+% NOTA: Aquí puedes agregar una segunda figura mostrando una captura de pantalla real de tu sistema.
+\figuraAPA{figuras/captura-dashboard.png}{Interfaz de usuario de la vista de gestión de usuarios.}{0.9\textwidth}{Elaboración propia.}{fig:captura_dashboard}
 	
 	\subsection{Implementación de funcionalidades}
 	Contenido...
@@ -680,27 +734,72 @@
 	
 	\section{Validación y manejo de errores}
 	
+	La robustez del sistema se garantiza mediante una estrategia de validación de doble capa (cliente y servidor) y un flujo estandarizado para la captura y presentación de errores, asegurando la integridad de los datos y una buena experiencia de usuario.
+	
 	\subsection{Validación de formularios}
-	Contenido...
+	La validación de la información introducida por el usuario se divide en dos frentes:
+	\begin{itemize}
+		\item \textbf{Capa del Cliente (\textit{Front\-end}):} Se utiliza la integración de \textbf{React Hook Form} junto con \textbf{Zod}. React Hook Form gestiona el estado de las entradas minimizando los re-renderizados, mientras que Zod proporciona validación de esquemas con tipado estricto (\textit{type safety}). Los esquemas, como \texttt{usuario.schema.ts}, definen reglas precisas (longitud mínima, formatos de correo, campos obligatorios) y bloquean el envío del formulario si no se cumplen, proporcionando retroalimentación visual inmediata.
+		\item \textbf{Capa del Servidor (\textit{Back\-end}):} Laravel actúa como la fuente de verdad definitiva. Utiliza sus clases \texttt{FormRequest} o validaciones integradas en los controladores para verificar nuevamente los datos entrantes. Esto previene la inyección de datos maliciosos en caso de que las validaciones del cliente sean eludidas.
+	\end{itemize}
 	
 	\subsection{Manejo de excepciones}
-	Contenido...
+	El manejo de excepciones se ha estructurado para interceptar fallos tanto lógicos como de red, evitando que la aplicación se detenga abruptamente:
+	\begin{itemize}
+		\item \textbf{Excepciones de Red y API:} En el cliente, el servicio centralizado (\texttt{apiClient}) captura códigos de estado HTTP de error (4xx y 5xx). Si la respuesta indica un fallo (ej. \texttt{!res.ok}), se lanza una excepción controlada (\texttt{throw new Error(...)}) que interrumpe el flujo normal.
+		\item \textbf{Excepciones de Tipado de Datos:} Se implementa un bloque \texttt{try-catch} al procesar las respuestas del servidor. Si la estructura del JSON devuelto por Laravel no coincide con el esquema esperado en Next.js, Zod lanza un \texttt{ZodError}, el cual se registra en la consola para facilitar la depuración, previniendo fallos silenciosos en la interfaz.
+	\end{itemize}
 	
 	\subsection{Control de errores}
-	Contenido...
+	Una vez capturada una excepción, el sistema debe reaccionar de forma predecible y amigable para el usuario final:
+	\begin{itemize}
+		\item \textbf{Límites de Error (\textit{Error Boundaries}):} En Next.js, se hace uso de los archivos \texttt{error.tsx} en rutas específicas. Estos actúan como límites de error de React, aislando el fallo a un componente o vista particular en lugar de colapsar toda la aplicación.
+		\item \textbf{Respuestas estandarizadas del Servidor:} Laravel está configurado para devolver siempre las excepciones de la API en formato JSON estandarizado, incluyendo un mensaje descriptivo y, en caso de errores de validación (HTTP 422), un desglose de los campos afectados.
+	\end{itemize}
 	
 	\section{Pruebas del sistema}
 	
 	\subsection{Pruebas de funcionamiento}
-	Contenido...
+	Para validar la correcta operatividad y la integración entre el \textit{front\-end} y el \textit{back\-end}, se ejecutaron pruebas funcionales enfocadas en los flujos críticos de negocio:
 	
+	\begin{itemize}
+		\item \textbf{Pruebas de integración de la API:} Se utilizaron clientes HTTP (como Postman o el cliente integrado en Neovim) para atacar directamente los \textit{end\-points} de Laravel. Se verificó el correcto funcionamiento de las operaciones CRUD, la emisión y revocación de \textit{tokens} con Sanctum, y la coherencia de los datos almacenados en la base de datos PostgreSQL.
+		
+		\figuraAPA{figuras/prueba-api-postman.png}{Verificación de respuesta exitosa (200 OK) y estructura JSON en el \textit{end\-point} de usuarios.}{0.8\textwidth}{Elaboración propia.}{fig:prueba_api}
+		
+		\item \textbf{Pruebas de interfaz (\textit{End-to-End} manuales):} Se simuló el comportamiento de los roles administrativos interactuando con los \textit{dash\-boards} de Next.js. Esto incluyó la verificación de persistencia de sesiones, el funcionamiento de los filtros y paginación en las tablas de datos (ej. tabla de transacciones), y la correcta visualización de mensajes de error al forzar escenarios anómalos.
+		
+		\figuraAPA{figuras/captura-dashboard-usuarios.png}{Interfaz del \textit{dash\-board} de usuarios mostrando el funcionamiento de filtros dinámicos y paginación.}{0.9\textwidth}{Elaboración propia.}{fig:captura_dashboard}
+		
+		\item \textbf{Verificación de accesibilidad y adaptabilidad:} Se constató que los componentes visuales respondan correctamente a diferentes resoluciones (diseño \textit{responsive}), validando el uso del \textit{hook} personalizado \texttt{use-mobile.ts} en dispositivos móviles.
+		
+		\figuraAPA{figuras/vista-mobile.png}{Visualización de la interfaz en entorno móvil con el menú lateral colapsado automáticamente.}{0.5\textwidth}{Elaboración propia.}{fig:vista_mobile}
+	\end{itemize}
+	
+	% Figura sugerida para ilustrar el flujo de validación
+	\figuraAPA{figuras/flujo-validacion.png}{Diagrama de flujo de validación de datos entre cliente y servidor.}{0.8\textwidth}{Elaboración propia.}{fig:flujo_validacion}
 	\section{Resultados}
 	
 	\subsection{Funcionamiento final}
-	Contenido...
+	El desarrollo del sistema concluyó con la exitosa integración de la arquitectura cliente-servidor propuesta. Se logró establecer una comunicación fluida y segura entre la interfaz de usuario (\textit{front\-end} en Next.js) y la API RESTful central (\textit{back\-end} en Laravel). 
+	
+	Entre los resultados técnicos y funcionales más destacados de la implementación se encuentran:
+	\begin{itemize}
+		\item \textbf{Gestión integral de dominios:} Los módulos principales (usuarios, roles, dispositivos, cuentas y transacciones) operan correctamente de extremo a extremo. Las operaciones de lectura, escritura y actualización mantienen una estricta integridad referencial en la base de datos PostgreSQL.
+		\item \textbf{Seguridad y control de sesiones:} El flujo de autenticación basado en \textit{tokens} (vía Laravel Sanctum) protege eficazmente las rutas del cliente. El enrutamiento de Next.js bloquea exitosamente el acceso a los \textit{dash\-boards} administrativos si no existe una sesión activa y válida.
+		\item \textbf{Rendimiento y experiencia de usuario (UX):} La arquitectura de Next.js, combinando \textit{Server Components} para la estructura base y \textit{Client Components} para interactividad (como las tablas de datos de transacciones), resultó en tiempos de carga óptimos. Además, el sistema de validación de doble capa con Zod demostró ser efectivo para prevenir la entrada de datos corruptos sin degradar la experiencia del usuario.
+	\end{itemize}
 	
 	\subsection{Capturas del sistema}
-	Contenido...
+	A continuación, se presenta evidencia visual de los componentes e interfaces más representativos del sistema en funcionamiento. Las siguientes imágenes demuestran la aplicación consistente del sistema de diseño (Tailwind CSS y \textit{shadcn/ui}) y la disposición de las herramientas de gestión.
+	
+	\figuraAPA{figuras/resultado-login.png}{Interfaz de autenticación del sistema, con validación de credenciales en tiempo real.}{0.7\textwidth}{Elaboración propia.}{fig:res_login}
+	
+	\figuraAPA{figuras/resultado-transacciones.png}{Módulo de transacciones (\textit{Data Table}) mostrando el listado de operaciones, con soporte para búsqueda dinámica y paginación.}{0.9\textwidth}{Elaboración propia.}{fig:res_transacciones}
+	
+	\figuraAPA{figuras/resultado-roles.png}{Panel interactivo para la gestión de roles, demostrando el uso de modales laterales (\textit{Sheets}) para la inserción de datos sin abandonar el contexto de la tabla.}{0.8\textwidth}{Elaboración propia.}{fig:res_roles}
+	
+	\figuraAPA{figuras/resultado-dispositivos.png}{Vista de gestión de dispositivos móviles y tarjetas NFC vinculadas a las cuentas de los usuarios.}{0.9\textwidth}{Elaboración propia.}{fig:res_dispositivos}
 	
 	%---------------------------------------------------------
 	\chapter{Conclusiones y recomendaciones}
