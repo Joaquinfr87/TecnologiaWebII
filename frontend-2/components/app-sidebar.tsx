@@ -67,12 +67,8 @@ const data = {
           url: "/dashboard/usuario",
         },
         {
-          title: "Roles",
+          title: "Roles y Tarifas",
           url: "/dashboard/roles",
-        },
-        {
-          title: "Tarifas",
-          url: "/dashboard/tarifas",
         },
       ],
     },

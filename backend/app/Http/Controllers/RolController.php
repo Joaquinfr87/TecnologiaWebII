@@ -65,6 +65,9 @@ class RolController extends Controller
 
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:50|unique:Rol,Nombre,' . $id . ',Id_Rol',
+            'tarifa' => 'nullable|array',
+            'tarifa.monto' => 'numeric|min:0',
+            'tarifa.estado' => 'nullable|string|in:Activa,Inactiva',
         ]);
 
         if ($validator->fails()) {
@@ -77,6 +80,25 @@ class RolController extends Controller
         $rol->update([
             'Nombre' => $request->nombre
         ]);
+
+        // Actualizar tarifa si se envía
+        if ($request->has('tarifa')) {
+            $tarifa = $rol->tarifas()->where('Estado', 'Activa')->first();
+            $monto = $request->input('tarifa.monto');
+            $estado = $request->input('tarifa.estado', 'Activa');
+
+            if ($tarifa) {
+                $tarifa->update(array_filter([
+                    'Monto' => $monto,
+                    'Estado' => $estado,
+                ], fn($v) => $v !== null));
+            } elseif ($monto !== null) {
+                $rol->tarifas()->create([
+                    'Monto' => $monto,
+                    'Estado' => $estado,
+                ]);
+            }
+        }
 
         return response()->json([
             'message' => 'Rol actualizado exitosamente',
@@ -95,6 +117,10 @@ class RolController extends Controller
         }
 
         $rol = Rol::findOrFail($id);
+        
+        // Eliminar tarifas asociadas al rol
+        $rol->tarifas()->delete();
+        
         $rol->delete();
 
         // Tras eliminar, reiniciamos el AUTO_INCREMENT.

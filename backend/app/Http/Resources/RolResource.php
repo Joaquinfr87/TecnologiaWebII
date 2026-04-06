@@ -16,6 +16,7 @@ class RolResource extends JsonResource
             'nombre' => $this->Nombre,
             'tarifa' => $tarifa ? [
                 'monto' => $tarifa->Monto,
+                'estado' => $tarifa->Estado,
             ] : null,
         ];
     }

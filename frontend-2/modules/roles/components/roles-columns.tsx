@@ -39,11 +39,19 @@ const AccionesCell = ({ rol }: {rol:RolType}) => {
 export const columns: ColumnDef<RolType>[] = [
   {
     accessorKey: "id",
-    header: "nombres",
+    header: "Id",
   },
   {
     accessorKey:"nombre",
     header:"Nombre"
+  },
+  {
+    accessorKey: "tarifa.monto",
+    header:"Monto",
+  },
+  {
+    accessorKey:"tarifa.estado",
+    header:"Estado"
   },
   {
     id: "acciones",
