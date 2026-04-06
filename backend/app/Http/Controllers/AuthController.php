@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Cuenta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -30,6 +31,12 @@ class AuthController extends Controller
             'Contrasena'         => Hash::make($request->contrasena),
             'Id_Rol'             => $request->rolId,
             'Estado'             => 'Activo',
+        ]);
+
+        // Crear cuenta asociada con saldo inicial en 0
+        Cuenta::create([
+            'Id_Usuario' => $user->Id_Usuario,
+            'Saldo'      => 0.00,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
