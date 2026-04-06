@@ -1,9 +1,6 @@
 import { apiClient } from "@/lib/api/api-client";
 import { Usuario, FormularioUsuario, FiltrosUsuario, UsuarioResponse, usuarioResponseSchema } from "../schemas/usuario.schema";
-import AppPageRouteModule from "next/dist/server/route-modules/app-page/module";
 
-//Tambien se puede anadir a futuro el uso de los search params para filtrado de la tabla y usar el Type UsuarioResponse
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "/api";
 
 export async function fetchUsuarios(filtros: FiltrosUsuario): Promise<UsuarioResponse> {
   const searchParams = new URLSearchParams();
