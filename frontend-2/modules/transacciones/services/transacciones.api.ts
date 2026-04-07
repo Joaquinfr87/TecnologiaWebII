@@ -1,15 +1,44 @@
 import { apiClient } from "@/lib/api/api-client";
-import { TransaccionType, transaccionesResponseSchema } from "../schemas/transacciones.schema";
+import { TransaccionType, TransaccionesResponseType } from "../schemas/transacciones.schema";
+import { FiltrosTransaccion } from "../schemas/transacciones.schema";
 
-export async function fetchTransacciones(): Promise<TransaccionType[]> {
-  const res = await apiClient("/transacciones");
+export async function fetchTransacciones(filtros?: Partial<FiltrosTransaccion>): Promise<TransaccionesResponseType> {
+  const searchParams = new URLSearchParams();
+
+  if (filtros?.search) searchParams.set("search", filtros.search)
+  if (filtros?.cuentaId) searchParams.set("cuentaId", String(filtros.cuentaId))
+  if (filtros?.fechaDesde) searchParams.set("fechaDesde", filtros.fechaDesde)
+  if (filtros?.fechaHasta) searchParams.set("fechaHasta", filtros.fechaHasta)
+  if (filtros?.sortBy) searchParams.set("sortBy", filtros.sortBy)
+  if (filtros?.sortDir) searchParams.set("sortDir", filtros.sortDir)
+  if (filtros?.perPage) searchParams.set("perPage", String(filtros.perPage))
+  if (filtros?.page) searchParams.set("page", String(filtros.page))
+
+  const res = await apiClient(`/transacciones?${searchParams}`);
   if (!res.ok) throw new Error("Fallo al traer transacciones");
 
   const data = await res.json();
-  try {
-    return transaccionesResponseSchema.parse(data).data;
-  } catch (error) {
-    console.error("Zod error en fetchTransacciones:", error);
-    throw error;
+  
+  // Handle both paginated and non-paginated responses
+  if (data.data && Array.isArray(data.data)) {
+    return {
+      data: data.data,
+      meta: data.meta || {
+        current_page: 1,
+        last_page: 1,
+        per_page: data.data.length,
+        total: data.data.length
+      }
+    };
   }
+  
+  return {
+    data: [],
+    meta: {
+      current_page: 1,
+      last_page: 1,
+      per_page: 10,
+      total: 0
+    }
+  };
 }

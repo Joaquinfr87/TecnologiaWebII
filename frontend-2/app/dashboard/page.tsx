@@ -47,14 +47,14 @@ export default function DashboardPage() {
 }
 
 function DashboardAdmin() {
-  const { data: cuentas, isLoading: loadingCuentas } = useQuery({
+  const { data: cuentasData, isLoading: loadingCuentas } = useQuery({
     queryKey: ["cuentas"],
-    queryFn: fetchCuentas,
+    queryFn: () => fetchCuentas(),
   })
 
-  const { data: transacciones, isLoading: loadingTransacciones } = useQuery({
+  const { data: transaccionesData, isLoading: loadingTransacciones } = useQuery({
     queryKey: ["transacciones"],
-    queryFn: fetchTransacciones,
+    queryFn: () => fetchTransacciones({ perPage: 100 }),
   })
 
   const { data: dispositivos, isLoading: loadingDispositivos } = useQuery({
@@ -62,12 +62,15 @@ function DashboardAdmin() {
     queryFn: fetchDispositivos,
   })
 
-  const totalCuentas = cuentas?.length ?? 0
-  const saldoTotal = cuentas?.reduce((acc, c) => acc + c.saldo, 0) ?? 0
+  const cuentas = cuentasData ?? []
+  const transacciones = transaccionesData?.data ?? []
+  
+  const totalCuentas = cuentas.length
+  const saldoTotal = cuentas.reduce((acc, c) => acc + c.saldo, 0)
   const dispositivosActivos = dispositivos?.filter(d => d.estado === "Activo").length ?? 0
-  const totalTransacciones = transacciones?.length ?? 0
+  const totalTransacciones = transacciones.length
 
-  const ultimasTransacciones = transacciones?.slice(0, 5) ?? []
+  const ultimasTransacciones = transacciones.slice(0, 5)
 
   return (
     <div className="p-4 md:p-6 space-y-6 bg-background min-h-screen w-full">

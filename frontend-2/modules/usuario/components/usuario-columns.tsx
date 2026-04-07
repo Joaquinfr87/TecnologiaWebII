@@ -2,6 +2,9 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Usuario } from "@/modules/usuario/schemas/usuario.schema"
+import { Button } from "@/components/ui/button"
+import { Pencil } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 
 export const columns: ColumnDef<Usuario>[] = [
@@ -34,5 +37,23 @@ export const columns: ColumnDef<Usuario>[] = [
   {
     accessorKey:"estado",
     header:"Estado"
-  }
+  },
+  {
+    id: "actions",
+    header: "Acciones",
+    cell: ({ row }) => {
+      const router = useRouter()
+      return (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => {
+            router.push(`?usuarioId=${row.original.id}`)
+          }}
+        >
+          <Pencil className="h-4 w-4" />
+        </Button>
+      )
+    },
+  },
 ]

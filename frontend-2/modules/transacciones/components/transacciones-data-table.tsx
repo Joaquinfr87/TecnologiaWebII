@@ -16,15 +16,14 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { TransaccionType } from "../schemas/transacciones.schema"
-import { ArrowDownLeft, ArrowUpRight, CircleDollarSign } from "lucide-react"
 
-interface DataTableProps {
+interface SimpleDataTableProps {
   columns: ColumnDef<TransaccionType>[]
   data: TransaccionType[]
   loading?: boolean
 }
 
-export function TransaccionesDataTable({ columns, data, loading }: DataTableProps) {
+export function TransaccionesDataTable({ columns, data, loading }: SimpleDataTableProps) {
   const table = useReactTable({
     data,
     columns,
@@ -91,10 +90,7 @@ export const transaccionesColumns: ColumnDef<TransaccionType>[] = [
     accessorKey: "id",
     header: "ID",
     cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <CircleDollarSign className="h-4 w-4 text-muted-foreground" />
-        <span className="font-mono text-sm text-muted-foreground">#{row.getValue("id")}</span>
-      </div>
+      <span className="font-mono text-sm text-muted-foreground">#{row.getValue("id")}</span>
     ),
   },
   {
@@ -102,24 +98,21 @@ export const transaccionesColumns: ColumnDef<TransaccionType>[] = [
     header: "Monto",
     cell: ({ row }) => {
       const monto = row.getValue("monto") as number
-      return (
-        <div className="flex items-center gap-2">
-          <ArrowUpRight className="h-4 w-4 text-emerald-500" />
-          <span className="font-bold text-emerald-600">Bs. {monto.toFixed(2)}</span>
-        </div>
-      )
+      return <span className="font-semibold text-emerald-600">Bs. {monto.toFixed(2)}</span>
     },
   },
   {
     accessorKey: "fecha",
-    header: "Fecha y Hora",
+    header: "Fecha",
     cell: ({ row }) => {
       const fecha = row.getValue("fecha") as string
       const date = new Date(fecha)
       return (
         <div className="flex flex-col">
           <span className="text-sm font-medium">{date.toLocaleDateString("es-BO")}</span>
-          <span className="text-xs text-muted-foreground">{date.toLocaleTimeString("es-BO", { hour: '2-digit', minute: '2-digit' })}</span>
+          <span className="text-xs text-muted-foreground">
+            {date.toLocaleTimeString("es-BO", { hour: "2-digit", minute: "2-digit" })}
+          </span>
         </div>
       )
     },
@@ -130,10 +123,7 @@ export const transaccionesColumns: ColumnDef<TransaccionType>[] = [
     cell: ({ row }) => {
       const origen = row.getValue("idCuentaOrigen") as number | null
       return origen ? (
-        <div className="flex items-center gap-1">
-          <ArrowDownLeft className="h-3 w-3 text-amber-500" />
-          <span className="font-mono text-sm">#{origen}</span>
-        </div>
+        <span className="font-mono text-sm">#{origen}</span>
       ) : (
         <span className="text-muted-foreground">—</span>
       )
@@ -145,10 +135,7 @@ export const transaccionesColumns: ColumnDef<TransaccionType>[] = [
     cell: ({ row }) => {
       const destino = row.getValue("idCuentaDestino") as number | null
       return destino ? (
-        <div className="flex items-center gap-1">
-          <ArrowUpRight className="h-3 w-3 text-blue-500" />
-          <span className="font-mono text-sm">#{destino}</span>
-        </div>
+        <span className="font-mono text-sm">#{destino}</span>
       ) : (
         <span className="text-muted-foreground">—</span>
       )

@@ -3,14 +3,17 @@
 import { useEffect, useMemo, useState } from "react"
 import { columns } from "./usuario-columns"
 import { DataTable } from "./usuario-data-table"
+import SheetUsuario from "./usuario-sheet"
 import {
   FiltrosUsuario,
   filtrosUsuariosSchema,
 } from "@/modules/usuario/schemas/usuario.schema"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { usuariosListQueryOptions } from "../services/usuario.queries"
 import { PaginationState, SortingState } from "@tanstack/react-table"
+import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
 
 interface Props {
   initialFiltros: FiltrosUsuario
@@ -35,6 +38,7 @@ const reverseSortMap: Record<ColumnId, TableColumnId> = {
 
 export default function UsuarioClient({ initialFiltros }: Props) {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: initialFiltros.page - 1,
@@ -161,16 +165,22 @@ export default function UsuarioClient({ initialFiltros }: Props) {
 
   return (
     <div className="p-4 md:p-6 space-y-6 bg-background min-h-screen w-full">
-      <div className="flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-blue-500/10">
-          <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-blue-500/10">
+            <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Usuarios</h1>
+            <p className="text-sm text-muted-foreground">Gestión de usuarios del sistema</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Usuarios</h1>
-          <p className="text-sm text-muted-foreground">Gestión de usuarios del sistema</p>
-        </div>
+        <Button onClick={() => router.push("?usuarioId=new")}>
+          <Plus className="h-4 w-4 mr-2" />
+          Crear Usuario
+        </Button>
       </div>
       <div className="w-full">
         <DataTable
@@ -196,6 +206,7 @@ export default function UsuarioClient({ initialFiltros }: Props) {
           loading={isLoading}
         />
       </div>
+      <SheetUsuario />
     </div>
   )
 }
