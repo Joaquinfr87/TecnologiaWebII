@@ -9,7 +9,8 @@ import {
   PaginationState,
   SortingState,
 } from "@tanstack/react-table"
-
+import { useQuery } from "@tanstack/react-query"
+import { rolesListQueryOptions } from "@/modules/roles/services/roles.query"
 import {
   Table,
   TableBody,
@@ -19,7 +20,13 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { ChevronLeft, ChevronRight, Search } from "lucide-react"
 
 type Updater<T> = T | ((prev: T) => T)
@@ -80,6 +87,8 @@ export function DataTable<TData, TValue>({
     setSearchTerm(globalFilter)
   }, [globalFilter])
 
+  const { data: roles, isLoading } = useQuery(rolesListQueryOptions())
+
   const table = useReactTable({
     data,
     columns,
@@ -101,9 +110,9 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
       {/* Filtros */}
-      <div className="flex flex-col sm:flex-row gap-3 p-4 bg-card rounded-lg border">
+      <div className="flex flex-col gap-3 rounded-lg border bg-card p-4 sm:flex-row">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -129,20 +138,29 @@ export function DataTable<TData, TValue>({
             <SelectValue placeholder="Rol" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos</SelectItem>
-            <SelectItem value="1">Administrador</SelectItem>
-            <SelectItem value="2">Estudiante</SelectItem>
-            <SelectItem value="3">Chofer</SelectItem>
+            {isLoading && (
+              <SelectItem value="loading" disabled>
+                Cargando...
+              </SelectItem>
+            )}
+            {roles?.data?.map((e) => (
+              <SelectItem key={e.id} value={e.id.toString()}>
+                {e.nombre}
+              </SelectItem>
+            ))}{" "}
           </SelectContent>
         </Select>
       </div>
 
       {/* Tabla */}
-      <div className="rounded-lg border bg-card w-full">
+      <div className="w-full rounded-lg border bg-card">
         <Table>
           <TableHeader className="bg-muted/50">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="border-b hover:bg-transparent">
+              <TableRow
+                key={headerGroup.id}
+                className="border-b hover:bg-transparent"
+              >
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
@@ -170,7 +188,10 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-32 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-32 text-center"
+                >
                   <div className="flex items-center justify-center gap-2 text-muted-foreground">
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                     Cargando...
@@ -179,20 +200,26 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow 
-                  key={row.id} 
-                  className="hover:bg-muted/50 transition-colors border-b border-border/50"
+                <TableRow
+                  key={row.id}
+                  className="border-b border-border/50 transition-colors hover:bg-muted/50"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="py-3">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-32 text-center text-muted-foreground">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-32 text-center text-muted-foreground"
+                >
                   No se encontraron usuarios
                 </TableCell>
               </TableRow>
@@ -210,14 +237,14 @@ export function DataTable<TData, TValue>({
           <button
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="p-2 rounded-lg border hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-lg border p-2 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="p-2 rounded-lg border hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-lg border p-2 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -226,3 +253,4 @@ export function DataTable<TData, TValue>({
     </div>
   )
 }
+

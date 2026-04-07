@@ -1,6 +1,7 @@
 import { getQueryClient } from "@/lib/query-client";
 import { fetchDispositivos } from "@/modules/dispositivos/services/dispositivos.api";
 import { DispositivosDataTable, dispositivosColumns } from "@/modules/dispositivos/components/dispositivos-data-table";
+import { DispositivoType } from "@/modules/dispositivos/schemas/dispositivos.schema";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Smartphone } from "lucide-react";
 
@@ -13,7 +14,7 @@ export default async function DispositivosPage() {
   });
 
   const dehydratedState = dehydrate(queryClient);
-  const dispositivos = dehydratedState.queries[0]?.state?.data?.data ?? [];
+  const dispositivos = (dehydratedState.queries[0]?.state?.data as { data?: DispositivoType[] })?.data ?? [];
 
   return (
     <div className="p-4 md:p-6 space-y-6 bg-background min-h-screen w-full">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cuenta;
 use App\Http\Resources\CuentaResource;
+use Illuminate\Http\Request;
 
 class CuentaController extends Controller
 {
@@ -38,6 +39,42 @@ class CuentaController extends Controller
         return response()->json([
             'status' => 'ok',
             'data' => new CuentaResource($cuenta)
+        ], 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $cuenta = Cuenta::findOrFail($id);
+
+        $validated = $request->validate([
+            'saldo' => 'required|numeric|min:0'
+        ]);
+
+        $cuenta->Saldo = $validated['saldo'];
+        $cuenta->save();
+
+        return response()->json([
+            'status' => 'ok',
+            'data' => new CuentaResource($cuenta),
+            'mensaje' => 'Saldo actualizado correctamente'
+        ], 200);
+    }
+
+    public function updateSaldo(Request $request, $id)
+    {
+        $cuenta = Cuenta::findOrFail($id);
+
+        $validated = $request->validate([
+            'saldo' => 'required|numeric|min:0'
+        ]);
+
+        $cuenta->Saldo = $validated['saldo'];
+        $cuenta->save();
+
+        return response()->json([
+            'status' => 'ok',
+            'data' => new CuentaResource($cuenta),
+            'mensaje' => 'Saldo actualizado correctamente'
         ], 200);
     }
 }

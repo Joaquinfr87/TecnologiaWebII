@@ -1,8 +1,39 @@
+"use client"
+
 import { RegisterForm } from "@/modules/auth/components/register-form"
+import { useQuery } from "@tanstack/react-query"
 import { Bus } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+import { sessionQueryOptions } from "@/modules/auth/services/auth.queries"
 import Link from "next/link"
 
 export default function SignupPage() {
+  const router = useRouter()
+
+  const { isLoading, isSuccess, data } = useQuery(sessionQueryOptions())
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      router.replace("/dashboard")
+    }
+  }, [isSuccess, data, router])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-3 border-primary border-t-transparent" />
+          <span className="text-sm text-muted-foreground">Verificando...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (isSuccess && data) {
+    return null
+  }
+
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Visual */}

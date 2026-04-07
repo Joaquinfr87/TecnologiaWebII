@@ -1,6 +1,7 @@
 import { getQueryClient } from "@/lib/query-client";
 import { fetchCuentas } from "@/modules/cuentas/services/cuentas.api";
 import { CuentasDataTable, cuentasColumns } from "@/modules/cuentas/components/cuentas-data-table";
+import { CuentaType } from "@/modules/cuentas/schemas/cuentas.schema";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Wallet } from "lucide-react";
 
@@ -13,7 +14,7 @@ export default async function CuentasPage() {
   });
 
   const dehydratedState = dehydrate(queryClient);
-  const cuentas = dehydratedState.queries[0]?.state?.data?.data ?? [];
+  const cuentas = (dehydratedState.queries[0]?.state?.data as { data?: CuentaType[] })?.data ?? [];
 
   return (
     <div className="p-4 md:p-6 space-y-6 bg-background min-h-screen w-full">

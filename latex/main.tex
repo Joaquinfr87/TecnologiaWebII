@@ -1,17 +1,36 @@
 % PLANTILLA PERSONALIZADA UPDS
 \documentclass[12pt,letterpaper]{report}
 
-\usepackage{xparse}% para notas opcionales en la figura
+% --------------------------------------------------------
+% PAQUETES ESENCIALES
+% --------------------------------------------------------
+\usepackage{xparse} % Para notas opcionales en comandos
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage{graphicx}
 \usepackage{float}
-\usepackage[round]{natbib} % Necesario para usar \citet y citas estilo APA
-\usepackage{listings} % Anexos
-\usepackage{microtype}
+\usepackage[round]{natbib} % Citas estilo APA
+\usepackage{listings} % Para anexos y bloques de código
+\usepackage{microtype} % Mejoras tipográficas y ajuste fino de márgenes
+\usepackage{booktabs} % Para tablas con calidad profesional (\toprule, \midrule)
 
 % --------------------------------------------------------
-% CONFIGURACIÓN DE FORMATO REQUERIDO 
+% CONFIGURACIÓN DE LISTAS Y VIÑETAS
+% --------------------------------------------------------
+\usepackage{enumitem}
+
+% 1. Aplica margen izquierdo 0 a TODOS los niveles de itemize y enumerate
+\setlist[itemize]{leftmargin=*, labelsep=0.5em}
+\setlist[enumerate]{leftmargin=*, labelsep=0.5em}
+
+% 2. Fuerza al entorno description a no tener ninguna sangría colgante
+\setlist[description]{style=unboxed, leftmargin=0pt}
+
+% 3. Elimina espacios verticales exagerados, pero mantiene un respiro
+\setlist{noitemsep, topsep=0pt, partopsep=0pt}
+
+% --------------------------------------------------------
+% CONFIGURACIÓN DE FORMATO REQUERIDO (MÁRGENES Y ESPACIADO)
 % --------------------------------------------------------
 
 % 1. Tipografía: Arial (helvet) 12pt. Negrilla solo en títulos
@@ -21,7 +40,7 @@
 % 2. Márgenes: Izq 3.5cm, Der 2.5cm, Sup 1.5cm, Inf 1.5cm
 \usepackage[left=3.5cm,right=2.5cm,top=1.5cm,bottom=1.5cm, includehead, includefoot, headheight=15pt]{geometry}
 
-% 3. Espaciado: 1.5
+% 3. Espaciado: 1.5 (Interlineado)
 \usepackage{setspace}
 \onehalfspacing
 
@@ -34,7 +53,7 @@
 \pagestyle{fancy}
 \fancyhf{} 
 \fancyhead[R]{\nouppercase{\leftmark}} % Nombre del capítulo en el encabezado
-\fancyfoot[C]{\thepage} % Numeración en el pie de página
+\fancyfoot[C]{\thepage} % Numeración en el pie de página central
 \renewcommand{\headrulewidth}{0.4pt} 
 
 % Forzar el encabezado en las páginas donde inicia un capítulo
@@ -44,110 +63,120 @@
 	\fancyfoot[C]{\thepage}
 }
 
-% 6. Configuración de Objetos (Títulos arriba y centrados) y titulo figuras
-\usepackage{caption}
-\captionsetup[figure]{position=top, justification=centering, labelsep=colon}
-\captionsetup[table]{position=top, justification=centering, labelsep=colon}
-
-\captionsetup[figure]{
-	position=top,
-	justification=centering,
-	labelfont=bf,
-	textfont=it,
-	labelsep=space
-}
-
-% 7. Comando personalizado para la fuente de los objetos
-\newcommand{\fuente}[1]{
-	\vspace{0.2cm}
-	{\raggedright \small \textbf{Fuente:} #1 \par}
-}
-
-% Asegurar que la profundidad de numeración y del índice incluya subsecciones
+% 6. Profundidad de numeración e índice
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 
 % --------------------------------------------------------
-% CONFIGURACIÓN DE TÍTULOS (TODO EN TAMAÑO 12pt Y NEGRITA)
+% CONFIGURACIÓN DE TÍTULOS (TAMAÑO 12pt, NEGRITA Y ESPACIADO)
 % --------------------------------------------------------
 \usepackage{titlesec}
 
-% Formato para \chapter: tamaño normal (12pt), negrita, sin la palabra "Capítulo" arriba
+% Formato para \chapter: sin la palabra "Capítulo", espaciado corregido
 \titleformat{\chapter}[hang]
-{\normalsize\bfseries} % Formato: tamaño normal y negrita
-{\thechapter.} % Etiqueta (ej. "1.")
-{0.5em} % Espacio entre número y texto
+{\normalsize\bfseries} 
+{\thechapter.} 
+{0.5em} 
 {}
-% Quitar el enorme espacio en blanco que LaTeX pone arriba de los capítulos por defecto
 \titlespacing*{\chapter}{0pt}{-0.5in}{12pt} 
 
-% Formato para \section
-\titleformat{\section}
-{\normalsize\bfseries}
-{\thesection}
-{0.5em}
-{}
+% Formato y espaciado para \section
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{0.5em}{}
+\titlespacing*{\section}{0pt}{18pt}{6pt}
 
-% Formato para \subsection
-\titleformat{\subsection}
-{\normalsize\bfseries}
-{\thesubsection}
-{0.5em}
-{}
+% Formato y espaciado para \subsection
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
 
-% Formato para \subsubsection
-\titleformat{\subsubsection}
-{\normalsize\bfseries}
-{\thesubsubsection}
-{0.5em}
-{}
+% Formato y espaciado para \subsubsection
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{12pt}{6pt}
 
-%----------------------Comandos---------------------------
+% --------------------------------------------------------
+% CONFIGURACIÓN DE TABLAS Y FIGURAS (ESTILO APA)
+% --------------------------------------------------------
+\usepackage{caption}
+
+% Configuración específica para las tablas
+\captionsetup[table]{
+	labelfont=bf,           % Pone "Cuadro X" en negrita
+	textfont=normalfont,    % Deja el texto del título en fuente normal
+	labelsep=colon,         % Añade los dos puntos "Cuadro X:"
+	justification=raggedright, % Alinea el título a la izquierda
+	singlelinecheck=false   % Fuerza la alineación izquierda siempre
+}
+\renewcommand{\tablename}{Cuadro} % Cambiar nomenclatura de Tabla a Cuadro
+
+% Configuración específica para las figuras
+\captionsetup[figure]{
+	labelfont=bf,           % Pone "Figura X" en negrita
+	textfont=normalfont,    % Texto del título en fuente normal
+	labelsep=colon,         % Añade los dos puntos "Figura X:"
+	justification=raggedright, % Alinea el título a la izquierda
+	singlelinecheck=false   % Fuerza la alineación izquierda siempre
+}
+
+% --------------------------------------------------------
+% COMANDOS PERSONALIZADOS (\figuraAPA y \tablaAPA)
+% --------------------------------------------------------
+
 \NewDocumentCommand{\figuraAPA}{m m m m o m}{
 	\begin{figure}[H]
+		\centering % Centra el bloque entero (minipage) en la hoja
 		
-		\caption{#2}
-		\label{#6}
-		
-		\begin{center}
-			\begin{minipage}{#3}
-				
-				\centering
-				\includegraphics[width=\textwidth]{#1}
-				
-				\vspace{4pt}
-				\raggedright
-				
-				% Nota opcional
-				\IfValueT{#5}{
-					{\small \textit{Nota: #5}\\}
-				}
-				
-				{\small \textbf{Fuente:} #4}
-				
-			\end{minipage}
-		\end{center}
-		
+		\begin{minipage}{#3}
+			% Título (Alineado a la izquierda por el paquete caption)
+			\caption{#2}
+			\label{#6}
+			
+			\vspace{4pt}
+			
+			% Centra la imagen dentro de su contenedor
+			\centering
+			\includegraphics[width=\textwidth]{#1}
+			
+			\vspace{6pt}
+			\raggedright % Alinea la nota y la fuente a la izquierda del minipage
+			
+			% Nota opcional
+			\IfValueT{#5}{
+				{\small \textit{Nota.} #5\\[2pt]}
+			}
+			
+			{\small \textbf{Fuente:} #4}
+			
+		\end{minipage}
 	\end{figure}
 }
 
-\newcommand{\tablaAPA}[5]{
+\NewDocumentCommand{\tablaAPA}{m m m m o m}{
 	\begin{table}[H]
+		\centering % Centra el bloque entero (minipage) en la página
 		
-		\caption{#2}
-		\label{#5}
-		
-		\begin{center}
-			\begin{minipage}{#3}
-				
-				\centering
-				#1
-				
-			\end{minipage}
-		\end{center}
-		\fuente{#4}
+		\begin{minipage}{#3}
+			% Título (Su formato y alineación ahora lo controla \captionsetup)
+			\caption{#2}
+			\label{#6}
+			
+			\vspace{4pt}
+			
+			\centering
+			#1
+			
+			\vspace{6pt}
+			\raggedright % Asegura que notas y fuente se alineen a la izquierda del minipage
+			
+			% Nota opcional
+			\IfValueT{#5}{
+				{\small \textit{Nota.} #5\\[2pt]}
+			}
+			
+			{\small \textbf{Fuente:} #4}
+			
+		\end{minipage}
 	\end{table}
 }
+
 %---------------------------------------------------------
 % DOCUMENTO
 %---------------------------------------------------------
@@ -233,7 +262,7 @@
 		
 		\item Diseñar el \textit{backend} del sistema en PHP bajo el patrón de arquitectura MVC, implementando un módulo de administración (CRUD) de usuarios y una API para el procesamiento de peticiones de cobro.
 		
-		\item Implementar un mecanismo de seguridad basado en tokenización (como JWT) para generar credenciales temporales, permitiendo que el pago desde el dispositivo del estudiante se realice de manera \textit{offline}.
+		\item Implementar un mecanismo de seguridad basado en tokenización (como JWT) para generar credenciales temporales, permitiendo que el pago desde el dispositivo del estudiante se realice de manera \textit{online}.
 		
 		\item Programar el módulo de la aplicación móvil Android dirigido al estudiante, utilizando la tecnología de Emulación de Tarjeta Host (HCE) para transmitir de forma segura el token identificador vía NFC.
 		
@@ -510,29 +539,29 @@
 	
 	\section{Desarrollo de la aplicación}
 	
-\subsection{Definición de rutas e integración de la API}
-
-El sistema implementa una arquitectura basada en servicios (API RESTful) que comunica el \textit{back\-end} (Laravel) con el \textit{front\-end} (Next.js). La definición de rutas abarca desde la exposición de \textit{end\-points} en el servidor hasta su respectivo consumo y validación en el cliente.
-
-\subsubsection{Enrutamiento en el Backend (Laravel)}
-La configuración de rutas se centraliza en el archivo \texttt{routes/api.php}. El diseño de la API sigue las siguientes convenciones principales:
-
-\begin{itemize}
-	\item \textbf{Autenticación y Seguridad:} Se exponen rutas públicas para el registro (\texttt{/register}) y acceso (\texttt{/login}). Por otro lado, las rutas que devuelven la sesión del usuario (\texttt{/user}) o ejecutan cierres de sesión están protegidas bajo el \textit{middle\-ware} \texttt{auth:sanctum}, garantizando que solo clientes con un \textit{token} válido accedan.
-	\item \textbf{Controladores de Recursos (API Resources):} Se utiliza el método \texttt{Route::api\-Resource} para generar automáticamente las rutas CRUD (Crear, Leer, Actualizar, Eliminar) de entidades clave, tales como \texttt{users}, \texttt{roles}, \texttt{tarifas}, \texttt{cuentas} y \texttt{transacciones}.
-	\item \textbf{Rutas Específicas de Lógica de Negocio:} Para procesos que no encajan en el modelo CRUD estándar, se definen \textit{end\-points} personalizados. Esto incluye la gestión transaccional (ej. \texttt{/cobro}, \texttt{/recargas}) y la obtención de relaciones complejas (ej. \texttt{/usuarios/\{id\}/cuenta}).
-\end{itemize}
-
-\subsubsection{Consumo en el Frontend (Next.js)}
-En el lado del cliente, las peticiones HTTP se abstraen dentro de los módulos correspondientes. Tomando como ejemplo el servicio de usuarios (\texttt{usuario.api.ts}), el flujo de datos se maneja de la siguiente forma:
-
-\begin{itemize}
-	\item \textbf{Cliente HTTP Centralizado:} Se emplea una instancia personalizada llamada \texttt{apiClient} que se encarga de estandarizar las peticiones (inyectando \textit{headers} y manejando sesiones) hacia los \textit{end\-points} de Laravel.
-	\item \textbf{Manejo Dinámico de Parámetros:} Para peticiones GET complejas como listados (\texttt{fetchUsuarios}), se utiliza la interfaz \texttt{URL\-Search\-Params}. Esto permite inyectar dinámicamente parámetros de paginación, filtros (\textit{estado}, \textit{rolId}), búsquedas (\textit{search}) y ordenamiento directo en la URL de la API.
-	\item \textbf{Validación de Tipos Estrictos:} Para garantizar la integridad de la información que ingresa al estado de la aplicación, las respuestas en formato JSON se validan en tiempo de ejecución utilizando la librería Zod (ej. \texttt{usuario\-Response\-Schema.parse(data)}). Si la respuesta del servidor no coincide con el esquema esperado, se intercepta el error para evitar fallos silenciosos en la interfaz.
-\end{itemize}
-
-\figuraAPA{figuras/flujo-rutas-api.png}{Arquitectura de comunicación y flujo de datos entre el Frontend y el Backend.}{0.8\textwidth}{Elaboración propia.}{fig:flujo_rutas_api}
+	\subsection{Definición de rutas e integración de la API}
+	
+	El sistema implementa una arquitectura basada en servicios (API RESTful) que comunica el \textit{back\-end} (Laravel) con el \textit{front\-end} (Next.js). La definición de rutas abarca desde la exposición de \textit{end\-points} en el servidor hasta su respectivo consumo y validación en el cliente.
+	
+	\subsubsection{Enrutamiento en el Backend (Laravel)}
+	La configuración de rutas se centraliza en el archivo \texttt{routes/api.php}. El diseño de la API sigue las siguientes convenciones principales:
+	
+	\begin{itemize}
+		\item \textbf{Autenticación y Seguridad:} Se exponen rutas públicas para el registro (\texttt{/register}) y acceso (\texttt{/login}). Por otro lado, las rutas que devuelven la sesión del usuario (\texttt{/user}) o ejecutan cierres de sesión están protegidas bajo el \textit{middle\-ware} \texttt{auth:sanctum}, garantizando que solo clientes con un \textit{token} válido accedan.
+		\item \textbf{Controladores de Recursos (API Resources):} Se utiliza el método \texttt{Route::api\-Resource} para generar automáticamente las rutas CRUD (Crear, Leer, Actualizar, Eliminar) de entidades clave, tales como \texttt{users}, \texttt{roles}, \texttt{tarifas}, \texttt{cuentas} y \texttt{transacciones}.
+		\item \textbf{Rutas Específicas de Lógica de Negocio:} Para procesos que no encajan en el modelo CRUD estándar, se definen \textit{end\-points} personalizados. Esto incluye la gestión transaccional (ej. \texttt{/cobro}, \texttt{/recargas}) y la obtención de relaciones complejas (ej. \texttt{/usuarios/\{id\}/cuenta}).
+	\end{itemize}
+	
+	\subsubsection{Consumo en el Frontend (Next.js)}
+	En el lado del cliente, las peticiones HTTP se abstraen dentro de los módulos correspondientes. Tomando como ejemplo el servicio de usuarios (\texttt{usuario.api.ts}), el flujo de datos se maneja de la siguiente forma:
+	
+	\begin{itemize}
+		\item \textbf{Cliente HTTP Centralizado:} Se emplea una instancia personalizada llamada \texttt{apiClient} que se encarga de estandarizar las peticiones (inyectando \textit{headers} y manejando sesiones) hacia los \textit{end\-points} de Laravel.
+		\item \textbf{Manejo Dinámico de Parámetros:} Para peticiones GET complejas como listados (\texttt{fetchUsuarios}), se utiliza la interfaz \texttt{URL\-Search\-Params}. Esto permite inyectar dinámicamente parámetros de paginación, filtros (\textit{estado}, \textit{rolId}), búsquedas (\textit{search}) y ordenamiento directo en la URL de la API.
+		\item \textbf{Validación de Tipos Estrictos:} Para garantizar la integridad de la información que ingresa al estado de la aplicación, las respuestas en formato JSON se validan en tiempo de ejecución utilizando la librería Zod (ej. \texttt{usuario\-Response\-Schema.parse(data)}). Si la respuesta del servidor no coincide con el esquema esperado, se intercepta el error para evitar fallos silenciosos en la interfaz.
+	\end{itemize}
+	
+	\figuraAPA{figuras/flujo-rutas-api.png}{Arquitectura de comunicación y flujo de datos entre el Frontend y el Backend.}{0.8\textwidth}{Elaboración propia.}{fig:flujo_rutas_api}
 	
 	\subsection{Creación de controladores}
 	\begin{description}
@@ -578,36 +607,45 @@ En el lado del cliente, las peticiones HTTP se abstraen dentro de los módulos c
 		\item[Transaccion:] Relaciones: \texttt{belongsTo(Cuenta::class, 'Id\_Cuenta\_Origen')} (Quien paga), \texttt{belongsTo(Cuenta::class, 'Id\_Cuenta\_Destino')} (El chofer/sindicato que recibe), \texttt{belongsTo(TarjetaNFC::class, 'UID\_NFC')}.
 	\end{description}
 	
-\subsection{Desarrollo de vistas y componentes de interfaz}
-
-El desarrollo de la capa visual del \textit{front\-end} se abordó mediante una arquitectura basada en componentes reutilizables, apoyándose en las convenciones del \textit{App Router} de Next.js y un sistema de diseño estandarizado.
-
-\subsubsection{Estrategia de renderizado (Server y Client Components)}
-Para optimizar el rendimiento y la experiencia del usuario, se implementó una separación clara entre componentes de servidor y de cliente:
-\begin{itemize}
-	\item \textbf{\textit{Server Com\-po\-nents} (por defecto):} Se utilizaron para las páginas estáticas y los \textit{lay\-outs} principales (como \texttt{app/dashboard/layout.tsx}). Esto permite que la estructura base de la aplicación se genere en el servidor, reduciendo el tamaño del paquete JavaScript enviado al navegador.
-	\item \textbf{\textit{Client Com\-po\-nents}:} Aquellos elementos que requieren interactividad, manejo de estado local o el uso de \textit{hooks} (como los formularios de registro, tablas de datos interactivos y modales) se marcaron explícitamente con la directiva \texttt{"use client"}. Un ejemplo de esto son los componentes dentro de \texttt{modules/usuario/components/}.
-\end{itemize}
-
-\subsubsection{Sistema de diseño y librería UI}
-Para mantener la coherencia visual y acelerar el desarrollo, se integró \textbf{Tailwind CSS} junto con una arquitectura de componentes base accesibles. 
-La carpeta \texttt{components/ui/} actúa como una biblioteca interna donde residen elementos atómicos (\textit{botones, inputs, selectores, avatares, tablas y menús desplegables}). Estos componentes encapsulan sus propios estilos y comportamientos base, garantizando que vistas complejas, como los \textit{dash\-boards} administrativos, compartan el mismo lenguaje visual.
-
-\subsubsection{Estructuración de Vistas Complejas}
-Las interfaces principales, como el panel de administración (\textit{dash\-board}), se componen de varias capas jerárquicas:
-\begin{enumerate}
-	\item \textbf{Capa de Envoltorio (\textit{Layouts}):} Proveen el esqueleto de navegación persistente, integrando componentes globales como \texttt{app-sidebar.tsx} y \texttt{nav-main.tsx}.
-	\item \textbf{Capa de Página (\textit{Pages}):} Actúan como contenedores principales de cada ruta (ej. \texttt{cuentas/page.tsx}).
-	\item \textbf{Capa de Dominio (\textit{Módulos}):} Las páginas delegan la presentación de la información a componentes especializados del dominio, como \texttt{cuentas-data-table.tsx}, los cuales gestionan la paginación, filtros y acciones directas sobre los registros.
-\end{enumerate}
-
-\figuraAPA{figuras/jerarquia-vistas.png}{Jerarquía de componentes y composición de una vista administrativa.}{0.8\textwidth}{Elaboración propia.}{fig:jerarquia_vistas}
-
-% NOTA: Aquí puedes agregar una segunda figura mostrando una captura de pantalla real de tu sistema.
-\figuraAPA{figuras/captura-dashboard.png}{Interfaz de usuario de la vista de gestión de usuarios.}{0.9\textwidth}{Elaboración propia.}{fig:captura_dashboard}
+	\subsection{Desarrollo de vistas y componentes de interfaz}
+	
+	El desarrollo de la capa visual del \textit{front\-end} se abordó mediante una arquitectura basada en componentes reutilizables, apoyándose en las convenciones del \textit{App Router} de Next.js y un sistema de diseño estandarizado.
+	
+	\subsubsection{Estrategia de renderizado (Server y Client Components)}
+	Para optimizar el rendimiento y la experiencia del usuario, se implementó una separación clara entre componentes de servidor y de cliente:
+	\begin{itemize}
+		\item \textbf{\textit{Server Com\-po\-nents} (por defecto):} Se utilizaron para las páginas estáticas y los \textit{lay\-outs} principales (como \texttt{app/dashboard/layout.tsx}). Esto permite que la estructura base de la aplicación se genere en el servidor, reduciendo el tamaño del paquete JavaScript enviado al navegador.
+		\item \textbf{\textit{Client Com\-po\-nents}:} Aquellos elementos que requieren interactividad, manejo de estado local o el uso de \textit{hooks} (como los formularios de registro, tablas de datos interactivos y modales) se marcaron explícitamente con la directiva \texttt{"use client"}. Un ejemplo de esto son los componentes dentro de \texttt{modules/usuario/components/}.
+	\end{itemize}
+	
+	\subsubsection{Sistema de diseño y librería UI}
+	Para mantener la coherencia visual y acelerar el desarrollo, se integró \textbf{Tailwind CSS} junto con una arquitectura de componentes base accesibles. 
+	La carpeta \texttt{components/ui/} actúa como una biblioteca interna donde residen elementos atómicos (\textit{botones, inputs, selectores, avatares, tablas y menús desplegables}). Estos componentes encapsulan sus propios estilos y comportamientos base, garantizando que vistas complejas, como los \textit{dash\-boards} administrativos, compartan el mismo lenguaje visual.
+	
+	\subsubsection{Estructuración de Vistas Complejas}
+	Las interfaces principales, como el panel de administración (\textit{dash\-board}), se componen de varias capas jerárquicas:
+	\begin{enumerate}
+		\item \textbf{Capa de Envoltorio (\textit{Layouts}):} Proveen el esqueleto de navegación persistente, integrando componentes globales como \texttt{app-sidebar.tsx} y \texttt{nav-main.tsx}.
+		\item \textbf{Capa de Página (\textit{Pages}):} Actúan como contenedores principales de cada ruta (ej. \texttt{cuentas/page.tsx}).
+		\item \textbf{Capa de Dominio (\textit{Módulos}):} Las páginas delegan la presentación de la información a componentes especializados del dominio, como \texttt{cuentas-data-table.tsx}, los cuales gestionan la paginación, filtros y acciones directas sobre los registros.
+	\end{enumerate}
+	
+	\figuraAPA{figuras/jerarquia-vistas.png}{Jerarquía de componentes y composición de una vista administrativa.}{0.6\textwidth}{Elaboración propia.}{fig:jerarquia_vistas}
+	
+	% NOTA: Aquí puedes agregar una segunda figura mostrando una captura de pantalla real de tu sistema.
+	\figuraAPA{figuras/captura-dashboard.png}{Interfaz de usuario de la vista de gestión de usuarios.}{0.9\textwidth}{Elaboración propia.}{fig:captura_dashboard}
 	
 	\subsection{Implementación de funcionalidades}
-	Contenido...
+	
+	La funcionalidad del sistema reside en el \texttt{CobroController}, donde el flujo de intercambio de valor sera mediante una transacción atómica de base de datos para garantizar la consistencia de los saldos. Se utilizan \textit{API Resources} para estandarizar la salida JSON, el flujo algorítmico implementado la siguiente secuencia lógica:
+	
+	\begin{enumerate}
+		\item \textbf{Validación de Identidad:} Se intercepta el \texttt{UID\_NFC} enviado por el microcontrolador, verificando su existencia en el repositorio de \texttt{TarjetaNFC} y comprobando que su estado operativo sea 'Activa'.
+		\item \textbf{Resolución de Tarifa:} El sistema identifica el rol del usuario propietario de la tarjeta y consulta en la tabla \texttt{Tarifa} el monto vigente correspondiente a dicho perfil.
+		\item \textbf{Verificación de Solvencia:} Se realiza una validación lógica para confirmar que el saldo disponible en la \texttt{Cuenta} del estudiante es mayor o igual al monto de la tarifa obtenida.
+		\item \textbf{Ejecución de Transacción:} Mediante un bloque \textit{database transaction}, se realiza simultáneamente el descuento (débito) de la cuenta del estudiante y el abono (crédito) a la cuenta del conductor/operador.
+		\item \textbf{Registro de Auditoría:} Se persiste un registro en la tabla \texttt{Transaccion}, capturando los IDs de los dispositivos móviles involucrados en la operación, asegurando la trazabilidad forense del cobro.
+	\end{enumerate}
 	
 	\section{Interacción con la base de datos}
 	\subsection{Configuración de conexión}
@@ -629,56 +667,66 @@ Las interfaces principales, como el panel de administración (\textit{dash\-boar
 	}{Variables de configuración de la base de datos}{0.8\textwidth}{Elaboración propia.}{tab:config_db}
 	
 	\begin{figure}[H]
-		\caption{Configuración del servicio MySQL en Docker Compose}
-		\label{fig:docker_config}
-		\begin{center}
-			\begin{minipage}{0.9\textwidth}
-				\begin{lstlisting}[language=bash, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
-					services:
-					db:
-					image: mysql:8.0
-					environment:
-					MYSQL_DATABASE: laravel_db
-					MYSQL_ROOT_PASSWORD: root_password
-					MYSQL_USER: laravel_user
-					MYSQL_PASSWORD: secret_password
-					ports:
-					- "3306:3306"
-				\end{lstlisting}
-				\vspace{4pt}
-				\raggedright
-				{\small \textbf{Fuente:} Elaboración propia.}
-			\end{minipage}
-		\end{center}
+		\centering
+		\begin{minipage}{0.9\textwidth}
+			
+			\caption{Configuración del servicio MySQL en Docker Compose}
+			\label{fig:docker_config}
+			
+			\vspace{4pt}
+			
+			\begin{lstlisting}[language=bash, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
+				services:
+				db:
+				image: mysql:8.0
+				environment:
+				MYSQL_DATABASE: laravel_db
+				MYSQL_ROOT_PASSWORD: root_password
+				MYSQL_USER: laravel_user
+				MYSQL_PASSWORD: secret_password
+				ports:
+				- "3306:3306"
+			\end{lstlisting}
+			
+			\vspace{2pt}
+			\raggedright
+			{\small \textbf{Fuente:} Elaboración propia.}
+			
+		\end{minipage}
 	\end{figure}
 	
 	\subsection{Consultas realizadas}
 	Para la interacción con los datos, se utiliza el ORM Eloquent de Laravel, el cual permite realizar consultas a la base de datos mediante una sintaxis orientada a objetos en lugar de consultas SQL manuales. En el sistema de pasajes, las consultas más representativas incluyen filtros de búsqueda y paginación. Un ejemplo destacado es la recuperación de usuarios en el \texttt{UserController}, donde se implementa lógica para filtrar por nombres, apellidos o carnet de identidad, junto con un sistema de ordenamiento dinámico:
 	
 	\begin{figure}[H]
-		\caption{Filtrado y consulta mediante Eloquent}
-		\label{fig:consulta_eloquent}
-		\begin{center}
-			\begin{minipage}{0.9\textwidth}
-				\begin{lstlisting}[language=php, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
-					$query = User::query();
-					
-					if ($request->has('search')) {
-						$search = $request->search;
-						$query->where(function($q) use ($search) {
-							$q->where('Nombres', 'like', "%{$search}%")
-							->orWhere('Apellidos', 'like', "%{$search}%")
-							->orWhere('Carnet_Identidad', 'like', "%{$search}%");
-						});
-					}
-					
-					$users = $query->paginate($request->get('perPage', 10));
-				\end{lstlisting}
-				\vspace{4pt}
-				\raggedright
-				{\small \textbf{Fuente:} Elaboración propia.}
-			\end{minipage}
-		\end{center}
+		\centering
+		\begin{minipage}{0.9\textwidth}
+			
+			\caption{Filtrado y consulta mediante Eloquent}
+			\label{fig:consulta_eloquent}
+			
+			\vspace{4pt}
+			
+			\begin{lstlisting}[language=php, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
+				$query = User::query();
+				
+				if ($request->has('search')) {
+					$search = $request->search;
+					$query->where(function($q) use ($search) {
+						$q->where('Nombres', 'like', "%{$search}%")
+						->orWhere('Apellidos', 'like', "%{$search}%")
+						->orWhere('Carnet_Identidad', 'like', "%{$search}%");
+					});
+				}
+				
+				$users = $query->paginate($request->get('perPage', 10));
+			\end{lstlisting}
+			
+			\vspace{2pt}
+			\raggedright
+			{\small \textbf{Fuente:} Elaboración propia.}
+			
+		\end{minipage}
 	\end{figure}
 	
 	\subsection{Manipulación de datos}
@@ -688,48 +736,58 @@ Las interfaces principales, como el panel de administración (\textit{dash\-boar
 	Para registrar un nuevo usuario, se utiliza el método \texttt{create()}, el cual recibe un arreglo asociativo con los datos validados del estudiante o chofer. El sistema se encarga de aplicar el \textit{hashing} a la contraseña para su almacenamiento seguro:
 	
 	\begin{figure}[H]
-		\caption{Inserción de datos en la tabla Usuario}
-		\label{fig:insercion_usuario}
-		\begin{center}
-			\begin{minipage}{0.9\textwidth}
-				\begin{lstlisting}[language=php, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
-					$user = User::create([
-					'Nombres' => $request->nombres,
-					'Apellidos' => $request->apellidos,
-					'Carnet_Identidad' => $request->carnetIdentidad,
-					'Contrasena' => Hash::make($request->contrasena),
-					'Id_Rol' => $request->rolId,
-					'Estado' => 'Activo',
-					]);
-				\end{lstlisting}
-				\vspace{4pt}
-				\raggedright
-				{\small \textbf{Fuente:} Elaboración propia.}
-			\end{minipage}
-		\end{center}
+		\centering
+		\begin{minipage}{0.9\textwidth}
+			
+			\caption{Inserción de datos en la tabla Usuario}
+			\label{fig:insercion_usuario}
+			
+			\vspace{4pt}
+			
+			\begin{lstlisting}[language=php, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
+				$user = User::create([
+				'Nombres' => $request->nombres,
+				'Apellidos' => $request->apellidos,
+				'Carnet_Identidad' => $request->carnetIdentidad,
+				'Contrasena' => Hash::make($request->contrasena),
+				'Id_Rol' => $request->rolId,
+				'Estado' => 'Activo',
+				]);
+			\end{lstlisting}
+			
+			\vspace{2pt}
+			\raggedright
+			{\small \textbf{Fuente:} Elaboración propia.}
+			
+		\end{minipage}
 	\end{figure}
 	
 	\subsubsection{Eliminación simulada (Soft Delete)}
 	Para mantener la trazabilidad histórica de las transacciones, el sistema no realiza un borrado físico de los registros de usuario. En su lugar, se implementa una "eliminación lógica" o \textit{Soft Delete} manual, modificando la columna \texttt{Estado} a \texttt{'Inactivo'}. Esto deshabilita al usuario del sistema sin perder sus registros relacionados:
 	
 	\begin{figure}[H]
-		\caption{Lógica de eliminación lógica}
-		\label{fig:soft_delete}
-		\begin{center}
-			\begin{minipage}{0.9\textwidth}
-				\begin{lstlisting}[language=php, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
-					public function destroy($id)
-					{
-						$user = User::findOrFail($id);
-						$user->update(['Estado' => 'Inactivo']);
-						return response()->json(['message' => 'Usuario desactivado'], 200);
-					}
-				\end{lstlisting}
-				\vspace{4pt}
-				\raggedright
-				{\small \textbf{Fuente:} Elaboración propia.}
-			\end{minipage}
-		\end{center}
+		\centering
+		\begin{minipage}{0.9\textwidth}
+			
+			\caption{Lógica de eliminación lógica}
+			\label{fig:soft_delete}
+			
+			\vspace{4pt}
+			
+			\begin{lstlisting}[language=php, frame=single, breaklines=true, basicstyle=\ttfamily\scriptsize]
+				public function destroy($id)
+				{
+					$user = User::findOrFail($id);
+					$user->update(['Estado' => 'Inactivo']);
+					return response()->json(['message' => 'Usuario desactivado'], 200);
+				}
+			\end{lstlisting}
+			
+			\vspace{2pt}
+			\raggedright
+			{\small \textbf{Fuente:} Elaboración propia.}
+			
+		\end{minipage}
 	\end{figure}
 	
 	\section{Validación y manejo de errores}
@@ -765,7 +823,7 @@ Las interfaces principales, como el panel de administración (\textit{dash\-boar
 	\begin{itemize}
 		\item \textbf{Pruebas de integración de la API:} Se utilizaron clientes HTTP (como Postman o el cliente integrado en Neovim) para atacar directamente los \textit{end\-points} de Laravel. Se verificó el correcto funcionamiento de las operaciones CRUD, la emisión y revocación de \textit{tokens} con Sanctum, y la coherencia de los datos almacenados en la base de datos PostgreSQL.
 		
-		\figuraAPA{figuras/prueba-api-postman.png}{Verificación de respuesta exitosa (200 OK) y estructura JSON en el \textit{end\-point} de usuarios.}{0.8\textwidth}{Elaboración propia.}{fig:prueba_api}
+		\figuraAPA{figuras/prueba-api-postman.jpeg}{Verificación de respuesta exitosa (200 OK) y estructura JSON en el \textit{end\-point} de usuarios.}{0.8\textwidth}{Elaboración propia.}{fig:prueba_api}
 		
 		\item \textbf{Pruebas de interfaz (\textit{End-to-End} manuales):} Se simuló el comportamiento de los roles administrativos interactuando con los \textit{dash\-boards} de Next.js. Esto incluyó la verificación de persistencia de sesiones, el funcionamiento de los filtros y paginación en las tablas de datos (ej. tabla de transacciones), y la correcta visualización de mensajes de error al forzar escenarios anómalos.
 		

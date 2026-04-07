@@ -128,7 +128,7 @@ export const transaccionesColumns: ColumnDef<TransaccionType>[] = [
     accessorKey: "idCuentaOrigen",
     header: "Origen",
     cell: ({ row }) => {
-      const origen = row.getValue("idCuentaOrigen")
+      const origen = row.getValue("idCuentaOrigen") as number | null
       return origen ? (
         <div className="flex items-center gap-1">
           <ArrowDownLeft className="h-3 w-3 text-amber-500" />
@@ -143,7 +143,7 @@ export const transaccionesColumns: ColumnDef<TransaccionType>[] = [
     accessorKey: "idCuentaDestino",
     header: "Destino",
     cell: ({ row }) => {
-      const destino = row.getValue("idCuentaDestino")
+      const destino = row.getValue("idCuentaDestino") as number | null
       return destino ? (
         <div className="flex items-center gap-1">
           <ArrowUpRight className="h-3 w-3 text-blue-500" />

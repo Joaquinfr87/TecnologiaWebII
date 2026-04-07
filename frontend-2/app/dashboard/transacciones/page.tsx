@@ -1,6 +1,7 @@
 import { getQueryClient } from "@/lib/query-client";
 import { fetchTransacciones } from "@/modules/transacciones/services/transacciones.api";
 import { TransaccionesDataTable, transaccionesColumns } from "@/modules/transacciones/components/transacciones-data-table";
+import { TransaccionType } from "@/modules/transacciones/schemas/transacciones.schema";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { ArrowDownLeft } from "lucide-react";
 
@@ -13,7 +14,7 @@ export default async function TransaccionesPage() {
   });
 
   const dehydratedState = dehydrate(queryClient);
-  const transacciones = dehydratedState.queries[0]?.state?.data?.data ?? [];
+  const transacciones = (dehydratedState.queries[0]?.state?.data as { data?: TransaccionType[] })?.data ?? [];
 
   return (
     <div className="p-4 md:p-6 space-y-6 bg-background min-h-screen w-full">

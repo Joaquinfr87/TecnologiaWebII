@@ -5,6 +5,7 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
+  Row,
 } from "@tanstack/react-table"
 
 import {
@@ -16,6 +17,19 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CuentaType } from "../schemas/cuentas.schema"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Edit2, Loader2 } from "lucide-react"
+import { useUpdateCuentaSaldoMutation } from "../hooks/use-cuentas"
+import { Input } from "@/components/ui/input"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
 
 interface DataTableProps {
   columns: ColumnDef<CuentaType>[]
@@ -85,6 +99,68 @@ export function CuentasDataTable({ columns, data, loading }: DataTableProps) {
   )
 }
 
+function EditSaldoCell({ row }: { row: Row<CuentaType> }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [saldo, setSaldo] = useState(row.original.saldo.toString())
+  
+  const { mutate: updateSaldo, isPending } = useUpdateCuentaSaldoMutation()
+
+  const cuenta = row.original
+
+  const handleSave = () => {
+    updateSaldo(
+      { id: cuenta.id, saldo: parseFloat(saldo) },
+      {
+        onSuccess: () => setIsOpen(false),
+      }
+    )
+  }
+
+  return (
+    <>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => setIsOpen(true)}
+        className="h-8 w-8"
+      >
+        <Edit2 className="h-4 w-4" />
+      </Button>
+
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Editar Saldo</SheetTitle>
+            <SheetDescription>
+              Actualiza el saldo de la cuenta #{cuenta.id}
+            </SheetDescription>
+          </SheetHeader>
+
+          <div className="py-4">
+            <label className="text-sm font-medium mb-2 block">Nuevo Saldo</label>
+            <Input
+              type="number"
+              value={saldo}
+              onChange={(e) => setSaldo(e.target.value)}
+              placeholder="Ingrese el nuevo saldo"
+            />
+          </div>
+
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setIsOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleSave} disabled={isPending}>
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Guardar
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+    </>
+  )
+}
+
 export const cuentasColumns: ColumnDef<CuentaType>[] = [
   {
     accessorKey: "id",
@@ -107,5 +183,10 @@ export const cuentasColumns: ColumnDef<CuentaType>[] = [
         {String(row.getValue("usuarioId")).slice(0, 8)}...
       </span>
     ),
+  },
+  {
+    id: "acciones",
+    header: "Acciones",
+    cell: ({ row }) => <EditSaldoCell row={row} />,
   },
 ]
