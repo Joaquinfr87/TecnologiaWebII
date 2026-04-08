@@ -24,7 +24,8 @@ export type TransaccionesResponseType = z.infer<typeof transaccionesResponseSche
 
 export const filtrosTransaccionesSchema = z.object({
   search: z.string().trim().min(1).optional(),
-  cuentaId: z.coerce.number().int().positive().optional(),
+  origen: z.boolean().optional(),
+  destino: z.boolean().optional(),
   fechaDesde: z.string().optional(),
   fechaHasta: z.string().optional(),
   sortBy: z.enum(["id", "monto", "fecha"]).optional(),

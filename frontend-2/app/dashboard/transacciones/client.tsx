@@ -15,6 +15,14 @@ interface Props {
   initialFiltros: FiltrosTransaccion
 }
 
+type SortColumnId = "id" | "monto" | "fecha"
+
+const sortMap: Record<string, SortColumnId> = {
+  id: "id",
+  monto: "monto",
+  fecha: "fecha",
+}
+
 export default function TransaccionesClient({ initialFiltros }: Props) {
   const router = useRouter()
 
@@ -27,7 +35,7 @@ export default function TransaccionesClient({ initialFiltros }: Props) {
     if (initialFiltros.sortBy) {
       return [{ id: initialFiltros.sortBy, desc: initialFiltros.sortDir === "desc" }]
     }
-    return []
+    return [{ id: "fecha", desc: true }]
   })
 
   const [globalFilter, setGlobalFilter] = useState(initialFiltros.search ?? "")
@@ -40,10 +48,11 @@ export default function TransaccionesClient({ initialFiltros }: Props) {
       page: pagination.pageIndex + 1,
       perPage: pagination.pageSize,
       search: globalFilter || undefined,
-      cuentaId: cuentaFilter && cuentaFilter !== "all" ? Number(cuentaFilter) : undefined,
+      origen: cuentaFilter === "origen" ? true : undefined,
+      destino: cuentaFilter === "destino" ? true : undefined,
       fechaDesde: fechaDesdeFilter || undefined,
       fechaHasta: fechaHastaFilter || undefined,
-      sortBy: sorting[0]?.id as "id" | "monto" | "fecha" | undefined,
+      sortBy: sorting[0]?.id as SortColumnId | undefined,
       sortDir: sorting[0] ? (sorting[0].desc ? "desc" : "asc") : "desc",
     })
   }, [pagination, globalFilter, sorting, cuentaFilter, fechaDesdeFilter, fechaHastaFilter])

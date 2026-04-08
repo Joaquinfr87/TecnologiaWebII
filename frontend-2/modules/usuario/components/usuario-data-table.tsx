@@ -27,7 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ChevronLeft, ChevronRight, Search } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { ChevronLeft, ChevronRight, Search, X, RotateCcw } from "lucide-react"
 
 type Updater<T> = T | ((prev: T) => T)
 
@@ -72,22 +73,56 @@ export function DataTable<TData, TValue>({
   loading,
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState(globalFilter)
+  const [pageInput, setPageInput] = useState(String(pagination.pageIndex + 1))
+
+  const hasFilters = globalFilter || estadoFilter !== "" || rolFilter !== ""
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (globalFilter !== searchTerm) {
         setGlobalFilter(searchTerm)
+        setPagination((prev) => ({ ...prev, pageIndex: 0 }))
       }
     }, 500)
 
     return () => clearTimeout(timer)
-  }, [searchTerm, globalFilter, setGlobalFilter])
+  }, [searchTerm, globalFilter, setGlobalFilter, setPagination])
 
   useEffect(() => {
     setSearchTerm(globalFilter)
   }, [globalFilter])
 
+  useEffect(() => {
+    setPageInput(String(pagination.pageIndex + 1))
+  }, [pagination.pageIndex])
+
   const { data: roles, isLoading } = useQuery(rolesListQueryOptions())
+
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPageInput(e.target.value)
+  }
+
+  const handlePageInputBlur = () => {
+    const page = parseInt(pageInput, 10)
+    if (page >= 1 && page <= pageCount) {
+      setPagination((prev) => ({ ...prev, pageIndex: page - 1 }))
+    } else {
+      setPageInput(String(pagination.pageIndex + 1))
+    }
+  }
+
+  const handlePageInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handlePageInputBlur()
+    }
+  }
+
+  const clearFilters = () => {
+    setGlobalFilter("")
+    setEstadoFilter("")
+    setRolFilter("")
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }))
+  }
 
   const table = useReactTable({
     data,
@@ -110,46 +145,67 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
       {/* Filtros */}
-      <div className="flex flex-col gap-3 rounded-lg border bg-card p-4 sm:flex-row">
-        <div className="relative flex-1">
-          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Buscar usuarios..."
-            className="pl-9"
-          />
+      <div className="flex flex-col gap-3 rounded-lg border bg-card p-4">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="relative flex-1">
+            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Buscar usuarios..."
+              className="pl-9"
+            />
+          </div>
+
+          <Select value={estadoFilter} onValueChange={(value) => {
+            setEstadoFilter(value)
+            setPagination((prev) => ({ ...prev, pageIndex: 0 }))
+          }}>
+            <SelectTrigger className="w-[150px]">
+              <SelectValue placeholder="Estado" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos</SelectItem>
+              <SelectItem value="Activo">Activo</SelectItem>
+              <SelectItem value="Inactivo">Inactivo</SelectItem>
+              <SelectItem value="Suspendido">Suspendido</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={rolFilter} onValueChange={(value) => {
+            setRolFilter(value)
+            setPagination((prev) => ({ ...prev, pageIndex: 0 }))
+          }}>
+            <SelectTrigger className="w-[150px]">
+              <SelectValue placeholder="Rol" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos</SelectItem>
+              {isLoading && (
+                <SelectItem value="loading" disabled>
+                  Cargando...
+                </SelectItem>
+              )}
+              {roles?.data?.map((e) => (
+                <SelectItem key={e.id} value={e.id.toString()}>
+                  {e.nombre}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {hasFilters && (
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={clearFilters}
+              className="h-9 w-9 flex-shrink-0"
+              title="Limpiar filtros"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
         </div>
-
-        <Select value={estadoFilter} onValueChange={setEstadoFilter}>
-          <SelectTrigger className="w-[150px]">
-            <SelectValue placeholder="Estado" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todos</SelectItem>
-            <SelectItem value="Activo">Activo</SelectItem>
-            <SelectItem value="Inactivo">Inactivo</SelectItem>
-            <SelectItem value="Suspendido">Suspendido</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select value={rolFilter} onValueChange={setRolFilter}>
-          <SelectTrigger className="w-[150px]">
-            <SelectValue placeholder="Rol" />
-          </SelectTrigger>
-          <SelectContent>
-            {isLoading && (
-              <SelectItem value="loading" disabled>
-                Cargando...
-              </SelectItem>
-            )}
-            {roles?.data?.map((e) => (
-              <SelectItem key={e.id} value={e.id.toString()}>
-                {e.nombre}
-              </SelectItem>
-            ))}{" "}
-          </SelectContent>
-        </Select>
       </div>
 
       {/* Tabla */}
@@ -241,6 +297,21 @@ export function DataTable<TData, TValue>({
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
+          
+          <div className="flex items-center gap-1">
+            <Input
+              type="number"
+              value={pageInput}
+              onChange={handlePageInputChange}
+              onBlur={handlePageInputBlur}
+              onKeyDown={handlePageInputKeyDown}
+              className="h-8 w-14 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              min={1}
+              max={pageCount || 1}
+            />
+            <span className="text-sm text-muted-foreground">/ {pageCount || 1}</span>
+          </div>
+
           <button
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
@@ -253,4 +324,3 @@ export function DataTable<TData, TValue>({
     </div>
   )
 }
-

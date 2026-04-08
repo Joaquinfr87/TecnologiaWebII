@@ -97,7 +97,7 @@ export const transaccionesColumns: ColumnDef<TransaccionType>[] = [
     accessorKey: "monto",
     header: "Monto",
     cell: ({ row }) => {
-      const monto = row.getValue("monto") as number
+      const monto = Number(row.getValue("monto"))
       return <span className="font-semibold text-emerald-600">Bs. {monto.toFixed(2)}</span>
     },
   },

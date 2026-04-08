@@ -25,8 +25,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ChevronLeft, ChevronRight, Search } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { ChevronLeft, ChevronRight, Search, X } from "lucide-react"
 import { TransaccionType } from "../schemas/transacciones.schema"
+
+type Updater<T> = T | ((prev: T) => T)
 
 export const transaccionesColumns: ColumnDef<TransaccionType>[] = [
   {
@@ -40,7 +43,7 @@ export const transaccionesColumns: ColumnDef<TransaccionType>[] = [
     accessorKey: "monto",
     header: "Monto",
     cell: ({ row }) => {
-      const monto = row.getValue("monto") as number
+      const monto = Number(row.getValue("monto"))
       return <span className="font-semibold text-emerald-600">Bs. {monto.toFixed(2)}</span>
     },
   },
@@ -86,8 +89,6 @@ export const transaccionesColumns: ColumnDef<TransaccionType>[] = [
   },
 ]
 
-type Updater<T> = T | ((prev: T) => T)
-
 interface TransaccionesDataTableProps {
   columns: ColumnDef<TransaccionType>[]
   data: TransaccionType[]
@@ -126,19 +127,55 @@ export function TransaccionesDataTableFull({
   loading,
 }: TransaccionesDataTableProps) {
   const [searchTerm, setSearchTerm] = useState(globalFilter)
+  const [pageInput, setPageInput] = useState(String(pagination.pageIndex + 1))
+
+  const hasFilters = globalFilter || cuentaFilter !== "" || fechaDesdeFilter || fechaHastaFilter
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (globalFilter !== searchTerm) {
         setGlobalFilter(searchTerm)
+        setPagination((p) => ({ ...p, pageIndex: 0 }))
       }
     }, 500)
     return () => clearTimeout(timer)
-  }, [searchTerm, globalFilter, setGlobalFilter])
+  }, [searchTerm, globalFilter, setGlobalFilter, setPagination])
 
   useEffect(() => {
     setSearchTerm(globalFilter)
   }, [globalFilter])
+
+  useEffect(() => {
+    setPageInput(String(pagination.pageIndex + 1))
+  }, [pagination.pageIndex])
+
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPageInput(e.target.value)
+  }
+
+  const handlePageInputBlur = () => {
+    const page = parseInt(pageInput, 10)
+    if (page >= 1 && page <= pageCount) {
+      setPagination((prev) => ({ ...prev, pageIndex: page - 1 }))
+    } else {
+      setPageInput(String(pagination.pageIndex + 1))
+    }
+  }
+
+  const handlePageInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handlePageInputBlur()
+    }
+  }
+
+  const clearFilters = () => {
+    setSearchTerm("")
+    setGlobalFilter("")
+    setCuentaFilter("")
+    setFechaDesdeFilter("")
+    setFechaHastaFilter("")
+    setPagination((p) => ({ ...p, pageIndex: 0 }))
+  }
 
   const table = useReactTable({
     data,
@@ -160,51 +197,65 @@ export function TransaccionesDataTableFull({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-3 rounded-lg border bg-card p-4 sm:flex-row sm:items-end">
-        <div className="relative flex-1">
-          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Buscar por ID o monto..."
-            className="pl-9"
-          />
-        </div>
+      <div className="flex flex-col gap-3 rounded-lg border bg-card p-4">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="relative flex-1">
+            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Buscar por ID o monto..."
+              className="pl-9"
+            />
+          </div>
 
-        <div className="flex gap-2 flex-wrap">
-          <Input
-            type="date"
-            value={fechaDesdeFilter}
-            onChange={(e) => {
-              setFechaDesdeFilter(e.target.value)
+          <div className="flex gap-2 flex-wrap">
+            <Input
+              type="date"
+              value={fechaDesdeFilter}
+              onChange={(e) => {
+                setFechaDesdeFilter(e.target.value)
+                setPagination((p) => ({ ...p, pageIndex: 0 }))
+              }}
+              className="w-[150px]"
+              placeholder="Desde"
+            />
+            <Input
+              type="date"
+              value={fechaHastaFilter}
+              onChange={(e) => {
+                setFechaHastaFilter(e.target.value)
+                setPagination((p) => ({ ...p, pageIndex: 0 }))
+              }}
+              className="w-[150px]"
+              placeholder="Hasta"
+            />
+            <Select value={cuentaFilter} onValueChange={(value) => {
+              setCuentaFilter(value)
               setPagination((p) => ({ ...p, pageIndex: 0 }))
-            }}
-            className="w-[150px]"
-            placeholder="Desde"
-          />
-          <Input
-            type="date"
-            value={fechaHastaFilter}
-            onChange={(e) => {
-              setFechaHastaFilter(e.target.value)
-              setPagination((p) => ({ ...p, pageIndex: 0 }))
-            }}
-            className="w-[150px]"
-            placeholder="Hasta"
-          />
-          <Select value={cuentaFilter} onValueChange={(value) => {
-            setCuentaFilter(value)
-            setPagination((p) => ({ ...p, pageIndex: 0 }))
-          }}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Cuenta" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todas</SelectItem>
-              <SelectItem value="origen">Origen</SelectItem>
-              <SelectItem value="destino">Destino</SelectItem>
-            </SelectContent>
-          </Select>
+            }}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Cuenta" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas</SelectItem>
+                <SelectItem value="origen">Origen</SelectItem>
+                <SelectItem value="destino">Destino</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {hasFilters && (
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={clearFilters}
+              className="h-9 w-9 flex-shrink-0"
+              title="Limpiar filtros"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       </div>
 
@@ -279,6 +330,21 @@ export function TransaccionesDataTableFull({
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
+          
+          <div className="flex items-center gap-1">
+            <Input
+              type="number"
+              value={pageInput}
+              onChange={handlePageInputChange}
+              onBlur={handlePageInputBlur}
+              onKeyDown={handlePageInputKeyDown}
+              className="h-8 w-14 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              min={1}
+              max={pageCount || 1}
+            />
+            <span className="text-sm text-muted-foreground">/ {pageCount || 1}</span>
+          </div>
+
           <button
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}

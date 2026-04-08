@@ -37,6 +37,7 @@
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 
+\usepackage{hyperref}
 % 2. Márgenes: Izq 3.5cm, Der 2.5cm, Sup 1.5cm, Inf 1.5cm
 \usepackage[left=3.5cm,right=2.5cm,top=1.5cm,bottom=1.5cm, includehead, includefoot, headheight=15pt]{geometry}
 
@@ -412,6 +413,17 @@
 	
 	En el sistema desarrollado, TypeScript será utilizado para mejorar la calidad del código en el frontend, facilitando el desarrollo de componentes más robustos y escalables.
 	
+	\section{Android}
+	Según Google, 2026, Android es una pila de software de código abierto basada en Linux diseñada para una amplia gama de dispositivos, que proporciona una plataforma abierta y un entorno de ejecución para el desarrollo de aplicaciones innovadoras.
+	
+	En el proyecto propuesto, Android se utilizará como la plataforma operativa base, permitiendo que la aplicación móvil interactúe directamente con el hardware del dispositivo y garantizando la compatibilidad con el ecosistema global de dispositivos móviles.
+	
+	\section{Kotlin}
+	Según JetBrains, 2026, Kotlin es un lenguaje de programación moderno, de tipado estático y multiplataforma, diseñado para ser conciso, seguro y totalmente interoperable con Java y otros lenguajes de la infraestructura de Android.
+	
+	En el proyecto propuesto, Kotlin será el lenguaje de programación principal para el desarrollo de la lógica de negocio, permitiendo reducir la verbosidad del código y mejorar la estabilidad del sistema gracias a su sistema de seguridad contra nulos (null-safety).
+	
+	
 	%---------------------------------------------------------
 	\chapter{Marco práctico} 
 	
@@ -433,6 +445,7 @@
 	\subsection{Instalación de Docker Engine} 
 	Para la capa de persistencia de datos, se optó por aislar el motor de base de datos MySQL utilizando contenedores. Esto evita conflictos de versiones con otras aplicaciones del sistema anfitrión y mantiene el entorno limpio. Siguiendo la documentación oficial para Debian, se instaló Docker Engine. La Figura \ref{fig:install_docker} detalla los comandos utilizados mediante el gestor de paquetes \texttt{apt} para la configuración inicial del motor.
 	
+	
 	\figuraAPA{figuras/comandos-docker.png}{Instalación de Docker Engine en el entorno local (Debian).}{0.8\textwidth}{Elaboración propia.}{fig:install_docker}
 	
 	\subsection{Instalación de los frameworks} 
@@ -445,6 +458,9 @@
 	
 	\subsubsection{Instalación del framework frontend (Next.js)} 
 	Por otro lado, la interfaz web (cliente administrativo) se inicializó utilizando Next.js. Aprovechando el entorno de Node.js, se ejecutó la utilidad \texttt{create-next-app} para generar la estructura del proyecto web. Durante la instalación, se configuró el proyecto para utilizar el \textit{App Router}, asegurando un entorno de desarrollo moderno para el consumo de la API. La Figura \ref{fig:install_nextjs} muestra el comando ejecutado para la creación de la aplicación frontend.
+	
+	
+	
 	
 	\figuraAPA{figuras/comandos-next.png}{Inicialización del proyecto web con Next.js.}{0.8\textwidth}{Elaboración propia.}{fig:install_nextjs}
 	
@@ -471,6 +487,11 @@
 	{Elaboración propia.}
 	[Salida de la terminal al ejecutar \texttt{php artisan migrate}.]
 	{fig:migraciones_db}
+	
+	
+	
+	\subsection{Instalación de Android Studio}
+	Para el desarrollo de la aplicación móvil, se seleccionó Android Studio como el entorno de desarrollo integrado (IDE) oficial. Se optó por esta herramienta debido a que centraliza la gestión del Android SDK, el sistema de construcción Gradle y los emuladores de dispositivos en un entorno unificado, lo cual asegura la consistencia entre el código fuente y el binario generado. Siguiendo la documentación oficial de Android Developers, se procedió con la configuración del asistente de instalación para establecer las herramientas de compilación necesarias y las variables de entorno para el lenguaje Kotlin. La Figura \ref{fig:install_android_studio} ilustra el proceso de configuración inicial y la descarga de los componentes del SDK requeridos para el proyecto.
 	
 	\section{Arquitectura del sistema} 
 	
@@ -589,7 +610,7 @@
 			\texttt{\{"status": "ok", "msj": "Cobro exitoso", "saldo\_restante": 12.50\}}
 		\end{itemize}
 		
-		\item[CuentaController:] Para tener un endpoint (ej. \texttt{GET /api/cuenta/mi-saldo}) donde un usuario pueda ver ya accedeetalles de su cuenta
+		\item[CuentaController:] Para tener un endpoint (ej. \texttt{GET /api/cuenta/mi-saldo}) donde un usuario pueda ver y acceder a detalles de su cuenta como los datos generales y otros.
 	\end{description}
 	
 	\subsection{Creación de modelos}
@@ -622,6 +643,10 @@
 	Para mantener la coherencia visual y acelerar el desarrollo, se integró \textbf{Tailwind CSS} junto con una arquitectura de componentes base accesibles. 
 	La carpeta \texttt{components/ui/} actúa como una biblioteca interna donde residen elementos atómicos (\textit{botones, inputs, selectores, avatares, tablas y menús desplegables}). Estos componentes encapsulan sus propios estilos y comportamientos base, garantizando que vistas complejas, como los \textit{dash\-boards} administrativos, compartan el mismo lenguaje visual.
 	
+	Para la construcción de la interfaz visual se utilizó el kit de herramientas "Jetpack Compose", el cual emplea un paradigma declarativo basado en "Kotlin" para desarrollar componentes nativos de manera más intuitiva y eficiente. Esta base tecnológica se complementa con el sistema de diseño "Material Design 3" (implementado mediante el paquete "androidx.compose.material3.*"), que proporciona elementos pre-estilizados como "Buttons", "TextFields" y "Cards", asegurando una estética profesional, coherente y optimizada según los estándares más recientes de Google.
+	
+	
+	
 	\subsubsection{Estructuración de Vistas Complejas}
 	Las interfaces principales, como el panel de administración (\textit{dash\-board}), se componen de varias capas jerárquicas:
 	\begin{enumerate}
@@ -634,6 +659,8 @@
 	
 	% NOTA: Aquí puedes agregar una segunda figura mostrando una captura de pantalla real de tu sistema.
 	\figuraAPA{figuras/captura-dashboard.png}{Interfaz de usuario de la vista de gestión de usuarios.}{0.9\textwidth}{Elaboración propia.}{fig:captura_dashboard}
+	
+	
 	
 	\subsection{Implementación de funcionalidades}
 	
@@ -790,6 +817,10 @@
 		\end{minipage}
 	\end{figure}
 	
+	\section{Conexion desde la aplicacion android}
+	
+	El acceso a los servicios web se centraliza en el objeto RetrofitClient, el cual define la URL del backend y configura los adaptadores de conversión (GSON) y los interceptores de red para gestionar la comunicación asíncrona con la API REST de Laravel.
+	
 	\section{Validación y manejo de errores}
 	
 	La robustez del sistema se garantiza mediante una estrategia de validación de doble capa (cliente y servidor) y un flujo estandarizado para la captura y presentación de errores, asegurando la integridad de los datos y una buena experiencia de usuario.
@@ -857,12 +888,34 @@
 	
 	\figuraAPA{figuras/resultado-roles.png}{Panel interactivo para la gestión de roles, demostrando el uso de modales laterales (\textit{Sheets}) para la inserción de datos sin abandonar el contexto de la tabla.}{0.8\textwidth}{Elaboración propia.}{fig:res_roles}
 	
-	\figuraAPA{figuras/resultado-dispositivos.png}{Vista de gestión de dispositivos móviles y tarjetas NFC vinculadas a las cuentas de los usuarios.}{0.9\textwidth}{Elaboración propia.}{fig:res_dispositivos}
+	\figuraAPA{figuras/resultado-dispositivos.jpeg}{Vista de gestión de dispositivos móviles y tarjetas NFC vinculadas a las cuentas de los usuarios.}{0.9\textwidth}{Elaboración propia.}{fig:res_dispositivos}
 	
 	%---------------------------------------------------------
-	\chapter{Conclusiones y recomendaciones}
+	\chapter{Conclusiones}
 	
-	Redacción de conclusiones...
+	El desarrollo del proyecto nos permitió alcanzar de manera satisfactoria cada uno de los objetivos planteados, consolidando un ecosistema tecnológico funcional para la gestión del pasaje estudiantil en Cochabamba. Presentamois cómo cada objetivo específico fue concretado, destacando los aspectos más relevantes de cada proceso.
+	
+	En cuanto al diseño del modelo relacional de la base de datos, se logró construir una estructura que centraliza de forma íntegra y segura los perfiles de usuarios, los saldos virtuales y el historial de transacciones. Un aspecto clave fue la implementación de la eliminación lógica (\textit{Soft Delete}) mediante el campo \texttt{Estado}, lo que permite conservar la trazabilidad completa del historial transaccional sin eliminar registros físicamente de la base de datos, garantizando así la auditoría del sistema.
+	
+	Respecto al diseño del \textit{backend}, se implementó exitosamente una API RESTful bajo el patrón MVC utilizando Laravel. El módulo de administración cubre las operaciones CRUD de los recursos principales del sistema (usuarios, roles, dispositivos, cuentas y transacciones), con respuestas estandarizadas en formato JSON y validación robusta mediante las clases \texttt{FormRequest} del \textit{framework}. La organización por capas del código resultó determinante para mantener la separación de responsabilidades y facilitar la incorporación de nuevas funcionalidades.
+	
+	En lo referente a la seguridad y autenticación, se adoptó Laravel Sanctum para la gestión de tokens de sesión. Este mecanismo protege eficazmente los \textit{endpoints} de la API y bloquea el acceso no autorizado a los paneles administrativos, garantizando que únicamente usuarios con sesiones válidas puedan interactuar con los recursos del sistema. La integración de Sanctum con el enrutamiento de Next.js demostró ser una solución práctica y segura para el flujo de autenticación \textit{online}.
+	
+	En cuanto a la aplicación móvil Android para el estudiante, se implementó el módulo de Emulación de Tarjeta Host (HCE), habilitando al dispositivo para transmitir un token identificador de forma segura mediante NFC. Esta capacidad convierte al teléfono inteligente del estudiante en un sustituto funcional de una tarjeta física, lo que representó el componente tecnológico más innovador del proyecto al no requerir hardware adicional para el lado del estudiante.
+	
+	Respecto a la interfaz del chofer, se desarrolló la aplicación Android en Kotlin que activa el modo lector NFC del dispositivo, captura el token emitido por el estudiante y se comunica con el servidor para validar y ejecutar el descuento de la tarifa preferencial. La comunicación con el backend se articuló a través del cliente Retrofit, que gestiona las peticiones HTTP de manera asíncrona, asegurando una experiencia de cobro fluida y sin bloqueos en la interfaz.
+	
+	Finalmente, las pruebas de funcionamiento e integración realizadas validaron la correcta operación del sistema en un entorno local. Las pruebas sobre los \textit{endpoints} con Postman verificaron la integridad de los datos y la coherencia del flujo de autenticación, mientras que las pruebas de interfaz confirmaron el comportamiento del sistema de validación de doble capa (cliente y servidor con Zod), la paginación de tablas y la adaptabilidad del diseño en dispositivos móviles.
+	
+	El objetivo general del proyecto fue alcanzado donde se desarrolló un ecosistema web y móvil integrado con tecnología NFC que moderniza y digitaliza el proceso de cobro del pasaje estudiantil en Cochabamba. El sistema demuestra que es técnicamente viable reemplazar el efectivo por una solución basada en saldos virtuales y tokens NFC, reduciendo las fricciones del proceso de cobro y generando un registro auditable de cada transacción entre estudiantes y choferes.
+	
+	\section{Recomendaciones}
+	
+	En primer lugar, se recomienda incorporar la funcionalidad de recarga de saldo desde plataformas bancarias y servicios de pago externos. En el presente proyecto, el campo de tipo de transacción fue deshabilitado deliberadamente, ya que el alcance se limitó a las transacciones directas entre estudiante y chofer. A futuro, integrar pasarelas de pago o convenios con entidades bancarias nacionales permitiría a los estudiantes recargar su saldo de manera autónoma, incrementando significativamente la utilidad y autonomía del sistema.
+	
+	En segundo lugar, se recomienda investigar e implementar un esquema de pago \textit{offline}. La arquitectura actual opera en modalidad \textit{online}, requiriendo conectividad a internet para validar cada transacción contra el servidor. Dado que la conectividad en ciertas zonas de Cochabamba puede ser intermitente, un esquema \textit{offline} ---donde el dispositivo del chofer valide y almacene la transacción localmente para sincronizarla al recuperar la conexión--- incrementaría considerablemente la resiliencia y confiabilidad del sistema. Si bien esta arquitectura es técnicamente más compleja, representa una evolución natural del proyecto.
+	
+	En tercer lugar, se recomienda reemplazar el uso del teléfono inteligente del estudiante como emisor NFC por una tarjeta física individual de tipo \textit{contactless}. El modelo actual, que utiliza la tecnología HCE en el dispositivo móvil del estudiante, es funcional para un prototipo, pero presenta inconvenientes de seguridad (exposición del teléfono en el transporte público) y de accesibilidad (no todos los estudiantes cuentan con un dispositivo compatible). Una tarjeta física dedicada, similar a las utilizadas en el sistema ``Mi Teleférico'', sería más segura, duradera e igualitaria, y brindaría al chofer una experiencia de cobro más ágil y estandarizada.
 	
 	%---------------------------------------------------------
 	
@@ -872,6 +925,14 @@
 	
 	% En la clase report se usa \bibname en lugar de \refname
 	\renewcommand\bibname{Referencias}
+	\section{Links de Github}
+	
+	
+	
+	\url{https://github.com/Joaquinfr87/TecnologiaWebII.git}
+	
+	\url{https://github.com/Dally-0/MiPasaje_App_Android.git}
+	
 	\bibliographystyle{apalike} % Define el estilo visual de la bibliografía
 	\bibliography{mibibliografia}
 	

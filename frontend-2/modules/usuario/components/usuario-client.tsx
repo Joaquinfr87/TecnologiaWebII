@@ -65,10 +65,10 @@ export default function UsuarioClient({ initialFiltros }: Props) {
     initialFiltros.search ?? ""
   )
   const [estadoFilter, setEstadoFilter] = useState<string>(
-    initialFiltros.estado ?? ""
+    initialFiltros.estado ?? "all"
   )
   const [rolFilter, setRolFilter] = useState<string>(
-    initialFiltros.rolId ? String(initialFiltros.rolId) : ""
+    initialFiltros.rolId ? String(initialFiltros.rolId) : "all"
   )
   const filtros = useMemo(() => {
     const sortId = sorting[0]?.id as TableColumnId | undefined

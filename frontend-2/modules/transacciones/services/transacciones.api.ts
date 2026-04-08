@@ -6,7 +6,8 @@ export async function fetchTransacciones(filtros?: Partial<FiltrosTransaccion>):
   const searchParams = new URLSearchParams();
 
   if (filtros?.search) searchParams.set("search", filtros.search)
-  if (filtros?.cuentaId) searchParams.set("cuentaId", String(filtros.cuentaId))
+  if (filtros?.origen) searchParams.set("origen", "1")
+  if (filtros?.destino) searchParams.set("destino", "1")
   if (filtros?.fechaDesde) searchParams.set("fechaDesde", filtros.fechaDesde)
   if (filtros?.fechaHasta) searchParams.set("fechaHasta", filtros.fechaHasta)
   if (filtros?.sortBy) searchParams.set("sortBy", filtros.sortBy)
@@ -19,7 +20,6 @@ export async function fetchTransacciones(filtros?: Partial<FiltrosTransaccion>):
 
   const data = await res.json();
   
-  // Handle both paginated and non-paginated responses
   if (data.data && Array.isArray(data.data)) {
     return {
       data: data.data,

@@ -171,7 +171,7 @@ export const cuentasColumns: ColumnDef<CuentaType>[] = [
     accessorKey: "saldo",
     header: "Saldo",
     cell: ({ row }) => {
-      const saldo = row.getValue("saldo") as number
+      const saldo = Number(row.getValue("saldo"))
       return <span className="font-semibold text-emerald-600">Bs. {saldo.toFixed(2)}</span>
     },
   },

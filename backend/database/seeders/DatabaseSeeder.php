@@ -31,5 +31,8 @@ class DatabaseSeeder extends Seeder
             'Id_Rol' => 1,
             'Estado' => 'Activo',
         ]);
+
+        // Preguntar si quiere crear datos de prueba
+        // $this->call(DatosPruebaSeeder::class);
     }
 }

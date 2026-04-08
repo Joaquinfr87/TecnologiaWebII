@@ -14,7 +14,8 @@ export default async function TransaccionesPage({
 
   const filtros: FiltrosTransaccion = {
     search: typeof params.search === "string" ? params.search : undefined,
-    cuentaId: params.cuentaId ? Number(params.cuentaId) : undefined,
+    origen: params.origen === "1" ? true : undefined,
+    destino: params.destino === "1" ? true : undefined,
     fechaDesde: typeof params.fechaDesde === "string" ? params.fechaDesde : undefined,
     fechaHasta: typeof params.fechaHasta === "string" ? params.fechaHasta : undefined,
     sortBy: params.sortBy as "id" | "monto" | "fecha" | undefined,

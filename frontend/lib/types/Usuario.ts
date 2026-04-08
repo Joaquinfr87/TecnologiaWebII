@@ -8,3 +8,4 @@ export interface Usuario {
   estado: "Activo"|"Inactivo"|"Suspendido"
   correoElectronico:string
 }
+
